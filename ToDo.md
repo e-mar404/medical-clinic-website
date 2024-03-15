@@ -1,3 +1,4 @@
+# Front end
 ## Patient Pages
 
 - [ ] sign up
@@ -28,3 +29,7 @@
 
 - [ ] dashboard view for managing who works at the clinic
 
+# Back end
+
+- [ ] Set up connection to local MySQL DB
+- [ ] Start up server at the same time that react is started
