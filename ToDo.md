@@ -33,3 +33,5 @@
 
 - [ ] Set up connection to local MySQL DB
 - [ ] Start up server at the same time that react is started
+- [ ] createUser() - when doing sign up
+- [ ] authenticateUser() - when doing log in
