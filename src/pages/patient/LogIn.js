@@ -1,14 +1,15 @@
 import { NavLink as Link } from 'react-router-dom';
-import PatientNavbar from '../../components/PatientNavbar';
-
+import Navbar from '../../components/Navbar';
+import PatientLoginModal from '../../components/PatientLoginModal';
+import Footer from '../../components/Footer';
 function PatientLogIn() {
   return (
     <>
-      <PatientNavbar />
+      <Navbar />
 
-      <h1>Patient log in page</h1>
+      <PatientLoginModal />    
 
-      <p>Dont have an account ?<Link to="/patient/signup">Sign Up</Link></p>
+      <Footer />
     </>
   );
 }
