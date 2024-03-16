@@ -1,12 +1,12 @@
+const http = require('http');
 const mysql = require('mysql');
-require('dotenv').config()
+  const { createPatient } = require('./controllers/patientControllers');
+require('dotenv').config({ path: '../.env' })
 
 const dbHost = process.env.DB_HOST;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const database = process.env.DATABASE;
-
-console.log(dbHost, dbUser);
 
 const db = mysql.createConnection({
   host: dbHost,
@@ -17,15 +17,22 @@ const db = mysql.createConnection({
 
 db.connect(function (err) {
   if (err) {
-    console.log(`Error connecting to db: ${err}`);
+    console.log(`Server.js: Error connecting to db: ${err}`);
   } else {
-    console.log('Database connected');
-    db.query('SHOW TABLES',
-            function (err, result) {
-                if (err)
-                    console.log(`Error executing the query: ${err}`)
-                else
-                    console.log("Result: ", result)
-            })
+    console.log('Server.js: Database connected');
   }
 });
+
+const server = http.createServer((req, res) => {
+  if (req.url === '/patient/register' && req.method === 'POST'){
+      createPatient(req, res, db);
+
+  } else {
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Route not found' }));
+  }
+});
+
+const PORT = process.env.SERVER_PORT || 8080
+
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
