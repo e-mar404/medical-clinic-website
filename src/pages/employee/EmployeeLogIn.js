@@ -1,11 +1,15 @@
 import Navbar from '../../components/Navbar';
+import EmployeeLoginModal from '../../components/EmployeeLoginModal';
+import Footer from '../../components/Footer';
 
 function EmployeeLogIn() {
   return (
     <>
       <Navbar />
       
-      <h1>Employee login page</h1>
+      <EmployeeLoginModal />
+
+      <Footer />
     </>
   );
 }
