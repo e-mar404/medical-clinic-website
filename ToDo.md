@@ -6,11 +6,11 @@
     - email
     - Address
 
-- [ ] log in 
+- [X] log in 
 - [ ] schedule appointment
 - [ ] profile (view/edit)
 - [ ] medical history page (view/edit)
-- [ ] not signed in navbar [Logo    log in]
+- [X] not signed in navbar [Logo    log in]
 - [ ] signed in navbar [appointments    history    profile(contact info, sign out)]
 - [ ] query
     - query available appointments for a given clinic/doctor
