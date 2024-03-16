@@ -1,10 +1,10 @@
 import { NavLink as Link } from 'react-router-dom';
-import PatientNavbar from '../../components/PatientNavbar';
+import Navbar from '../../components/Navbar';
 
 function PatientSignUp() {
   return (
     <div> 
-      <PatientNavbar />
+      <Navbar />
 
       <h2>Patient sign up</h2>
        

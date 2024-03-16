@@ -1,9 +1,9 @@
 import React from 'react';
 import { FaBars } from "react-icons/fa";
 import { NavLink as Link } from "react-router-dom";
-import './PatientNavbarStyles.css';
+import './Navbar.css';
 
-function PatientNavbar() {
+function Navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-info">
@@ -34,10 +34,10 @@ function PatientNavbar() {
             </ul>
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link btn btn-lg" href="#">Employees</a>
+                <a class="nav-link btn btn-lg" href="/employee">Employees</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn btn-lg" href="#">Patients</a>
+                <a class="nav-link btn btn-lg" href="/patient">Patients</a>
               </li>
             </ul>
           </div>
@@ -47,4 +47,4 @@ function PatientNavbar() {
   );
 }
 
-export default PatientNavbar;
+export default Navbar;

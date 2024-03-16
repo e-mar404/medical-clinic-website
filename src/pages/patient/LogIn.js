@@ -1,10 +1,10 @@
 import { NavLink as Link } from 'react-router-dom';
-import PatientNavbar from '../../components/PatientNavbar';
+import Navbar from '../../components/Navbar';
 
 function PatientLogIn() {
   return (
     <>
-      <PatientNavbar />
+      <Navbar />
 
       <h1>Patient log in page</h1>
 

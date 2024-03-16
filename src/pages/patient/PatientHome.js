@@ -1,9 +1,9 @@
-import PatientNavbar from '../../components/PatientNavbar';
+import Navbar from '../../components/Navbar';
 
 function PatientHome() {
   return(
     <>
-      <PatientNavbar />
+      <Navbar />
       
       <h1>Patient Home Page</h1>
     </>

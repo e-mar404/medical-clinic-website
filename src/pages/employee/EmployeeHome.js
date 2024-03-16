@@ -1,9 +1,9 @@
-import EmployeeNavbar from '../../components/EmployeeNavbar';
+import Navbar from '../../components/Navbar';
 
 function EmployeeHome() {
   return (
     <>
-      <EmployeeNavbar />
+      <Navbar />
       
       <h1>Employee home page</h1>
     </>
