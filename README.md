@@ -17,8 +17,8 @@
     
 ## Employee Pages
 
-- [ ] log in
-- [ ] not signed in navbar [logo    log in]
+- [X] log in
+- [X] not signed in navbar [logo    log in]
 - [ ] signed in navbar [appointments    sign out]
 
 ### Medical Employee
