@@ -13,6 +13,12 @@ import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 
 function App() {
+  if (localStorage.getItem("LoggedIn") == null) {
+    localStorage.setItem("LoggedIn", false)
+  }
+
+  // localStorage.clear();
+
   return (
     <Router>
       <Routes>

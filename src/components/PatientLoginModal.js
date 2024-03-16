@@ -2,15 +2,20 @@ import React from 'react';
 import './LoginModal.css';
 
 function PatientLoginModal() {
+  
+  const loginFunction = () => {
+    localStorage.setItem("LoggedIn", true);
+  }
+
   return (
     <>
-      <div class="login-page">
-        <div class="form">
-          <form class="login-form">
+      <div className="login-page">
+        <div className="form">
+          <form className="login-form">
             <input type="text" placeholder="patientid" />
             <input type="password" placeholder="password" />
-            <button>login</button>
-            <p class="message">New patient? <a href="/patient/register">Register here!</a></p>
+            <button onClick={loginFunction}>login</button>
+            <p className="message">New patient? <a href="/patient/register">Register here!</a></p>
           </form>
         </div>
       </div>
