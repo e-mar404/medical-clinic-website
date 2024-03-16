@@ -11,7 +11,7 @@
 - [ ] profile (view/edit)
 - [ ] medical history page (view/edit)
 - [X] not signed in navbar [Logo    log in]
-- [ ] signed in navbar [appointments    history    profile(contact info, sign out)]
+- [X] signed in navbar [appointments    history    profile(contact info, sign out)] **only added sign out**
 - [ ] query
     - query available appointments for a given clinic/doctor
     
@@ -19,7 +19,7 @@
 
 - [X] log in
 - [X] not signed in navbar [logo    log in]
-- [ ] signed in navbar [appointments    sign out]
+- [X] signed in navbar [appointments    sign out]  **only added sign out**
 
 ### Medical Employee
 
