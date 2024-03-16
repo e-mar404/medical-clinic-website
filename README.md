@@ -1,7 +1,7 @@
 # Front end
-## Patient Pages [Emilio]
+## Patient Pages [Emilio + John]
 
-- [ ] sign up 
+- [X] sign up 
     - Name
     - email
     - Address
@@ -15,7 +15,7 @@
 - [ ] query
     - query available appointments for a given clinic/doctor
     
-## Employee Pages
+## Employee Pages [John]
 
 - [X] log in
 - [X] not signed in navbar [logo    log in]
