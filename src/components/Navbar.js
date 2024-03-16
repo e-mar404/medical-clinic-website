@@ -1,13 +1,13 @@
 import React from 'react';
 import { FaBars } from "react-icons/fa";
 import { NavLink as Link } from "react-router-dom";
-import './PatientNavbarStyles.css';
+import './Navbar.css';
 
-function PatientNavbar() {
+function Navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-info">
-        <div className="container-fluid">
+        <div id="navbarContainer" className="container-fluid">
           <a className="navbar-brand" href="#">Medical Clinic Application</a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
@@ -15,7 +15,7 @@ function PatientNavbar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" href="#">Home</a>
+                <a className="nav-link" aria-current="page" href="/">Home</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">Link</a>
@@ -33,12 +33,23 @@ function PatientNavbar() {
               </li>
             </ul>
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link btn btn-lg" href="#">Employees</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link btn btn-lg" href="#">Patients</a>
-              </li>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle btn btn-lg" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Employees
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a className="dropdown-item" href="/employee/login">Employee Login</a></li>
+                </ul>
+              </li> 
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle btn btn-lg" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Patients
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a className="dropdown-item" href="/patient/login">Patient Login</a></li>
+                  <li><a className="dropdown-item" href="/patient/signup">Patient Register</a></li>
+                </ul>
+              </li> 
             </ul>
           </div>
         </div>
@@ -47,4 +58,4 @@ function PatientNavbar() {
   );
 }
 
-export default PatientNavbar;
+export default Navbar;
