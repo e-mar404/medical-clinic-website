@@ -1,3 +1,7 @@
+#navbarContainer {
+  padding-left: 50px;
+  padding-right: 50px;
+}
 .navbar-nav > li{
   padding-left:5px;
   padding-right:5px;
