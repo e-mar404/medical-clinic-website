@@ -4,9 +4,9 @@ import './LoginModal.css';
 function PatientRegisterModal() {
   return (
     <>
-      <div class="login-page">
-        <div class="form">
-          <form class="login-form">
+      <div className="login-page">
+        <div className="form">
+          <form className="login-form">
             <input type="text" placeholder="username" />
             <input type="text" placeholder="email" />
             <input type="text" placeholder="phone number" />
