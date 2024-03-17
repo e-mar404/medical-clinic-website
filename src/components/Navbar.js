@@ -1,11 +1,9 @@
 import React from 'react';
-import { FaBars } from "react-icons/fa";
-import { NavLink as Link } from "react-router-dom";
 import './Navbar.css';
 
 function Navbar() {
   const RenderButtons = () => {
-    if (localStorage.getItem("LoggedIn") == "true") {
+    if (localStorage.getItem("LoggedIn") === "true") {
       return (
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
           <li className="nav-item">
