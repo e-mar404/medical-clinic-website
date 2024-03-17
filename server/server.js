@@ -22,7 +22,7 @@ db.connect(function (err) {
   if (err) {
     console.log(`Server.js: Error connecting to db: ${err}`);
   } else {
-    console.log('Server.js: Database connected');
+    console.log(`Server.js: Database '${database}' connected`);
   }
 });
 
