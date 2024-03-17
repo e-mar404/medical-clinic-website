@@ -1,7 +1,7 @@
 const http = require('http');
 const mysql = require('mysql');
 const { 
-  createPatient,
+  createPatientAccount,
   loginPatient
 } = require('./controllers/patientControllers');
 require('dotenv').config({ path: '../.env' })
@@ -28,7 +28,7 @@ db.connect(function (err) {
 
 const server = http.createServer((req, res) => {
   if (req.url === '/patient/register' && req.method === 'POST'){
-    createPatient(req, res, db);
+    createPatientAccount(req, res, db);
 
   } else if (req.url === '/patient/login' && req.method === 'POST') {
     loginPatient(req, res, db);
