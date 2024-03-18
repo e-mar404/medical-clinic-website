@@ -19,11 +19,9 @@ const db = mysql.createConnection({
 });             
 
 db.connect(function (err) {
-  if (err) {
-    console.log(`Server.js: Error connecting to db: ${err}`);
-  } else {
-    console.log(`Server.js: Database '${database}' connected`);
-  }
+  const msg = (err) ? `Server.js: Error connecting to db: ${err}` : `Server.js: Database '${database}' connected`;  
+
+  console.log(msg);
 });
 
 const server = http.createServer((req, res) => {
