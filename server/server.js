@@ -1,5 +1,5 @@
 const http = require('http');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const { 
   createPatientAccount,
   loginPatient
