@@ -1,9 +1,15 @@
 const http = require('http');
 const mysql = require('mysql2');
+
 const { 
   createPatientAccount,
   loginPatient
 } = require('./controllers/patientControllers');
+
+const {
+  getEmployeesByType
+} = require('./controllers/employeeController');
+
 require('dotenv').config({ path: '../.env' })
 
 const dbHost = process.env.DB_HOST;
@@ -25,15 +31,44 @@ db.connect(function (err) {
 });
 
 const server = http.createServer((req, res) => {
-  if (req.url === '/patient/register' && req.method === 'POST'){
-    createPatientAccount(req, res, db);
+  
+  switch (req.method) {
+    case 'POST':
+      switch (req.url) {
+        case '/patient/register':
+          createPatientAccount(req, res, db);
+          break;
+        
+        case '/patient/login':
+          loginPatient(req, res, db);
+          break;
 
-  } else if (req.url === '/patient/login' && req.method === 'POST') {
-    loginPatient(req, res, db);
+        default:
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Route not found' }));
+          break;
+      }
+      
+      break;
+      
+    case 'GET': 
+      switch (req.url){
+        case req.url.match(/\/employee\/bytype/).input: 
+          const type = req.url.split('/')[3];
 
-  } else {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Route not found' }));
+          getEmployeesByType(res, db, type);
+          break;
+
+        default:
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Route not found' }));
+          break;
+      }
+      
+      break;
+
+    default:
+      break;
   }
 });
 
