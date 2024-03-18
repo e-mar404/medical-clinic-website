@@ -1,5 +1,5 @@
 # Front end
-## Patient Pages [Emilio + John]
+## Patient Pages [Emilio + John + mohammad]
 
 - [X] sign up 
     - Name
@@ -40,7 +40,7 @@
     - all appointments a patient has had at a clinic
     - medications a patient has reveived 
 
-# Back end [Emilio]
+# Back end [Emilio + mohammad]
 
 - [x] Set up connection to local MySQL DB
 - [x] Start up server at the same time that react is started
