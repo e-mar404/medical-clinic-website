@@ -40,12 +40,18 @@
     - all appointments a patient has had at a clinic
     - medications a patient has reveived 
 
-# Back end
+# Back end [Emilio]
 
-- [ ] Set up connection to local MySQL DB
-- [ ] Start up server at the same time that react is started
-- [ ] createUser() - when doing sign up
+- [x] Set up connection to local MySQL DB
+- [x] Start up server at the same time that react is started
+- [x] createPatientAccount
+    - [x] createPatientContact
+    - [x] createPatient
+    - [x] createPatientLogin
+    - [x] error handling for register
+
 - [ ] authenticateUser() - when doing log in
+    - [ ] error handling for login
 
 # Hosting [Mohammad]
 
