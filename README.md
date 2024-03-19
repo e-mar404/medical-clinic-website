@@ -70,6 +70,11 @@
     - [x] staff
     - [ ] at a specific clinic
 
+# Reporting 
+- [ ] patient appointment history
+- [ ] all appointment for a doctor
+- [ ] employees by type
+
 # Hosting [Mohammad]
 
 - [ ] host MySQL db
