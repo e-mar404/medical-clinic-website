@@ -7,7 +7,20 @@ function Navbar() {
   const RenderButtons = () => {
     if (localStorage.getItem("LoggedIn") == "true") {
       return (
+
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle btn btn-lg" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              FirstName LastName
+            </a>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a className="dropdown-item" href="/employee/login">Profile Information</a></li>
+            <li><a className="dropdown-item" href="/employee/login">Medical History</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a className="dropdown-item" href="/employee/login">Schedule Appointment</a></li>
+            </ul>
+          </li>
+
           <li className="nav-item">
             <a className="nav-link btn btn-lg" aria-current="page" href="/" onClick={SignOut}>Sign Out</a>
           </li>
@@ -57,17 +70,22 @@ function Navbar() {
                 <a className="nav-link" aria-current="page" href="/">Home</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">Link</a>
+                <a className="nav-link" href="#">Appointments</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">Locations</a>
               </li>
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
+                  Services
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a className="dropdown-item" href="#">Action</a></li>
-                  <li><a className="dropdown-item" href="#">Another action</a></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><a className="dropdown-item" href="#">Something else here</a></li>
+                  <li><a className="dropdown-item" href="#">Cancer</a></li>
+                  <li><a className="dropdown-item" href="#">Children's Services</a></li>
+                  <li><a className="dropdown-item" href="#">Heart & Vascular</a></li>
+                  <li><a className="dropdown-item" href="#">Neuroscience</a></li>
+                  <li><a className="dropdown-item" href="#">Surgical Services</a></li>
+                  <li><a className="dropdown-item" href="#">Transplant</a></li>
                 </ul>
               </li>
             </ul>
