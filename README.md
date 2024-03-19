@@ -53,6 +53,22 @@
 - [ ] authenticateUser() - when doing log in
     - [ ] error handling for login
 
+- [x] createEmployeeAccount
+    - [x] createEmployeeContact
+    - [x] createEmployee
+    - [x] createPatientLogin
+    - [x] error handling for register
+
+- [ ] get appointment filtered by:
+    - [ ] date/time
+    - [ ] doctor 
+    - [ ] clinic
+
+- [x] get employee by type
+    - [x] all
+    - [x] medical
+    - [x] staff
+
 # Hosting [Mohammad]
 
 - [ ] host MySQL db
