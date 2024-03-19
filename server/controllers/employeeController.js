@@ -32,11 +32,8 @@ async function getEmployeesByType(res, db, type) {
 async function getAllEmployees(db) {
   return new Promise((resolve, reject) => {
     db.query(`SELECT 
-      semployee_id AS employee_id, email_address, employee_role 
-      FROM SEmployee 
-      UNION ALL 
-      SELECT memployee_id AS employee_id, email_address, employee_role 
-      FROM MEmployee`, (err, db_res) => {
+      employee_id, email_address, employee_role 
+      FROM Employee`, (err, db_res) => {
         if (err) {
           reject(err);
         }
@@ -49,8 +46,9 @@ async function getAllEmployees(db) {
 async function getMedicalEmployees(db) {
   return new Promise((resolve, reject) => {
     db.query(`SELECT 
-      Memployee_id AS employee_id, email_address, employee_role 
-      FROM MEmployee`, (err, db_res) => {
+      employee_id, email_address, employee_role 
+      FROM Employee
+      WHERE employee_type='Medical'`, (err, db_res) => {
         if (err) {
           reject(err);
         }
@@ -63,8 +61,9 @@ async function getMedicalEmployees(db) {
 async function getStaffEmployees(db) {
   return new Promise((resolve, reject) => {
     db.query(`SELECT 
-      Semployee_id AS employee_id, email_address, employee_role 
-      FROM SEmployee`, (err, db_res) => {
+      employee_id, email_address, employee_role 
+      FROM Employee
+      WHERE employee_type='Staff'`, (err, db_res) => {
         if (err) {
           reject(err);
         }
