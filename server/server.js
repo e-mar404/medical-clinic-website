@@ -10,7 +10,7 @@ const {
   getEmployeesByType
 } = require('./controllers/employeeController');
 
-require('dotenv').config({ path: '../.env' })
+require('dotenv').config();
 
 const dbHost = process.env.DB_HOST;
 const dbUser = process.env.DB_USER;
