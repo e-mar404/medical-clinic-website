@@ -3,10 +3,10 @@ const mysql = require('mysql');
   const { createPatient } = require('./controllers/patientControllers');
 require('dotenv').config({ path: '../.env' })
 
-const dbHost = process.env.DB_HOST;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const database = process.env.DATABASE;
+const dbHost = "localhost";
+const dbUser = "root";
+const dbPassword = "password";
+const database = "mdb";
 
 const db = mysql.createConnection({
   host: dbHost,
