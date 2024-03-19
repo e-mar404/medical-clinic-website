@@ -51,6 +51,10 @@
     - [x] error handling for register
 
 - [ ] authenticateUser() - when doing log in
+    - [ ] localstore
+        - [ ] type of user (admin, receptionist, nurse, doctor, patient)
+        - [ ] id
+
     - [ ] error handling for login
 
 - [x] createEmployeeAccount
