@@ -68,6 +68,7 @@
     - [x] all
     - [x] medical
     - [x] staff
+    - [ ] at a specific clinic
 
 # Hosting [Mohammad]
 
