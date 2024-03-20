@@ -1,5 +1,5 @@
 # Front end
-## Patient Pages [Emilio + John]
+## Patient Pages [Emilio + John + mohammad]
 
 - [X] sign up 
     - Name
@@ -40,12 +40,44 @@
     - all appointments a patient has had at a clinic
     - medications a patient has reveived 
 
-# Back end
+# Back end [Emilio + mohammad]
 
-- [ ] Set up connection to local MySQL DB
-- [ ] Start up server at the same time that react is started
-- [ ] createUser() - when doing sign up
+- [x] Set up connection to local MySQL DB
+- [x] Start up server at the same time that react is started
+- [x] createPatientAccount
+    - [x] createPatientContact
+    - [x] createPatient
+    - [x] createPatientLogin
+    - [x] error handling for register
+
 - [ ] authenticateUser() - when doing log in
+    - [ ] localstore
+        - [ ] type of user (admin, receptionist, nurse, doctor, patient)
+        - [ ] id
+
+    - [ ] error handling for login
+
+- [x] createEmployeeAccount
+    - [x] createEmployeeContact
+    - [x] createEmployee
+    - [x] createPatientLogin
+    - [x] error handling for register
+
+- [ ] get appointment filtered by:
+    - [ ] date/time
+    - [ ] doctor 
+    - [ ] clinic
+
+- [x] get employee by type
+    - [x] all
+    - [x] medical
+    - [x] staff
+    - [ ] at a specific clinic
+
+# Reporting 
+- [ ] patient appointment history
+- [ ] all appointment for a doctor
+- [ ] employees by type
 
 # Hosting [Mohammad]
 

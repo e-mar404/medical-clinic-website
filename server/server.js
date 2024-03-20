@@ -1,10 +1,16 @@
 const http = require('http');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+
 const { 
-  createPatient,
+  createPatientAccount,
   loginPatient
 } = require('./controllers/patientControllers');
-require('dotenv').config({ path: '../.env' })
+
+const {
+  getEmployeesByType
+} = require('./controllers/employeeController');
+
+require('dotenv').config();
 
 const dbHost = process.env.DB_HOST;
 const dbUser = process.env.DB_USER;
@@ -19,23 +25,50 @@ const db = mysql.createConnection({
 });             
 
 db.connect(function (err) {
-  if (err) {
-    console.log(`Server.js: Error connecting to db: ${err}`);
-  } else {
-    console.log(`Server.js: Database '${database}' connected`);
-  }
+  const msg = (err) ? `Server.js: Error connecting to db: ${err}` : `Server.js: Database '${database}' connected`;  
+
+  console.log(msg);
 });
 
 const server = http.createServer((req, res) => {
-  if (req.url === '/patient/register' && req.method === 'POST'){
-    createPatient(req, res, db);
+  
+  switch (req.method) {
+    case 'POST':
+      switch (req.url) {
+        case '/patient/register':
+          createPatientAccount(req, res, db);
+          break;
+        
+        case '/patient/login':
+          loginPatient(req, res, db);
+          break;
 
-  } else if (req.url === '/patient/login' && req.method === 'POST') {
-    loginPatient(req, res, db);
+        default:
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Route not found' }));
+          break;
+      }
+      
+      break;
+      
+    case 'GET': 
+      switch (req.url){
+        case req.url.match(/\/employee\/bytype/).input: 
+          const type = req.url.split('/')[3];
 
-  } else {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Route not found' }));
+          getEmployeesByType(res, db, type);
+          break;
+
+        default:
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Route not found' }));
+          break;
+      }
+      
+      break;
+
+    default:
+      break;
   }
 });
 
