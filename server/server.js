@@ -4,11 +4,15 @@ const mysql = require('mysql2');
 const { 
   createPatientAccount,
   loginPatient
-} = require('./controllers/patientControllers');
+} = require('./controllers/patientController');
 
 const {
   getEmployeesByType
 } = require('./controllers/employeeController');
+
+const {
+  generateReportFor
+} = require('./controllers/reportController');
 
 require('dotenv').config();
 
@@ -43,6 +47,7 @@ const server = http.createServer((req, res) => {
           loginPatient(req, res, db);
           break;
 
+
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
@@ -52,8 +57,14 @@ const server = http.createServer((req, res) => {
       break;
       
     case 'GET': 
-      switch (req.url){
-        case req.url.match(/\/employee\/bytype/).input: 
+      switch (true){
+        case /reports/.test(req.url): 
+          const reportType = req.url.split('/')[2];
+
+          generateReportFor(res, db, reportType);
+          break;
+
+        case /\/employee\/bytype/.test(req.url): 
           const type = req.url.split('/')[3];
 
           getEmployeesByType(res, db, type);

@@ -70,15 +70,15 @@
 
 
 # Reporting 
-- [ ] appointment history
-- [ ] doctors and their patients
-- [ ] employees and what is their primary clinic
+- [x] appointment history
+- [x] doctors and their patients
+- [x] employees and what is their primary clinic
 - [x] get employee by type
     - [x] all
     - [x] medical
     - [x] staff
-- [ ] compare clinics
-    - [ ] number of patients at a clinic
+- [x] compare clinics
+    - [x] number of patients at a clinic
 
 # Hosting [Mohammad]
 
