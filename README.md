@@ -68,16 +68,17 @@
     - [ ] doctor 
     - [ ] clinic
 
+
+# Reporting 
+- [ ] appointment history
+- [ ] doctors and their patients
+- [ ] employees and what is their primary clinic
 - [x] get employee by type
     - [x] all
     - [x] medical
     - [x] staff
-    - [ ] at a specific clinic
-
-# Reporting 
-- [ ] patient appointment history
-- [ ] all appointment for a doctor
-- [ ] employees by type
+- [ ] compare clinics
+    - [ ] number of patients at a clinic
 
 # Hosting [Mohammad]
 
