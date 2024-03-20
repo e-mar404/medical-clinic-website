@@ -92,17 +92,4 @@ async function loginPatient(req, res, db) {
   } 
 }
 
-function primaryDoctorOfPatients(res, db) {
-    db.query('SELECT * FROM primary_doctor_for_patient', (err, db_res) => {
-      if (err) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: err }));
-        return;    
-      }
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: db_res}));
-    });
-}
-
-module.exports = { createPatientAccount, primaryDoctorOfPatients, loginPatient };
+module.exports = { createPatientAccount, loginPatient };
