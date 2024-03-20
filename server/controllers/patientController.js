@@ -78,7 +78,6 @@ async function loginPatient(req, res, db) {
         if (err) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: err }));
-
         } 
         
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -93,4 +92,4 @@ async function loginPatient(req, res, db) {
   } 
 }
 
-module.exports = { createPatientAccount, createPatientContact, loginPatient };
+module.exports = { createPatientAccount, loginPatient };
