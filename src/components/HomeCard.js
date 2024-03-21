@@ -1,6 +1,6 @@
-import './PatientHomeCard.css'
+import './HomeCard.css'
 
-function PatientHomeCard({ name, page_link, icon }) {
+function HomeCard({ name, page_link, icon }) {
   return (
     <a href={page_link} className="text-decoration-none card dashboard-card m-1">
       <div className="card-body d-flex flex-column justify-content-center align-items-center">
@@ -11,4 +11,4 @@ function PatientHomeCard({ name, page_link, icon }) {
   );
 }
 
-export default PatientHomeCard;
+export default HomeCard;
