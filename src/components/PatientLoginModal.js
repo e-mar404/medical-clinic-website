@@ -4,6 +4,7 @@ import './LoginModal.css';
 function PatientLoginModal() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState(''); 
+  const nav = useNavigate();
 
   const loginFunction = (e) => {
     e.preventDefault();
@@ -22,7 +23,8 @@ function PatientLoginModal() {
         console.log(response.status);
       });
     });
-
+    
+    nav('/patient', {});
     //localStorage.setItem("LoggedIn", true);
     //console.log(email, password);
   }
