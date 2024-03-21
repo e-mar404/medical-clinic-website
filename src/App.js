@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import PatientLogIn from './pages/patient/LogIn';
 import PatientSignUp from './pages/patient/SignUp';
@@ -9,7 +9,7 @@ import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
-import MakeAppointment from './pages/patient/MakeAppointment/MakeAppointment'; // Import the MakeAppointment component
+import MakeAppointment from './pages/appointment/MakeAppointment'; 
 import TransferDoctor from './pages/employee/TransferDoctor';
 
 function App() {
@@ -40,10 +40,8 @@ function App() {
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
         <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
-        <Route path="/patient/makeappointment" element={<MakeAppointment />} /> {/* Add this route */}
-        <Route path="/employee" element={<EmployeeHome />} />
-        <Route path="/employee/login" element={<EmployeeLogIn />} />
         <Route path='/admin/transfer' element ={<TransferDoctor />} />
+        <Route path="/make_appointment" element={<MakeAppointment />} /> 
       </Routes>
     </Router>
   );
