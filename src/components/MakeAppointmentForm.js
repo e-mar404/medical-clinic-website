@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import Navbar from '../../../components/Navbar';
-import DatePicker from 'react-datepicker'; // Import datepicker library
-import 'react-datepicker/dist/react-datepicker.css'; // Import datepicker styles
-import clinic from './clinic'; // Import the updated clinic data structure
-import '../../../styles/MakeAppointment.css';
+import DatePicker from 'react-datepicker'; 
+import 'react-datepicker/dist/react-datepicker.css'; 
+import './MakeAppointment.css';
 
 const MakeAppointment = () => {
   const [formData, setFormData] = useState({
     clinic: '',
     doctor: '',
-    date: null, // Initialize date as null
+    date: null, 
     time: '',
     firstName: '',
     lastName: '',
     email: '',
   });
-
-  const [appointments, setAppointments] = useState([]); // Define appointments state
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,13 +41,10 @@ const MakeAppointment = () => {
       }
     }
   
-    // Remove 'Dr.' from the selected doctor name
     const processedDoctor = formData.doctor.replace('Dr. ', '');
   
-    // Remove 'Clinic' from the selected clinic name
     const processedClinic = formData.clinic.replace(' Clinic', '');
   
-    // Create an object with appointment data to send to the backend
     const appointmentData = {
       clinic: processedClinic,
       doctor: processedDoctor,
@@ -63,7 +56,6 @@ const MakeAppointment = () => {
     };
   
     try {
-      // Make a POST request to the backend endpoint to process the appointment data
       const response = await fetch('/appointment', {
         method: 'POST',
         headers: {
@@ -72,20 +64,15 @@ const MakeAppointment = () => {
         body: JSON.stringify(appointmentData),
       });
   
-      // Check if the request was successful
       if (response.ok) {
         console.log('Appointment booked successfully!');
-        // Optionally, you can handle further actions after a successful appointment booking
       } else {
         console.error('Failed to book appointment:', response.statusText);
-        // Optionally, handle errors or display error messages to the user
       }
     } catch (error) {
       console.error('Error booking appointment:', error);
-      // Handle any network errors or exceptions
     }
   
-    // Reset form fields
     setFormData({
       clinic: '',
       doctor: '',
@@ -110,7 +97,6 @@ const MakeAppointment = () => {
 
   return (
     <>
-      <Navbar />
       <div className="appointment-page-container">
         <form className="appointment-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -122,11 +108,11 @@ const MakeAppointment = () => {
               required
             >
               <option value="">Select Clinic</option>
-              {clinic.map((clinic) => (
+              {/*clinic.map((clinic) => (
                 <option key={clinic.name} value={clinic.name}>
                   {clinic.name}
                 </option>
-              ))}
+              ))*/}
             </select>
           </div>
           <div className="form-group">
@@ -138,14 +124,14 @@ const MakeAppointment = () => {
               required
             >
               <option value="">Select Doctor</option>
-              {formData.clinic &&
+              {/*formData.clinic &&
                 clinic
                   .find((clinic) => clinic.name === formData.clinic)
                   ?.doctors.map((doctor) => (
                     <option key={doctor.name} value={doctor.name}>
                       {doctor.name}
                     </option>
-                  ))}
+                  ))*/}
             </select>
           </div>
           <div className="form-group">
@@ -208,7 +194,6 @@ const MakeAppointment = () => {
               required
             />
           </div>
-          {/* Add other form fields */}
           <div className="appointment-button-container">
             <button className="appointment-button" type="submit">
               Book Appointment
