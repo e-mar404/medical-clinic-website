@@ -17,12 +17,27 @@ async function createPatientAccount(req, res, db) {
       res.writeHead(200, {'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: msg }));
 
+
     } catch (err) {
       console.log(err);
       
       res.writeHead(400, {'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err }));
-    }
+
+      console.log(`patientController.js: creating patient with email: ${email}`);
+
+      db.query('INSERT INTO Patient_Login(email_address, password) VALUES (?, ?)', [email, password], (err, db_res) => {
+        if (err) {
+          console.log(err);
+          res.writeHead(400, { 'Content-Type': 'application/json'});
+          res.end(JSON.stringify({ error: err }));
+        } 
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: `created patient with email: ${email}` }));
+      });
+
+    } 
 }
 
 async function createPatientContact(email, phone_number, address, res, db){
@@ -72,7 +87,7 @@ async function loginPatient(req, res, db) {
 
     console.log(`logging in patient with email: ${email}`);
 
-    db.query(`SELECT * FROM Patient_Login WHERE email_address='${email}' AND password='${password}'`, 
+    db.query(`SELECT L.patient_id, P.first_name, P.last_name FROM Patient_Login L JOIN Patient P on L.email_address = P.email_address WHERE L.email_address='${email}' AND L.password='${password}';`, 
     [email, password], 
     (err, db_res) => {
       if (err) {
@@ -80,8 +95,8 @@ async function loginPatient(req, res, db) {
         res.end(JSON.stringify({ message: err }));
       } else {
         if (db_res.length === 0) {
-          // If no rows found, respond with 404
-          res.writeHead(404, { 'Content-Type': 'application/json' });
+          // If no rows found, respond with 401
+          res.writeHead(401, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: "No user found with provided credentials" }));
         } else {
           // If rows found, respond with 200

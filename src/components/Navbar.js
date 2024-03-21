@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import './Navbar.css';
 
 function Navbar() {
+  const nav = useNavigate();
   const RenderButtons = () => {
     if (localStorage.getItem("LoggedIn") === "true") {
       return (
-
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
           <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle btn btn-lg" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              FirstName LastName
+              <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span>
             </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a className="dropdown-item" href="/employee/login">Profile Information</a></li>
@@ -51,9 +52,9 @@ function Navbar() {
   }
 
   const SignOut = () => {
-    localStorage.setItem("LoggedIn", false);
+    localStorage.clear();
+    nav('/', {});
   }
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-info">
