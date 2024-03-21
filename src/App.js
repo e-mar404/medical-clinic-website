@@ -9,7 +9,7 @@ import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
-import MakeAppointment from './pages/patient/MakeAppointment'; // Import the MakeAppointment component
+import MakeAppointment from './pages/patient/MakeAppointment/MakeAppointment'; // Import the MakeAppointment component
 
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
         <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
-        <Route path="/patient/make-appointment" element={<MakeAppointment />} /> {/* Add this route */}
+        <Route path="/patient/makeappointment" element={<MakeAppointment />} /> {/* Add this route */}
         <Route path="/employee" element={<EmployeeHome />} />
         <Route path="/employee/login" element={<EmployeeLogIn />} />
       </Routes>

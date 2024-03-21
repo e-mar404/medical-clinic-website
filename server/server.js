@@ -2,6 +2,7 @@ const http = require('http');
 const mysql = require('mysql2');
 const { createPatientAccount, loginPatient } = require('./controllers/patientControllers');
 const { getEmployeesByType } = require('./controllers/employeeController');
+const { createAppointment } = require('./controllers/appointmentController'); // Import appointmentController
 require('dotenv').config();
 
 const dbHost = process.env.DB_HOST;
@@ -40,6 +41,10 @@ const server = http.createServer((req, res) => {
           loginPatient(req, res, db);
           break;
 
+        case '/appointment': // Handle appointment creation
+              createAppointment(req, res, db);
+          break;
+
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
@@ -49,10 +54,11 @@ const server = http.createServer((req, res) => {
       
     case 'GET': 
       switch (req.url){
-        case req.url.match(/\/employee\/bytype/).input: 
+        case req.url.match(/\/employee\/bytype/)?.input:
           const type = req.url.split('/')[3];
           getEmployeesByType(res, db, type);
           break;
+
 
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -68,3 +74,4 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.SERVER_PORT || 5001; 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
