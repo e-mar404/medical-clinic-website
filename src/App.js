@@ -10,7 +10,7 @@ import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
 import MakeAppointment from './pages/patient/MakeAppointment/MakeAppointment'; // Import the MakeAppointment component
-
+import TransferDoctor from './pages/employee/TransferDoctor';
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
