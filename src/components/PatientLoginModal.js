@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginModal.css';
 
 function PatientLoginModal() {
-  
+  const nav = useNavigate();
+
   const loginFunction = () => {
     localStorage.setItem("LoggedIn", true);
+    nav('/patient', {});
   }
 
   return (
