@@ -22,11 +22,18 @@ function PatientLoginModal() {
     fetch('/patient/login', requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(response.status);
+        if (response.status === 200) {
+          alert("Successfully signed in!");
+          localStorage.setItem("LoginEmail", email);
+          localStorage.setItem("LoginType", "Patient");
+          localStorage.setItem("LoggedIn", true);
+          nav('/patient', {});
+        }
+        else {
+          alert("Invalid credentials! Please try again.");
+        }
       });
     });
-    
-    nav('/patient', {});
-    //localStorage.setItem("LoggedIn", true);
     //console.log(email, password);
   }
 

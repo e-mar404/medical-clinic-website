@@ -80,8 +80,8 @@ async function loginPatient(req, res, db) {
         res.end(JSON.stringify({ message: err }));
       } else {
         if (db_res.length === 0) {
-          // If no rows found, respond with 404
-          res.writeHead(404, { 'Content-Type': 'application/json' });
+          // If no rows found, respond with 401
+          res.writeHead(401, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: "No user found with provided credentials" }));
         } else {
           // If rows found, respond with 200
