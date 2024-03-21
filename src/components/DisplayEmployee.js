@@ -5,7 +5,7 @@ function DisplayEmployee(){
     return(
         <>
             <div className="container">
-              <table className="table table-stripped" style={{ width: 95 + 'em'}}>
+              <table className="table table-stripped" style={{ width: 118 + 'em'}}>
                 <thead>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -44,7 +44,7 @@ function DisplayEmployee(){
                         <li><a className="dropdown-item" href="#">View Appointments</a></li>
                         <li><a className="dropdown-item" href="#">Transfer</a></li>
                         <li><hr className="dropdown-divider" /></li>
-                        <li><a className="dropdown-item" href="#" style={{color: "red" + 'em'}}>Terminate</a></li>
+                        <li><a className="dropdown-item" href="#">Terminate</a></li>
                       </ul>
                       </p>
                     </td>

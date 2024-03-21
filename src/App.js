@@ -14,6 +14,7 @@ import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
+import TransferDoctor from './pages/employee/TransferDoctor';
 
 function App() {
   if (localStorage.getItem("LoggedIn") == null) {
@@ -36,6 +37,7 @@ function App() {
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
         <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
+        <Route path='/admin/transfer' element ={<TransferDoctor />} />
       </Routes>
     </Router>
   );
