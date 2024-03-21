@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import './Navbar.css';
 
 function Navbar() {
+  const nav = useNavigate();
   const RenderButtons = () => {
     if (localStorage.getItem("LoggedIn") === "true") {
       return (
@@ -51,9 +53,9 @@ function Navbar() {
   }
 
   const SignOut = () => {
-    localStorage.setItem("LoggedIn", false);
+    localStorage.clear();
+    nav('/', {});
   }
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-info">

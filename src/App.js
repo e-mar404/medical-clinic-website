@@ -17,8 +17,12 @@ import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
 import TransferDoctor from './pages/employee/TransferDoctor';
 
 function App() {
-  if (localStorage.getItem("LoggedIn") == null) {
+  // On first-time load
+  if (localStorage.getItem("Loaded") === null) {
+    localStorage.setItem("Loaded", true)
     localStorage.setItem("LoggedIn", false)
+    localStorage.setItem("LoginEmail", null) // Email of logged in user
+    localStorage.setItem("LoginType", null) // Type of logged in user (patient, employee)
   }
 
   // localStorage.clear();
