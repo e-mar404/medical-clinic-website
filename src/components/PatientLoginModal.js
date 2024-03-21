@@ -24,9 +24,13 @@ function PatientLoginModal() {
         console.log(response.status);
         if (response.status === 200) {
           alert("Successfully signed in!");
-          localStorage.setItem("LoginEmail", email);
-          localStorage.setItem("LoginType", "Patient");
           localStorage.setItem("LoggedIn", true);
+          localStorage.setItem("UserEmail", email);
+          localStorage.setItem("UserId", data.message[0].patient_id);
+          localStorage.setItem("UserFirstName", data.message[0].first_name);
+          localStorage.setItem("UserLastName", data.message[0].last_name);
+          localStorage.setItem("UserType", "Patient");
+          console.log(data);
           nav('/patient', {});
         }
         else {
