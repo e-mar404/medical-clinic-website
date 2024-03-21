@@ -1,0 +1,50 @@
+.appointment-page-container {
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;    
+}
+
+.appointment-form {
+    margin: 0;
+    margin-top: 3em;
+    height: 80%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    background-color: gold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%; /* Make input boxes the same size */
+}
+
+.appointment-button-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+  
+  .appointment-button {
+    width: 50%;
+    padding: .8rem;
+    background-color: #007bff; /* Example background color */
+    color: white;
+    border: none;
+    border-radius: .2rem;
+    cursor: pointer;
+  }
+  
+  .appointment-button:hover {
+    background-color: #0056b3; /* Example hover background color */
+  }
+  
+  .form-group input,
+.form-group select,
+.form-group .react-datepicker-wrapper {
+    width: 100%; /* Make input boxes and datepicker the same size */
+}
