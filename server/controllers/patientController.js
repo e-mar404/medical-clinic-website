@@ -72,7 +72,7 @@ async function loginPatient(req, res, db) {
 
     console.log(`logging in patient with email: ${email}`);
 
-    db.query(`SELECT * FROM Patient_Login WHERE email_address='${email}' AND password='${password}'`, 
+    db.query(`SELECT L.patient_id, P.first_name, P.last_name FROM Patient_Login L JOIN Patient P on L.email_address = P.email_address WHERE L.email_address='${email}' AND L.password='${password}';`, 
     [email, password], 
     (err, db_res) => {
       if (err) {
