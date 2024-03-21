@@ -1,27 +1,37 @@
 async function getEmployeesByType(res, db, type) {
-  let query_res;
+  let condition;
 
   try {
     
     switch (type) {
       case 'all':
-        query_res = await getAllEmployees(db);
+        condition='true';
         break;
     
       case 'medical':
-        query_res = await getMedicalEmployees(db);
+        condition=`employee_type='Medical'`;
         break;
         
       case 'staff':
-        query_res = await getStaffEmployees(db);
+        condition=`employee_type='Staff'`;
         break;
 
       default:
         throw new TypeError('invalid role');
     }
+  
 
-    res.writeHead(200, { 'Content-Type':'application/json' });
-    res.end(JSON.stringify({ message: query_res }));
+    db.query(`SELECT 
+      employee_id, email_address, employee_role 
+      FROM Employee WHERE ${condition}`, (err, db_res) => {
+        if (err) {
+          throw (err);
+        }
+
+        res.writeHead(200, { 'Content-Type':'application/json' });
+        res.end(JSON.stringify({ message: db_res}));
+      }); 
+
 
   } catch(err) {
     res.writeHead(400, { 'Content-Type':'application/json' });
@@ -29,49 +39,4 @@ async function getEmployeesByType(res, db, type) {
   }
 }
 
-async function getAllEmployees(db) {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT 
-      semployee_id AS employee_id, email_address, employee_role 
-      FROM SEmployee 
-      UNION ALL 
-      SELECT memployee_id AS employee_id, email_address, employee_role 
-      FROM MEmployee`, (err, db_res) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(db_res);
-      }); 
-  });
-}
-
-async function getMedicalEmployees(db) {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT 
-      Memployee_id AS employee_id, email_address, employee_role 
-      FROM MEmployee`, (err, db_res) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(db_res);
-      }); 
-  });
-}
-
-async function getStaffEmployees(db) {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT 
-      Semployee_id AS employee_id, email_address, employee_role 
-      FROM SEmployee`, (err, db_res) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(db_res);
-      }); 
-  });
-}
-
-module.exports = { getEmployeesByType};
+module.exports = { getEmployeesByType };

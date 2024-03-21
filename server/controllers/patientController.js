@@ -87,25 +87,32 @@ async function loginPatient(req, res, db) {
 
     console.log(`logging in patient with email: ${email}`);
 
-    db.query('SELECT * FROM Patient_Login WHERE email_address=? AND password=?', 
-      [email, password], 
-      (err, db_res) => {
-        if (err) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ message: err }));
-
-        } 
-        
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: db_res}));
-
-      });
+    db.query(`SELECT * FROM Patient_Login WHERE email_address='${email}' AND password='${password}'`, 
+    [email, password], 
+    (err, db_res) => {
+      if (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: err }));
+      } else {
+        if (db_res.length === 0) {
+          // If no rows found, respond with 401
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: "No user found with provided credentials" }));
+        } else {
+          // If rows found, respond with 200
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: db_res}));
+          console.log("success");
+        }
+      }
+    });
+  
 
   } catch (error) {
-    console.log(`patientConstrollers.js: ${error}`);
+    console.log(`patientController.js: ${error}`);
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 'message': error }));
   } 
 }
 
-module.exports = { createPatientAccount, createPatientContact, loginPatient };
+module.exports = { createPatientAccount, loginPatient };

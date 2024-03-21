@@ -1,8 +1,25 @@
 const http = require('http');
 const mysql = require('mysql2');
+<<<<<<< HEAD
 const { createPatientAccount, loginPatient } = require('./controllers/patientControllers');
 const { getEmployeesByType } = require('./controllers/employeeController');
 const { createAppointment } = require('./controllers/appointmentController'); // Import appointmentController
+=======
+
+const { 
+  createPatientAccount,
+  loginPatient
+} = require('./controllers/patientController');
+
+const {
+  getEmployeesByType
+} = require('./controllers/employeeController');
+
+const {
+  generateReportFor
+} = require('./controllers/reportController');
+
+>>>>>>> main
 require('dotenv').config();
 
 const dbHost = process.env.DB_HOST;
@@ -53,8 +70,19 @@ const server = http.createServer((req, res) => {
       break;
       
     case 'GET': 
+<<<<<<< HEAD
       switch (req.url){
         case req.url.match(/\/employee\/bytype/)?.input:
+=======
+      switch (true){
+        case /reports/.test(req.url): 
+          const reportType = req.url.split('/')[2];
+
+          generateReportFor(res, db, reportType);
+          break;
+
+        case /\/employee\/bytype/.test(req.url): 
+>>>>>>> main
           const type = req.url.split('/')[3];
           getEmployeesByType(res, db, type);
           break;
