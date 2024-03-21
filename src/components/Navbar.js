@@ -14,7 +14,7 @@ function Navbar() {
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a className="dropdown-item" href="/employee/login">Profile Information</a></li>
             <li><a className="dropdown-item" href="/employee/login">Medical History</a></li>
-            <div class="dropdown-divider"></div>
+            <div className="dropdown-divider"></div>
             <li><a className="dropdown-item" href="/employee/login">Schedule Appointment</a></li>
             </ul>
           </li>
