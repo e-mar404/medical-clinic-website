@@ -1,5 +1,5 @@
 import Navbar from '../../components/Navbar';
-import PatientHomeCard from '../../components/PatientHomeCard';
+import HomeCard from '../../components/HomeCard';
 
 function PatientHome() {
   return(
@@ -9,21 +9,21 @@ function PatientHome() {
        <div className="d-flex justify-content-center m-5">
          <div className="row">
            <div className="col-md-4">
-             <PatientHomeCard 
+             <HomeCard 
                 name="Appointment History" 
-                page_link="/appointment_history" 
+                page_link="/patient/appointment_history" 
                 icon="fa-calendar"/>
           </div>
 
           <div className="col-md-4">
-            <PatientHomeCard 
+            <HomeCard 
                 name="Profile"
-                page_link="/profile" 
+                page_link="/patient/profile" 
                 icon="fa-user"/>
           </div>
 
           <div className="col-md-4">
-            <PatientHomeCard 
+            <HomeCard 
                 name="Schedule Appointment" 
                 page_link="" 
                 icon="fa-calendar-plus-o"/>
