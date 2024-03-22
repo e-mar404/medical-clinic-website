@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker'; 
-import 'react-datepicker/dist/react-datepicker.css'; 
-import './MakeAppointment.css';
+import './MakeAppointmentForm.css';
 
 const MakeAppointment = () => {
   const [formData, setFormData] = useState({
@@ -90,17 +89,17 @@ const MakeAppointment = () => {
     setFormData({
       ...formData,
       clinic: value,
-      doctor: '', // Reset doctor selection when clinic changes
+      doctor: '', 
     });
   };
 
 
   return (
     <>
-      <div className="appointment-page-container">
-        <form className="appointment-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Clinic:</label>
+    <div className="login-page">
+      <div className="form">
+        <form className="login-form" onSubmit={handleSubmit}>
+            <label className="d-flex justify-content-center text-secondary">Clinic:</label>
             <select
               name="clinic"
               value={formData.clinic}
@@ -114,9 +113,8 @@ const MakeAppointment = () => {
                 </option>
               ))*/}
             </select>
-          </div>
-          <div className="form-group">
-            <label>Doctor:</label>
+
+            <label className="d-flex justify-content-center text-secondary">Doctor:</label>
             <select
               name="doctor"
               value={formData.doctor}
@@ -133,18 +131,11 @@ const MakeAppointment = () => {
                     </option>
                   ))*/}
             </select>
-          </div>
-          <div className="form-group">
-            <label>Date:</label>
-            <DatePicker
-              selected={formData.date}
-              onChange={(date) => setFormData({ ...formData, date })}
-              dateFormat="yyyy-MM-dd"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Time:</label>
+
+            <label className="d-flex text-secondary">Date:</label>
+            <DatePicker className="w-100" name="date" selected={formData.date} onChange={handleInputChange} dateFormat="yyyy-MM-dd" toggleCalendarOnIconClick required />
+
+            <label className="d-flex justify-content-center text-secondary">Time:</label>
             <select
               name="time"
               value={formData.time}
@@ -163,43 +154,22 @@ const MakeAppointment = () => {
               <option value="04:00 PM">4:00 PM</option>
               <option value="05:00 PM">5:00 PM</option>
             </select>
-          </div>
-          <div className="form-group">
-            <label>First Name:</label>
+
+            <label className="d-flex text-secondary">First Name:</label>
             <input
               type="text"
               name="firstName"
+              placeholer="first name"
               value={formData.firstName}
               onChange={handleInputChange}
               required
             />
-          </div>
-          <div className="form-group">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="appointment-button-container">
-            <button className="appointment-button" type="submit">
+
+            <button className="submit-button" type="submit">
               Book Appointment
             </button>
-          </div>
         </form>
+      </div>
       </div>
     </>
   );
