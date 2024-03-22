@@ -1,4 +1,5 @@
 import './App.css';
+import 'react-datepicker/dist/react-datepicker.css'; 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import PatientLogIn from './pages/patient/LogIn';

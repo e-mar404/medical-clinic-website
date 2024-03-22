@@ -70,6 +70,7 @@ function PatientSignupModal() {
 
             <label className="d-flex text-secondary">First Name</label>
             <input type="text" name="first_name" placeholder="first name" onChange={registerInput} required/>
+
             <label className="d-flex text-secondary">Last Name</label>
             <input type="text" name="last_name" placeholder="last name" onChange={registerInput} required/>
     
