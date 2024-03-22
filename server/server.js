@@ -54,6 +54,10 @@ const server = http.createServer((req, res) => {
           loginEmployee(req, res, db);
           break;
 
+        case '/appointment': // Handle appointment creation
+          createAppointment(req, res, db);
+          break;
+
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
