@@ -7,7 +7,7 @@ async function createAppointment(req, res, db) {
         const body = await PostData(req)
       // Extract appointment data from the request body
       const { clinic, doctor, date, time, firstName, lastName, email } = JSON.parse(body);
-        console.log(`clinic:${clinic} doctor:${doctor} date:${date} time:${time} firstName:${firstName} lastName$:{lastName} email$:{email}`);
+        console.log(`clinic:${clinic} doctor:${doctor} date:${date} time:${time} firstName:${firstName} lastName$:${lastName} email$:${email}`);
       // Query to retrieve doctor_id from MEmployee table based on first_name
       const [doctorRows, _] = await db.promise().query('SELECT memployee_id FROM MEmployee WHERE first_name = ?', [doctor]);
       const doctorId = doctorRows.length > 0 ? doctorRows[0].memployee_id : null;
