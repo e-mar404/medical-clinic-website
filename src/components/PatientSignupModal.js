@@ -74,11 +74,11 @@ function PatientSignupModal() {
             <input type="text" name="last_name" placeholder="last name" onChange={registerInput} required/>
     
             <label className="d-flex text-secondary">Date of Birth</label>
-            <DatePicker className="w-100" selected={formData.date} onChange={registerInput} dateFormat="yyyy-MM-dd" showIcon icon="fa fa-calendar" toggleCalendarOnIconClick required />
+            <DatePicker className="w-100" selected={formData.date} onChange={registerInput} dateFormat="yyyy-MM-dd" showIcon toggleCalendarOnIconClick required />
             
             <label className="d-flex text-secondary">Password (min length: 8)</label>
             <input type="password" name="password" placeholder="password" minLength="8" onChange={registerInput} required/>
-            <button className="submit-button" >Register</button>
+            <button type="submit" className="submit-button" >Register</button>
           </form>
         </div>
       </div>
