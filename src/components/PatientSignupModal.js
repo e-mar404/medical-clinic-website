@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
-import './LoginModal.css';
+import './PatientSignupModal.css';
 
-function PatientRegisterModal() {
+function PatientSignupModal() {
   const nav = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -58,26 +59,27 @@ function PatientRegisterModal() {
       <div className="login-page">
         <div className="form">
           <form className="login-form" onSubmit={registerPatient}>
-            <label htmlFor="email" className="d-flex text-secondary">Email</label>
-            <input type="email" id="email" name="email" placeholder="email" onChange={registerInput} required/>
+            <label className="d-flex text-secondary">Email</label>
+            <input type="email" name="email" placeholder="email" onChange={registerInput} required/>
 
-            <label htmlFor="phone_number" className="d-flex text-secondary">Phone Number (123-456-7890)</label>
-            <input type="tel" id="phone_number" name="phone_number" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" onChange={registerInput} required/>
+            <label className="d-flex text-secondary">Phone Number (123-456-7890)</label>
+            <input type="tel" name="phone_number" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" onChange={registerInput} required/>
 
-            <label htmlFor="address" className="d-flex text-secondary">Address</label>
-            <input type="text" id="address" name="address" placeholder="address" onChange={registerInput} required/>
+            <label className="d-flex text-secondary">Address</label>
+            <input type="text" name="address" placeholder="address" onChange={registerInput} required/>
 
-            <label htmlFor="first_name" className="d-flex text-secondary">First Name</label>
-            <input type="text" id="first_name" name="first_name" placeholder="first name" onChange={registerInput} required/>
-            <label htmlFor="last_name" className="d-flex text-secondary">Last Name</label>
-            <input type="text" id="last_name" name="last_name" placeholder="last name" onChange={registerInput} required/>
+            <label className="d-flex text-secondary">First Name</label>
+            <input type="text" name="first_name" placeholder="first name" onChange={registerInput} required/>
+
+            <label className="d-flex text-secondary">Last Name</label>
+            <input type="text" name="last_name" placeholder="last name" onChange={registerInput} required/>
     
-            <label htmlFor="date_of_birth" className="d-flex text-secondary">Date of Birth</label>
-            <input type="text" id="date_of_birth" name="date_of_birth" placeholder="date of birth (yyyy-mm-dd)" onChange={registerInput} required/>
+            <label className="d-flex text-secondary">Date of Birth</label>
+            <DatePicker className="w-100" selected={formData.date} onChange={registerInput} dateFormat="yyyy-MM-dd" showIcon toggleCalendarOnIconClick required />
             
-            <label htmlFor="password" className="d-flex text-secondary">Password (min length: 8)</label>
-            <input type="password" id="password" name="password" placeholder="password" minLength="8" onChange={registerInput} required/>
-            <button type="submit">Register</button>
+            <label className="d-flex text-secondary">Password (min length: 8)</label>
+            <input type="password" name="password" placeholder="password" minLength="8" onChange={registerInput} required/>
+            <button type="submit" className="submit-button" >Register</button>
           </form>
         </div>
       </div>
@@ -85,4 +87,4 @@ function PatientRegisterModal() {
   );
 }
 
-export default PatientRegisterModal;
+export default PatientSignupModal;

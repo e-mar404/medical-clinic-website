@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker'; 
-import 'react-datepicker/dist/react-datepicker.css'; 
-import './MakeAppointment.css';
+import './MakeAppointmentForm.css';
 
-const MakeAppointment = () => {
+const MakeAppointmentForm = ({ firstName, lastName, email }) => {
+  firstName = (firstName) ? firstName : localStorage.getItem('UserFirstName'); 
+  lastName = (lastName) ? lastName : localStorage.getItem('UserLastName'); 
+  email = (email) ? email : localStorage.getItem('UserEmail'); 
+
   const [formData, setFormData] = useState({
-    clinic: '',
-    doctor: '',
+    clinic: 'Clinic 1',
+    doctor: 'Doctor 1',
     date: null, 
-    time: '',
-    firstName: '',
-    lastName: '',
-    email: '',
+    time: '1100',
+    firstName: firstName, 
+    lastName: lastName, 
+    email: email,
   });
 
   const handleInputChange = (e) => {
@@ -24,7 +27,7 @@ const MakeAppointment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     // Preprocess time data
     let processedTime = formData.time;
     if (formData.time.includes('PM')) {
@@ -55,6 +58,7 @@ const MakeAppointment = () => {
       email: formData.email,
     };
   
+    console.log(appointmentData);
     try {
       const response = await fetch('/appointment', {
         method: 'POST',
@@ -72,16 +76,7 @@ const MakeAppointment = () => {
     } catch (error) {
       console.error('Error booking appointment:', error);
     }
-  
-    setFormData({
-      clinic: '',
-      doctor: '',
-      date: null,
-      time: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-    });
+
   };
   
   
@@ -97,15 +92,13 @@ const MakeAppointment = () => {
 
   return (
     <>
-      <div className="appointment-page-container">
-        <form className="appointment-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Clinic:</label>
+      <div className="login-page">
+        <form className="form" onSubmit={handleSubmit}>
+            <label className="d-flex justify-content-center text-secondary">Clinic:</label>
             <select
               name="clinic"
               value={formData.clinic}
               onChange={handleClinicChange}
-              required
             >
               <option value="">Select Clinic</option>
               {/*clinic.map((clinic) => (
@@ -114,14 +107,12 @@ const MakeAppointment = () => {
                 </option>
               ))*/}
             </select>
-          </div>
-          <div className="form-group">
-            <label>Doctor:</label>
+
+            <label className="d-flex justify-content-center text-secondary">Doctor:</label>
             <select
               name="doctor"
               value={formData.doctor}
               onChange={handleInputChange}
-              required
             >
               <option value="">Select Doctor</option>
               {/*formData.clinic &&
@@ -133,23 +124,21 @@ const MakeAppointment = () => {
                     </option>
                   ))*/}
             </select>
-          </div>
-          <div className="form-group">
-            <label>Date:</label>
+
+            <label className="d-flex text-secondary">Date:</label>
             <DatePicker
               selected={formData.date}
               onChange={(date) => setFormData({ ...formData, date })}
               dateFormat="yyyy-MM-dd"
-              required
+              showIcon
+              toggleCalendarOnIconClick
             />
-          </div>
-          <div className="form-group">
-            <label>Time:</label>
+
+            <label className="d-flex justify-content-center text-secondary">Time:</label>
             <select
               name="time"
               value={formData.time}
               onChange={handleInputChange}
-              required
             >
               <option value="">Select Time</option>
               <option value="08:00 AM">8:00 AM</option>
@@ -163,46 +152,14 @@ const MakeAppointment = () => {
               <option value="04:00 PM">4:00 PM</option>
               <option value="05:00 PM">5:00 PM</option>
             </select>
-          </div>
-          <div className="form-group">
-            <label>First Name:</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="appointment-button-container">
-            <button className="appointment-button" type="submit">
+
+            <button className="submit-button" type="submit">
               Book Appointment
             </button>
-          </div>
         </form>
       </div>
     </>
   );
 };
 
-export default MakeAppointment;
+export default MakeAppointmentForm;

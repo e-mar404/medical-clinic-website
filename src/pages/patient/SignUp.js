@@ -2,7 +2,7 @@ import Navbar from '../../components/Navbar';
 import PatientSignupModal from '../../components/PatientSignupModal';
 import Footer from '../../components/Footer';
 
-function PatientSignUp() {
+function PatientSignup() {
   return (
     <>
     <Navbar />
@@ -14,5 +14,5 @@ function PatientSignUp() {
   );
 }
 
-export default PatientSignUp;
+export default PatientSignup;
 
