@@ -38,7 +38,6 @@ function PatientLoginModal() {
         }
       });
     });
-    //console.log(email, password);
   }
 
   return (
