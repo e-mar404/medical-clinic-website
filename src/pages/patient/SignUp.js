@@ -1,6 +1,5 @@
-import { NavLink as Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import PatientRegisterModal from '../../components/PatientRegisterModal';
+import PatientSignupModal from '../../components/PatientSignupModal';
 import Footer from '../../components/Footer';
 
 function PatientSignUp() {
@@ -8,7 +7,7 @@ function PatientSignUp() {
     <>
     <Navbar />
 
-    <PatientRegisterModal />
+    <PatientSignupModal />
 
     <Footer />
     </>
