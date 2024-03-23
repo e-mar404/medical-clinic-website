@@ -31,7 +31,12 @@ function EmployeeLoginModal() {
           localStorage.setItem("UserLastName", data.message[0].last_name);
           localStorage.setItem("UserType", data.message[0].employee_role);
           console.log(data);
-          nav('/employee', {});
+          if (data.message[0].employee_role === 'Administrator') {
+            nav('/admin', {});
+          }
+          else {
+            nav('/employee', {});
+          }
         }
         else {
           alert("Invalid credentials! Please try again.");
