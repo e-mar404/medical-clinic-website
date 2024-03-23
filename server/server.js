@@ -9,7 +9,8 @@ const {
 const {
   getEmployeesByType,
   getEmployeesByClinic,
-  loginEmployee
+  loginEmployee,
+  createEmployeeAccount
 } = require('./controllers/employeeController');
 
 const {
