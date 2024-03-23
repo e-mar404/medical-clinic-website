@@ -25,7 +25,7 @@ function PatientHome() {
           <div className="col-md-4">
             <HomeCard 
                 name="Schedule Appointment" 
-                page_link="" 
+                page_link="/make_appointment" 
                 icon="fa-calendar-plus-o"/>
           </div>
         </div>

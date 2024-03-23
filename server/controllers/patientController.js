@@ -23,20 +23,6 @@ async function createPatientAccount(req, res, db) {
       
       res.writeHead(400, {'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err }));
-
-      console.log(`patientController.js: creating patient with email: ${email}`);
-
-      db.query('INSERT INTO Patient_Login(email_address, password) VALUES (?, ?)', [email, password], (err, db_res) => {
-        if (err) {
-          console.log(err);
-          res.writeHead(400, { 'Content-Type': 'application/json'});
-          res.end(JSON.stringify({ error: err }));
-        } 
-
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: `created patient with email: ${email}` }));
-      });
-
     } 
 }
 
@@ -74,7 +60,10 @@ async function createPatientLogin(email, password, patient_id, db) {
           reject(`createPatientLogin: ${err}`);
         }
 
-        resolve(`created patient log in for patient: ${patient_id} with email: ${email}`);
+        resolve({
+          email: email,
+          id: patient_id
+        });
       });
   });
 }
@@ -115,4 +104,22 @@ async function loginPatient(req, res, db) {
   } 
 }
 
-module.exports = { createPatientAccount, loginPatient };
+async function getPatientId(db, email){
+  return new Promise((resolve, reject) => {
+    db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
+    if (err) {
+      reject(err);
+      return
+    }
+
+    if (db_res.length === 0){
+      reject('Patient with that email was not found');
+      return;
+    }
+
+      resolve(db_res[0].patient_id);
+    });
+  });
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId };

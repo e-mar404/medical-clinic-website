@@ -1,0 +1,12 @@
+.react-datepicker-wrapper {
+  width: 100%; 
+}
+
+.form button {
+  margin-top: 1rem;
+  width: 0.5rem;
+}
+
+.form .submit-button {
+  width: 100%;
+}

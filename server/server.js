@@ -7,16 +7,22 @@ const {
 } = require('./controllers/patientController');
 
 const {
-  getEmployeesByType
+  getEmployeesByType,
+  getEmployeesByClinic,
+  loginEmployee
 } = require('./controllers/employeeController');
 
 const {
   generateReportFor
 } = require('./controllers/reportController');
 
-const { 
-  createAppointment 
-} = require('./controllers/appointmentController'); 
+const {
+  createAppointment
+} = require('./controllers/appointmentController');
+
+const {
+  getClinics
+} = require('./controllers/clinicController');
 
 require('dotenv').config();
 
@@ -36,15 +42,12 @@ const db = mysql.createConnection({
 
 db.connect(function (err) {
   const msg = (err) ? `Server.js: Error connecting to db: ${err}` : `Server.js: Database '${database}' connected`;  
+
   console.log(msg);
 });
 
-// Log any database errors
-db.on('error', function(err) {
-  console.log('Database error:', err);
-});
-
 const server = http.createServer((req, res) => {
+  
   switch (req.method) {
     case 'POST':
       switch (req.url) {
@@ -56,8 +59,12 @@ const server = http.createServer((req, res) => {
           loginPatient(req, res, db);
           break;
 
-        case '/appointment': // Handle appointment creation
-              createAppointment(req, res, db);
+        case '/employee/login':
+          loginEmployee(req, res, db);
+          break;
+
+        case '/make_appointment': 
+          createAppointment(req, res, db);
           break;
 
         default:
@@ -65,6 +72,7 @@ const server = http.createServer((req, res) => {
           res.end(JSON.stringify({ message: 'Route not found' }));
           break;
       }
+      
       break;
       
     case 'GET': 
@@ -77,15 +85,26 @@ const server = http.createServer((req, res) => {
 
         case /\/employee\/bytype/.test(req.url): 
           const type = req.url.split('/')[3];
+
           getEmployeesByType(res, db, type);
           break;
 
+        case /\/employee\/byclinic/.test(req.url):
+          const clinic_id = req.url.split('/')[3];
+
+          getEmployeesByClinic(res, db, clinic_id);
+          break;
+
+        case /get_clinics/.test(req.url):
+          getClinics(res, db);
+          break;
 
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
           break;
       }
+      
       break;
 
     default:
@@ -94,5 +113,5 @@ const server = http.createServer((req, res) => {
 });
 
 const PORT = process.env.SERVER_PORT || 5001; 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
