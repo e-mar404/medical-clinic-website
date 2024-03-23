@@ -2,7 +2,6 @@
   "homepage": "https://clinic-website.up.railway.app",
   "name": "medical-clinic-website",
   "version": "0.1.0",
-  "private": true,
   "proxy": "https://medical-clinic-backend.up.railway.app",
   "proxy": "http://localhost:5001",
   "dependencies": {
