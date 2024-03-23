@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
 import './MakeAppointmentForm.css';
@@ -6,7 +6,7 @@ import './MakeAppointmentForm.css';
 const MakeAppointmentForm = ({ patientEmail }) => {
   const [clinics, setClinics] = useState([{"clinic_id": 0, "clinic_name": "Select clinic"}]);
   const [doctors, setDoctors] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
-
+  const clinicsRef = useRef(clinics);
 
   const fetchClinicEmployees = async (clinic_id=0) => {
 
@@ -42,7 +42,8 @@ const MakeAppointmentForm = ({ patientEmail }) => {
 
           }
 
-          setClinics(data.message);
+          clinicsRef.current = data.message;
+          setClinics(clinicsRef.current);
         });
       });
 
@@ -50,8 +51,8 @@ const MakeAppointmentForm = ({ patientEmail }) => {
 
     fetchClinics();
 
-    console.log(clinics);
-  }, []); 
+    console.log('use effect called');
+  }, [clinicsRef]); 
 
   patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
 
