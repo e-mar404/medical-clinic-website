@@ -52,7 +52,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*'); /* security concerns, but okay for now */
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
   res.setHeader('Access-Control-Max-Age', 2592000); 
-  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   switch (req.method) {
     case 'POST':
@@ -124,4 +124,4 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.SERVER_PORT || 5001; 
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
