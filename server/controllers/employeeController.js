@@ -170,6 +170,29 @@ async function loginEmployee(req, res, db) {
   } 
 }
 
+async function employeeTransfer(req, res, db){
+  try {
+    const body = await PostData(req);
+    body = { email, clinic }.JSON.parse(body);
+    
+    console.log(`Transfer Employee with email ${email} to clinic id: ${clinic}`);
+    db.query(`UPDATE Employee SET clinic_id = clinic WHERE email_address = '${email}';`, 
+    [email, clinic], (err, db_res) => {
+      if(err){
+        throw (err);
+      }
+      res.writeHead(200, { 'Content-Type':'applicatioon/json' });
+      res.end(JSON.stringify ({ message: db_res}));
+    }); // fix
+    // check for errors
+  }
+  catch (err) {
+    res.writeHead(400, { 'Content-Type':'applicatioon/json' });
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount };
+
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer };
 

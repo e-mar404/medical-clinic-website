@@ -10,7 +10,8 @@ const {
   getEmployeesByType,
   getEmployeesByClinic,
   loginEmployee,
-  createEmployeeAccount
+  createEmployeeAccount,
+  employeeTransfer
 } = require('./controllers/employeeController');
 
 const {
@@ -72,6 +73,10 @@ const server = http.createServer((req, res) => {
           createEmployeeAccount(req, res, db);
           break; 
           
+        case '/admin/transfer':
+          employeeTransfer(req, res, db);
+          break;
+
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
@@ -102,6 +107,10 @@ const server = http.createServer((req, res) => {
 
         case /get_clinics/.test(req.url):
           getClinics(res, db);
+          break; 
+
+        case /\/admin\/employeelist/.test(req.url): //might not be needed
+          getEmployeesByType(res, req, type);
           break;
 
         default:

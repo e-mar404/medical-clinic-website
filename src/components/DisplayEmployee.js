@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './DisplayEmployee.css'
 
 function DisplayEmployee(){
+    const [employees, setEmployee] = useState([])
+    const [type, setType] = useState('');
+  
+    
+    useEffect(() => {
+      setType('all');
+      fetch(`/\/employee\/bytype/${type}`).then((response) => {
+        response.json().then( data => {
+          setEmployee(data);}
+        )
+      })
+    }, []); 
+
     return(
         <>
             <div className="container">
@@ -12,10 +25,11 @@ function DisplayEmployee(){
                     <th>Role</th>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>First Name</td>
-                    <td>Last Name</td>
-                    <td>Role</td>
+                {employees.map(employee => (
+                    <tr key={employee.id}>
+                    <td>{employee.first_name}</td>
+                    <td>employee.last_name</td>
+                    <td>employee.role</td>
                     <td>
                     <p className="nav-item dropdown">
                       <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,25 +47,8 @@ function DisplayEmployee(){
                     </td>
                   </tr>
 
-                  <tr>
-                    <td>First Name</td>
-                    <td>Last Name</td>
-                    <td>Role</td>
-                    <td>
-                    <p className="nav-item dropdown">
-                      <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        More options
-                      </a>
-                      <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a className="dropdown-item" href="/">View Appointments</a></li>
-                        <li><a className="dropdown-item" href="/">Transfer</a></li>
-                        <li><hr className="dropdown-divider" /></li>
-                        <li><a className="dropdown-item" href="/">Terminate</a></li>
-                      </ul>
-                      </p>
-                    </td>
-                  </tr>
-
+                  ))}
+                
                 </tbody>
               </table>
             </div>
