@@ -12,7 +12,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
 
     const requestOptions = {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'text/plain' }
     };
 
     fetch(`/employee/byclinic/${clinic_id}`, requestOptions).then((response) => {

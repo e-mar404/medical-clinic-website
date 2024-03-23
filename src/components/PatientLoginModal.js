@@ -12,15 +12,17 @@ function PatientLoginModal() {
 
   const requestOptions = {
     method: 'POST',
+    mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       'email': email,
       'password': password,
     })
   };
-    fetch(`${process.env.BACKEND_HOST}/patient/login`, requestOptions).then((response) => {
+
+    fetch('https://medical-clinic-backend.up.railway.app/patient/login', requestOptions).then((response) => {
       response.json().then((data) => {
-        console.log(response.status);
+
         if (response.status === 200) {
           alert("Successfully signed in!");
           localStorage.setItem("LoggedIn", true);
