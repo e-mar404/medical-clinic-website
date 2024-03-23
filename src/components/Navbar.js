@@ -20,7 +20,7 @@ function Navbar() {
       return (
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
-            <a className="nav-link" aria-current="page" href="/">Home</a>
+            <a className="nav-link" aria-current="page" href="/patient">Home</a>
           </li>
           <li className="nav-item">
             <a className="nav-link disabled" href="/">Appointments</a>
