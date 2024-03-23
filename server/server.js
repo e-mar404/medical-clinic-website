@@ -8,12 +8,21 @@ const {
 
 const {
   getEmployeesByType,
+  getEmployeesByClinic,
   loginEmployee
 } = require('./controllers/employeeController');
 
 const {
   generateReportFor
 } = require('./controllers/reportController');
+
+const {
+  createAppointment
+} = require('./controllers/appointmentController');
+
+const {
+  getClinics
+} = require('./controllers/clinicController');
 
 require('dotenv').config();
 
@@ -54,7 +63,7 @@ const server = http.createServer((req, res) => {
           loginEmployee(req, res, db);
           break;
 
-        case '/appointment': // Handle appointment creation
+        case '/make_appointment': 
           createAppointment(req, res, db);
           break;
 
@@ -78,6 +87,16 @@ const server = http.createServer((req, res) => {
           const type = req.url.split('/')[3];
 
           getEmployeesByType(res, db, type);
+          break;
+
+        case /\/employee\/byclinic/.test(req.url):
+          const clinic_id = req.url.split('/')[3];
+
+          getEmployeesByClinic(res, db, clinic_id);
+          break;
+
+        case /get_clinics/.test(req.url):
+          getClinics(res, db);
           break;
 
         default:

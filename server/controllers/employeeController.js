@@ -77,5 +77,21 @@ async function loginEmployee(req, res, db) {
   } 
 }
 
+function getEmployeesByClinic(res, db, clinic_id) {
+  console.log(`getting employees from clinic ${clinic_id}`)
 
-module.exports = { getEmployeesByType, loginEmployee };
+  db.query('SELECT employee_id, first_name, last_name FROM Employee WHERE primary_clinic=?', [clinic_id], (err, db_res) => {
+    if (err) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err }));
+      return;
+    }
+
+    console.log("success");
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee };
