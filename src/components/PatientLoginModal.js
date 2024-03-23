@@ -46,7 +46,7 @@ function PatientLoginModal() {
           <form className="login-form">
             <input type="text" placeholder="patientid" onChange={(e) => setEmail(e.target.value)} />
             <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={loginFunction}>login</button>
+            <button type="submit" className="submit-button" onClick={loginFunction}>login</button>
             <p className="message">New patient? <a href="/patient/signup">Register here!</a></p>
           </form>
         </div>
