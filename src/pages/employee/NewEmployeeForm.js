@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar";
-import AddNewEmployee from "../../components/AddNewEmployee";
+// import AddNewEmployee from "../../components/AddNewEmployee";
 import NewEmployee from "../../components/NewEmployee";
 
 function NewEmployeeForm(){

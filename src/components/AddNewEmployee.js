@@ -6,7 +6,7 @@ function AddNewEmployee(){
         <>
             <div>
                 
-                <a className="button-link" href="#" id="navbarDropdown" role="button" aria-expanded="false">
+                <a className="button-link" href="/" id="navbarDropdown" role="button" aria-expanded="false">
                     <button className="button" >Add New Employee</button>
                 </a>
             </div>
