@@ -25,7 +25,7 @@
     "react": "react-scripts start",
     "start": "concurrently \"npm run react\" \"cd server && node server.js\"",
     "build": "react-scripts build",
-    "production": "npx serve -s build",
+    "production": "concurrently \"npx serve -s build\" \"cd server && node server.js\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
