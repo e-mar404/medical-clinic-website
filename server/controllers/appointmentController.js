@@ -27,7 +27,7 @@ async function createAppointment(req, res, db) {
  
 async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time){
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Appointment (clinic_id, doctor_id, patient_id, appointment_date, appointment_time, appointment_status) VALUES (?, ?, ?, ?, ?, ?)',
+    db.query('INSERT INTO Appointment (clinic_id, doctor_id, patient_id, appointment_date, time, appointment_status) VALUES (?, ?, ?, ?, ?, ?)',
       [clinicId, doctorId, patientId, date, time, 'scheduled'], (err, db_res) => {
         if (err) {
           reject(err.sqlMessage);
