@@ -19,7 +19,6 @@ function App() {
     localStorage.setItem('LoggedIn', false);
     localStorage.setItem("LoggedIn", false);
     localStorage.setItem("LoginEmail", null); // Email of logged in user
-    localStorage.setItem("LoginType", null); // Type of logged in user (patient, employee)
     localStorage.setItem("UserEmail", null); // Email of logged in user
     localStorage.setItem("UserId", null); // Email of logged in user
     localStorage.setItem("UserFirstName", null); // First name of logged in user
