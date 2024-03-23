@@ -22,8 +22,8 @@ function DisplayEmployee(){
                         More options
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a className="dropdown-item" href="#">View Appointments</a></li>
-                        <li><a className="dropdown-item" href="#">Transfer</a></li>
+                        <li><a className="dropdown-item" href="/admin/viewappointment">View Appointments</a></li>
+                        <li><a className="dropdown-item" href="/admin/transfer">Transfer</a></li>
                         <li><hr className="dropdown-divider" /></li>
                         <li><a className="dropdown-item" href="#">Terminate</a></li>
                       </ul>
