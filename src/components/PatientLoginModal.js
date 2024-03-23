@@ -10,16 +10,36 @@ function PatientLoginModal() {
   const loginFunction = (e) => {
     e.preventDefault();
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        'email': email,
-        'password': password,
-      })
-    };
+    const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
 
-    fetch('/patient/login', requestOptions).then((response) => {
+const raw = JSON.stringify({
+  "email": "emilio@gmail.com",
+  "password": "password"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://medical-clinic-backend.up.railway.app/patient/login", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+
+/*
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      'email': email,
+      'password': password,
+    })
+  };
+    fetch('https://medical-clinic-backend.up.railway.app/patient/login', requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(response.status);
         if (response.status === 200) {
@@ -38,6 +58,7 @@ function PatientLoginModal() {
         }
       });
     });
+    */
   }
 
   return (
