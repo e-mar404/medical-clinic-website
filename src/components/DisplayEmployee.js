@@ -8,10 +8,11 @@ function DisplayEmployee(){
     
     useEffect(() => {
       setType('all');
-      fetch(`/\/employee\/bytype/${type}`).then((response) => {
+      fetch('/employee/bytype/medical').then((response) => {
         response.json().then( data => {
-          setEmployee(data);}
-        )
+          console.log(data);
+        }
+      )
       })
     }, []); 
 
