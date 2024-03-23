@@ -1,5 +1,5 @@
 {
-  "homepage": "https://med-clinic-site.onrender.com/",
+  "homepage": "./",
   "name": "medical-clinic-website",
   "version": "0.1.0",
   "proxy": "https://medclinic-server-d90z.onrender.com",
