@@ -18,7 +18,7 @@ function PatientLoginModal() {
       'password': password,
     })
   };
-    fetch('/patient/login', requestOptions).then((response) => {
+    fetch(`${process.env.BACKEND_HOST}/patient/login`, requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(response.status);
         if (response.status === 200) {
