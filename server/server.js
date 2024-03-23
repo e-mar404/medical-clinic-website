@@ -48,6 +48,11 @@ db.connect(function (err) {
 
 const server = http.createServer((req, res) => {
   
+  res.setHeader('Access-Control-Allow-Origin', '*'); /* security concerns, but okay for now */
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Max-Age', 2592000); 
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+
   switch (req.method) {
     case 'POST':
       switch (req.url) {
