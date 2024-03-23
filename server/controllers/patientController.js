@@ -104,4 +104,22 @@ async function loginPatient(req, res, db) {
   } 
 }
 
-module.exports = { createPatientAccount, loginPatient };
+async function getPatientId(db, email){
+  return new Promise((resolve, reject) => {
+    db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
+    if (err) {
+      reject(err);
+      return
+    }
+
+    if (db_res.length === 0){
+      reject('Patient with that email was not found');
+      return;
+    }
+
+      resolve(db_res[0].patient_id);
+    });
+  });
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId };
