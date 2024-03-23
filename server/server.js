@@ -9,7 +9,8 @@ const {
 const {
   getEmployeesByType,
   getEmployeesByClinic,
-  loginEmployee
+  loginEmployee,
+  createEmployeeAccount
 } = require('./controllers/employeeController');
 
 const {
@@ -67,6 +68,10 @@ const server = http.createServer((req, res) => {
           createAppointment(req, res, db);
           break;
 
+        case '/admin/newemployee':
+          createEmployeeAccount(req, res, db);
+          break; 
+          
         default:
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Route not found' }));
