@@ -2,14 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-function Username() {
-  return (
-    <a className="nav-link dropdown-toggle btn btn-lg" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span>
-    </a>
-  )
-}
-
 function SignOutButton() {
   let nav = useNavigate();
   return (
@@ -67,6 +59,34 @@ function Navbar() {
           <li className="nav-item">
             <a className="nav-link" aria-current="page" href="/admin">Admin Home</a>
           </li>
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Employees
+            </a>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a className="dropdown-item" href="/admin/employeelist">View Employees</a></li>
+              <div class="dropdown-divider"></div>
+              <li><a className="dropdown-item" href="/admin/newemployee">Add an Employee</a></li>
+            </ul>
+          </li>
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Appointments
+            </a>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a className="dropdown-item" href="/admin/viewappointment">View Appointments</a></li>
+              <div class="dropdown-divider"></div>
+              <li><a className="dropdown-item" href="/admin/make_appointment">Create Appointment</a></li>
+            </ul>
+          </li>
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Clinics
+            </a>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a className="dropdown-item" href="/admin/transfer">Transfer a Doctor</a></li>
+            </ul>
+          </li>
         </ul>
       )
     }
@@ -105,7 +125,9 @@ function Navbar() {
       return (
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
           <li className="nav-item dropdown">
-            {Username()}
+            <a className="nav-link dropdown-toggle btn btn-lg" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span><span> ({localStorage.getItem("UserType")})</span>
+            </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a className="dropdown-item" href="/employee/login">Profile Information</a></li>
               <li><a className="dropdown-item" href="/employee/login">Medical History</a></li>
@@ -117,11 +139,13 @@ function Navbar() {
         </ul>
       )
     }
-    else if (localStorage.getItem("LoggedIn") === "true" && localStorage.getItem("UserType") === 'Doctor') {
+    else if (localStorage.getItem("LoggedIn") === "true" && ((localStorage.getItem("UserType") === 'Doctor' || localStorage.getItem("UserType") === 'Nurse') || localStorage.getItem("UserType") === 'Receptionist' || localStorage.getItem("UserType") === 'Administrator')) {
       return (
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
           <li className="nav-item dropdown">
-            {Username()}
+          <a className="btn btn-lg disabled" href="/" role="button">
+            <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span><span> ({localStorage.getItem("UserType")})</span>
+          </a>
           </li>
           {SignOutButton()}
         </ul>
