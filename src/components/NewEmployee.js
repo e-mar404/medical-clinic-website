@@ -16,7 +16,8 @@ function NewEmployee() {
     e.preventDefault();
 
     
-
+    setRole('for eslint');
+    console.log(email, password, role, first_name, m_initial, last_name);
   }
 
   return (
