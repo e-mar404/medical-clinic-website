@@ -12,8 +12,11 @@ function PatientLoginModal() {
 
   const requestOptions = {
     method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
+    redirect: 'follow',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Connection': 'keep-alive'
+    },
     body: JSON.stringify({
       'email': email,
       'password': password,
