@@ -33,7 +33,7 @@ function PatientSignupModal() {
       body: JSON.stringify(formData)
     };
 
-    fetch('/patient/register', requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/register`, requestOptions).then((response) => {
       response.json().then((data) => {
         if (response.status !== 200) {
           alert(data.error);
