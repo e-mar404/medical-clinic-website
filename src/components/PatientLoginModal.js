@@ -23,7 +23,7 @@ function PatientLoginModal() {
       })
     };
 
-    fetch(`${REACT_APP_BACKEND_HOST}/patient/login`, requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/login`, requestOptions).then((response) => {
       response.json().then((data) => {
 
         if (response.status === 200) {
