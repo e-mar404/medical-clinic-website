@@ -24,7 +24,7 @@ async function getEmployeesByType(res, db, type) {
 
 
     db.query(`SELECT 
-      employee_id, email_address, employee_role 
+      employee_id, email_address, employee_role, first_name, last_name
       FROM Employee WHERE ${condition}`, (err, db_res) => {
         if (err) {
           throw (err);
@@ -158,4 +158,29 @@ async function loginEmployee(req, res, db) {
     res.end(JSON.stringify({ 'message': error }));
   } 
 }
-module.exports = { getEmployeesByType, getEmployeesByClinic, createEmployeeAccount, loginEmployee };
+
+async function employeeTransfer(req, res, db){
+  try {
+    const body = await PostData(req);
+    body = { email, clinic }.JSON.parse(body);
+    
+    console.log(`Transfer Employee with email ${email} to clinic id: ${clinic}`);
+    db.query(`UPDATE Employee SET clinic_id = clinic WHERE email_address = '${email}';`, 
+    [email, clinic], (err, db_res) => {
+      if(err){
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    }); 
+    
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer };

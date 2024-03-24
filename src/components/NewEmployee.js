@@ -65,7 +65,7 @@ function NewEmployee() {
             <input type="text" placeholder="first name" onChange={(e) => setFirstName(e.target.value)}/>
             <input type="text" placeholder="middle initial" onChange={(e) => setMiddleName(e.target.value)}/>
             <input type="text" placeholder="last name" onChange={(e) => setLastName(e.target.value)}/>
-            <select class="form-select" onChange={handleRoleChange}> 
+            <select className="form-select" onChange={handleRoleChange}> 
                 <option selected disabled>Role</option>
                 <option value="Doctor">Doctor</option>
                 <option value="Nurse">Nurse</option>
@@ -73,7 +73,7 @@ function NewEmployee() {
                 <option value="Administrator">Administrator</option>
             </select>
 
-            <button onClick={(e) => registerEmployee(e)}>Register</button>
+            <button className="submit-button" type="submit" onClick={(e) => registerEmployee(e)}>Register</button>
          </form>
         </div>
       </div>
