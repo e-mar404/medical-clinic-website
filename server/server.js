@@ -1,11 +1,10 @@
 const http = require('http');
 const mysql = require('mysql2');
-
-const { 
-  createPatientAccount,
-  loginPatient
-} = require('./controllers/patientController');
-
+const { generateReportFor } = require('./controllers/reportController');
+const { createAppointment } = require('./controllers/appointmentController');
+const { getClinics } = require('./controllers/clinicController');
+const { headers } = require('./utils');
+const { createPatientAccount, loginPatient } = require('./controllers/patientController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -14,20 +13,8 @@ const {
   employeeTransfer
 } = require('./controllers/employeeController');
 
-const {
-  generateReportFor
-} = require('./controllers/reportController');
-
-const {
-  createAppointment
-} = require('./controllers/appointmentController');
-
-const {
-  getClinics
-} = require('./controllers/clinicController');
 
 require('dotenv').config();
-
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 const dbUser = process.env.DB_USER;
@@ -49,14 +36,21 @@ db.connect(function (err) {
 });
 
 const server = http.createServer((req, res) => {
-  
+    
+  console.log(`Server.js: METHOD: ${req.method}; URL: ${req.url}`);
+
   switch (req.method) {
+    case 'OPTIONS':
+      res.writeHead(200, headers); 
+      res.end();
+      break;
+
     case 'POST':
       switch (req.url) {
         case '/patient/register':
           createPatientAccount(req, res, db);
           break;
-        
+
         case '/patient/login':
           loginPatient(req, res, db);
           break;
@@ -78,13 +72,13 @@ const server = http.createServer((req, res) => {
           break;
 
         default:
-          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.writeHead(404, headers);
           res.end(JSON.stringify({ message: 'Route not found' }));
           break;
       }
-      
+
       break;
-      
+
     case 'GET': 
       switch (true){
         case /reports/.test(req.url): 
@@ -114,18 +108,20 @@ const server = http.createServer((req, res) => {
           break;
 
         default:
-          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.writeHead(404, headers);
           res.end(JSON.stringify({ message: 'Route not found' }));
           break;
       }
-      
+
       break;
 
     default:
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ message: 'Invalid request type' }));
       break;
   }
 });
 
-const PORT = process.env.SERVER_PORT || 5001; 
+const PORT = process.env.PORT || 5001; 
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -12,10 +12,10 @@ const MakeAppointmentForm = ({ patientEmail }) => {
 
     const requestOptions = {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'text/plain' }
     };
 
-    fetch(`/employee/byclinic/${clinic_id}`, requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/byclinic/${clinic_id}`, requestOptions).then((response) => {
       response.json().then((data) => {
         if (response.status !== 200) {
           alert(data.error);
@@ -34,7 +34,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     };
 
     const fetchClinics = async () => {
-      fetch('/get_clinics', requestOptions).then((response) => {
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/get_clinics`, requestOptions).then((response) => {
         response.json().then((data) => {
           if (response.status !== 200) {
             alert(data.error);
@@ -119,7 +119,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
       body: JSON.stringify(appointmentData)
     };
 
-    fetch('/make_appointment', requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/make_appointment`, requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(data);
 

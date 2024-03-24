@@ -45,7 +45,7 @@ function NewEmployee() {
         //need to figure out how to get the primary clinic and employee type and phone number
       })
     };
-    fetch('/admin/newemployee', requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/admin/newemployee`, requestOptions).then((response) => {
         response.json().then((data) => {
         console.log(data);
       });

@@ -1,14 +1,16 @@
 {
-  "homepage": "https://clinic-website.up.railway.app",
+  "homepage": "https://clinic-website.up.railway.app/",
   "name": "medical-clinic-website",
   "version": "0.1.0",
-  "private": true,
   "proxy": "http://localhost:5001",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.8",
+    "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
+    "http": "^0.0.1-security",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.2",
     "react": "^18.2.0",
@@ -47,8 +49,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "concurrently": "^8.2.2",
-    "http": "^0.0.1-security"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
