@@ -20,7 +20,7 @@ function TransferDoctorForm(){
                 }
             )
         };
-        fetch('/admin/transfer', requestOptions).then((response) => {
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/admin/transfer`, requestOptions).then((response) => {
             response.json().then((data) => {
                 console.log(data);
             })
