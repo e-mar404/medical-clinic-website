@@ -2,12 +2,12 @@
   "homepage": "",
   "name": "medical-clinic-website",
   "version": "0.1.0",
-  "proxy": "https://medclinic-server-d90z.onrender.com",
   "proxy": "http://localhost:5001",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "http": "^0.0.1-security",
@@ -26,7 +26,7 @@
     "react": "react-scripts start",
     "start": "concurrently \"npm run react\" \"cd server && node server.js\"",
     "build": "react-scripts build",
-    "production": "npx serve -s build",
+    "production": "concurrently \"npx serve -s build\" \"cd server && node server.js\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
