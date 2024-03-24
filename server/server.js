@@ -6,10 +6,11 @@ const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient } = require('./controllers/patientController');
 const {
-    getEmployeesByType,
-    getEmployeesByClinic,
-    loginEmployee,
-    createEmployeeAccount
+  getEmployeesByType,
+  getEmployeesByClinic,
+  loginEmployee,
+  createEmployeeAccount,
+  employeeTransfer
 } = require('./controllers/employeeController');
 
 
@@ -65,6 +66,10 @@ const server = http.createServer((req, res) => {
         case '/admin/newemployee':
           createEmployeeAccount(req, res, db);
           break; 
+          
+        case '/admin/transfer':
+          employeeTransfer(req, res, db);
+          break;
 
         default:
           res.writeHead(404, headers);
@@ -96,6 +101,10 @@ const server = http.createServer((req, res) => {
 
         case /get_clinics/.test(req.url):
           getClinics(res, db);
+          break; 
+
+        case /\/admin\/employeelist/.test(req.url): //might not be needed
+          getEmployeesByType(res, req, type);
           break;
 
         default:
