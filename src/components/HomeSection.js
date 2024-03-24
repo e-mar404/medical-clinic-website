@@ -10,7 +10,7 @@ function HomeSection() {
                         <div className="card-body">
                             <h5 className="card-title">Schedule an Appointment</h5>
                             <p className="card-text">Our appointment-scheduling services are managed by our amazing staff!</p>
-                            <a href="#" className="btn btn-warning disabled">Find Next Available</a>
+                            <a href="/" className="btn btn-warning disabled">Find Next Available</a>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@ function HomeSection() {
                         <div className="card-body">
                             <h5 className="card-title">Find a Doctor</h5>
                             <p className="card-text">We have an expert team of doctors and specialists eager to help!</p>
-                            <a href="#" className="btn btn-success disabled">View Doctors Near Me</a>
+                            <a href="/" className="btn btn-success disabled">View Doctors Near Me</a>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@ function HomeSection() {
                         <div className="card-body">
                             <h5 className="card-title">Find a Location</h5>
                             <p className="card-text">We are rapidly expanding to multiple locations near you!</p>
-                            <a href="#" className="btn btn-info disabled">View Locations Near Me</a>
+                            <a href="/" className="btn btn-info disabled">View Locations Near Me</a>
                         </div>
                     </div>
                 </div>

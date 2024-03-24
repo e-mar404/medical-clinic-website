@@ -1,3 +1,10 @@
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, GET',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+  'Content-Type': 'application/json'
+};
+
 function PostData (req) {
   return new Promise((resolve, reject) => {
     try {
@@ -15,4 +22,4 @@ function PostData (req) {
   });
 }
 
-module.exports = { PostData };
+module.exports = { headers, PostData };

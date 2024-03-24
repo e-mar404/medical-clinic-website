@@ -19,7 +19,7 @@ function EmployeeLoginModal() {
       })
     };
 
-    fetch('/employee/login', requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/login`, requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(response.status);
         if (response.status === 200) {
