@@ -23,7 +23,7 @@ function PatientLoginModal() {
       })
     };
 
-    fetch('https://medical-clinic-backend.up.railway.app/patient/login', requestOptions).then((response) => {
+    fetch(`${REACT_APP_BACKEND_HOST}/patient/login`, requestOptions).then((response) => {
       response.json().then((data) => {
 
         if (response.status === 200) {
