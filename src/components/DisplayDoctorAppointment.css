@@ -1,6 +1,11 @@
-.DoctorInfo{
-    height: 50%;
-}
-.h2{
-    align-content: center;
+.container {
+    position:relative;
+    z-index: 1;
+    margin: 0 0 0 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+.hr {
+    width: auto;
 }

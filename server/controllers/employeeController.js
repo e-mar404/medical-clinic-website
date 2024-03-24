@@ -24,7 +24,7 @@ async function getEmployeesByType(res, db, type) {
   
 
     db.query(`SELECT 
-      employee_id, email_address, employee_role 
+      employee_id, email_address, employee_role, first_name, last_name
       FROM Employee WHERE ${condition}`, (err, db_res) => {
         if (err) {
           throw (err);

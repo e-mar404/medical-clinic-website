@@ -13,12 +13,10 @@ function AdminReports(){
                 </div>
                 <select className="form-select">
                     <option selected disabled>Select Report Type</option>
-                    <option value="1">Employees By Clinic</option>
-                    <option value="2">Clinic 2</option>
-                    <option value="3">Clinic 3</option>
+                    <option value="1">Report Types Go Here</option>
                 </select>
                 
-              <button>Generate</button>
+              <button className="submit-button" type="submit">Generate</button>
            </form>
           </div>
         </div>
