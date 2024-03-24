@@ -3,9 +3,10 @@ import './DisplayEmployee.css'
 
 function DisplayEmployee(){
     const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
-    const [type, setType] = useState([{"type": "all"}]);
+    //const [type, setType] = useState([{"type": "all"}]);
     const employeesRef = useRef(employees);
-
+    //setType("all");
+    //console.log(`${type}`);
 
 
     useEffect(() => {
@@ -34,27 +35,6 @@ function DisplayEmployee(){
       console.log('use effect called');
     }, [employeesRef]); 
 
-
-    {/*
-   const getDoctors = async () => {
-      const requestOptions = {
-        method: 'GET',
-        header: {'Content-Type': 'application/json' }
-      }
-      fetch(`/employee/bytype/medical`, requestOptions).then((response) => {
-        response.json().then((data) => {
-          if(response.status !== 200){
-            alert(data.error);
-            return;
-          }
-          setEmployee(data.message);
-          console.log(data);
-        });
-      });
-   }
-  */
-
- }
     return(
         <div className="container">
               <table className="table table-stripped" style={{ width: 118 + 'em'}}>
