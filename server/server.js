@@ -93,10 +93,14 @@ const server = http.createServer((req, res) => {
           getEmployeesByType(res, db, type);
           break;
 
-        case /\/employee\/byclinic/.test(req.url):
-          const clinic_id = req.url.split('/')[3];
+        case /\/employee\/byclinic\//.test(req.url):
+          const args = req.url.split('/');
 
-          getEmployeesByClinic(res, db, clinic_id);
+          const clinic_id = args[3];
+          const role = (args.length > 3) ? args[4] : '';
+          console.log(`Calling get employees with role: ${role}`);
+            
+          getEmployeesByClinic(res, db, clinic_id, role);
           break;
 
         case /get_clinics/.test(req.url):
