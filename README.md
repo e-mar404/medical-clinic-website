@@ -1,5 +1,5 @@
 # Front end
-## Patient Pages [Emilio + John + mohammad]
+## Patient Pages [Emilio + John]
 
 - [X] sign up 
     - Name
