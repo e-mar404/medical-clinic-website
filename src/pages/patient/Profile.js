@@ -10,16 +10,16 @@ function PatientProfile() {
           <div class="col-12">
             <ul class="nav nav-tabs">
               <li class="nav-item">
-                <a class="nav-link active" href="">Profile</a>
+                <a class="nav-link active" href="/">Profile</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Financial</a>
+                <a class="nav-link" href="/">Financial</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Emergency</a>
+                <a class="nav-link" href="/">Emergency</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Insurance</a>
+                <a class="nav-link" href="/">Insurance</a>
               </li>
             </ul>
           </div>
