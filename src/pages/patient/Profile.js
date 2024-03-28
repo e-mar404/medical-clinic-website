@@ -1,11 +1,10 @@
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-
+// instead of giving each nav button its own page, i'm gonna just make it re-render the page with the correct form
 function PatientProfile() {
   return (
     <>
       <Navbar />
-
       <div class="container-md mx-auto">
         <div class="row mt-3">
           <div class="col-12">
@@ -22,12 +21,8 @@ function PatientProfile() {
               <li class="nav-item">
                 <a class="nav-link" href="#">Insurance</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-              </li>
             </ul>
           </div>
-
         </div>
         <form>
           <div class="row mt-3">
@@ -76,13 +71,13 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Phone Number</label>
-                  <input type="text" class="form-control mt-1" id="PhoneNumber" placeholder="000-000-0000" readOnly />
+                  <input type="text" class="form-control mt-1" id="PhoneNumber" placeholder="000-000-0000" />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Home Address</label>
-                  <input type="text" class="form-control mt-1" id="Address" placeholder="University of Houston, Houston, TX" readOnly />
+                  <input type="text" class="form-control mt-1" id="Address" placeholder="University of Houston, Houston, TX" />
                 </div>
               </div>
             </div>
