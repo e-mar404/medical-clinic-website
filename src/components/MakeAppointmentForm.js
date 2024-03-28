@@ -15,7 +15,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
       headers: { 'Content-Type': 'text/plain' }
     };
 
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/byclinic/${clinic_id}`, requestOptions).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/byclinic/${clinic_id}/doctor`, requestOptions).then((response) => {
       response.json().then((data) => {
         if (response.status !== 200) {
           alert(data.error);

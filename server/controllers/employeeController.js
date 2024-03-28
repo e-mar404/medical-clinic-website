@@ -42,10 +42,16 @@ async function getEmployeesByType(res, db, type) {
 }
 
 
-function getEmployeesByClinic(res, db, clinic_id) {
-  console.log(`getting employees from clinic ${clinic_id}`)
+function getEmployeesByClinic(res, db, clinic_id, role) {
+  console.log(`getting employees with role ${role} from clinic ${clinic_id}`)
 
-  db.query('SELECT employee_id, first_name, last_name FROM Employee WHERE primary_clinic=?', [clinic_id], (err, db_res) => {
+  let employeeRoleCondition= '';
+
+  if (role.length > 0 && ['doctor', 'nurse', 'administrator', 'receptionist'].includes(role)) {
+    employeeRoleCondition = ` AND employee_role='${role}'`;
+  }
+
+  db.query(`SELECT employee_id, first_name, last_name FROM Employee WHERE primary_clinic=? ${employeeRoleCondition}`, [clinic_id], (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: err }));
