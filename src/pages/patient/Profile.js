@@ -112,7 +112,7 @@ function PatientProfile() {
           </div>
         </form>
 
-        <form id="FinancialForm">
+        <form id="FinancialForm" class="d-none">
           <div class="row mt-3">
             <span class="h4 m-0">Financial</span>
             <div class="row mt-3">
@@ -151,7 +151,7 @@ function PatientProfile() {
           </div>
         </form>
 
-        <form id="EmergencyForm">
+        <form id="EmergencyForm" class="d-none">
           <div class="row mt-3">
             <span class="h4 m-0">Emergency Contact</span>
             <div class="row mt-3">
@@ -181,7 +181,8 @@ function PatientProfile() {
             </div>
           </div>
         </form>
-        <form id="InsuranceForm">
+
+        <form id="InsuranceForm" class="d-none">
           <div class="row mt-3">
             <span class="h4 m-0">Insurance</span>
             <div class="row mt-3">
