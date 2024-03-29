@@ -1,6 +1,28 @@
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 // instead of giving each nav button its own page, i'm gonna just make it re-render the page with the correct form
+const displayForm = (element) => {
+
+  const buttonIds = ['#Profile', '#Financial', '#Emergency', '#Insurance'];
+  buttonIds.forEach(buttonId => {
+    const button = document.querySelector(buttonId);
+    if (button) {
+      button.classList.remove('active');
+    }
+  })
+
+  const formIds = ['#ProfileForm', '#FinancialForm', '#EmergencyForm', '#InsuranceForm'];
+  formIds.forEach(formId => {
+    const form = document.querySelector(formId);
+    if (form) {
+      form.classList.add('d-none');
+    }
+  });
+
+  document.querySelector(`#${element}`).classList.add('active');
+  document.querySelector(`#${element}Form`).classList.remove('d-none');
+}
+
 function PatientProfile() {
   return (
     <>
@@ -8,23 +30,24 @@ function PatientProfile() {
       <div class="container-md mx-auto">
         <div class="row mt-3">
           <div class="col-12">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="NavHeader">
               <li class="nav-item">
-                <a class="nav-link active" href="/">Profile</a>
+                <button class="nav-link active" id="Profile" onClick={(event) =>displayForm(event.target.id)}>Profile</button>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/">Financial</a>
+                <button class="nav-link" id="Financial" onClick={(event) =>displayForm(event.target.id)}>Financial</button>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/">Emergency</a>
+              <button class="nav-link" id="Emergency" onClick={(event) =>displayForm(event.target.id)}>Emergency</button>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/">Insurance</a>
+              <button class="nav-link" id="Insurance" onClick={(event) =>displayForm(event.target.id)}>Insurance</button>
               </li>
             </ul>
           </div>
         </div>
-        <form>
+        
+        <form id="ProfileForm">
           <div class="row mt-3">
             <span class="h4 m-0">Patient Profile</span>
             <div class="row mt-3">
@@ -89,7 +112,47 @@ function PatientProfile() {
           </div>
         </form>
 
+        <form id="FinancialForm">
+          <div class="row mt-3">
+            <span class="h4 m-0">Financial</span>
+            <div class="row mt-3">
+              <div class="col-6">
+                <div class="mr-3 ml-3">
+                  <label>Name</label>
+                  <input type="text" class="form-control mt-1" id="FullName" placeholder="John Pham" readOnly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
 
+        <form id="EmergencyForm">
+          <div class="row mt-3">
+            <span class="h4 m-0">Emergency</span>
+            <div class="row mt-3">
+              <div class="col-6">
+                <div class="mr-3 ml-3">
+                  <label>Name</label>
+                  <input type="text" class="form-control mt-1" id="FullName" placeholder="John Pham" readOnly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form id="InsuranceForm">
+          <div class="row mt-3">
+            <span class="h4 m-0">Insurance</span>
+            <div class="row mt-3">
+              <div class="col-6">
+                <div class="mr-3 ml-3">
+                  <label>Name</label>
+                  <input type="text" class="form-control mt-1" id="FullName" placeholder="John Pham" readOnly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
 
 
