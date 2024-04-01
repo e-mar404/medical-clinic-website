@@ -4,14 +4,10 @@ import NewEmployee from "../../components/NewEmployee";
 
 function NewEmployeeForm(){
     return(
-        <>
-            <div>
-                <Navbar />
-                <NewEmployee />
-                
-
-            </div>
-        </>
+      <div>
+        <Navbar />
+        <NewEmployee />
+      </div>
     );
 }
 
