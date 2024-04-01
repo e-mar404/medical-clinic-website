@@ -187,6 +187,22 @@ async function employeeTransfer(req, res, db){
   }
 }
 
+function getSpecialists(res, db) {
+  try{
+    console.log('getting specialists');
 
+    db.query('SELECT D.employee_id, D.first_name, D.last_name FROM Employee AS D WHERE D.specialist', (err, db_res) => {
+      if (err) {
+        throw err;
+      }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer };
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    });
+  } catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists };

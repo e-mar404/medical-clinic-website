@@ -10,7 +10,8 @@ const {
   getEmployeesByClinic,
   loginEmployee,
   createEmployeeAccount,
-  employeeTransfer
+  employeeTransfer,
+  getSpecialists
 } = require('./controllers/employeeController');
 
 
@@ -91,6 +92,11 @@ const server = http.createServer((req, res) => {
           const type = req.url.split('/')[3];
 
           getEmployeesByType(res, db, type);
+          break;
+        
+        case /\/employee\/specialists/.test(req.url):
+          
+          getSpecialists(res, db);
           break;
 
         case /\/employee\/byclinic\//.test(req.url):
