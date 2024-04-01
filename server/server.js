@@ -5,6 +5,7 @@ const { createAppointment } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient } = require('./controllers/patientController');
+const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -15,8 +16,8 @@ const {
   getPatientsOf
 } = require('./controllers/employeeController');
 
-
 require('dotenv').config();
+
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 const dbUser = process.env.DB_USER;
@@ -59,6 +60,10 @@ const server = http.createServer((req, res) => {
 
         case '/employee/login':
           loginEmployee(req, res, db);
+          break;
+
+        case '/create_referral':
+          createReferral(req, res, db);
           break;
 
         case '/make_appointment': 
