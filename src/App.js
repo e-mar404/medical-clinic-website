@@ -6,7 +6,8 @@ import PatientLogIn from './pages/patient/LogIn';
 import PatientSignup from './pages/patient/Signup';
 import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
-import EmployeeHome from './pages/employee/EmployeeHome';
+import DoctorHomepage from './pages/employee/DoctorHomepage';
+import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
@@ -37,18 +38,18 @@ function App() {
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
 
-
-        <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
+
+        <Route path='/doctor' element={<DoctorHomepage />} />
+        <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
+
+        <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
         <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
         <Route path='/admin/transfer' element ={<TransferDoctor />} />
-
         <Route path='/admin' element={<AdminHomepage />}/>
-        <Route path="/make_appointment" element={<MakeAppointment />} /> 
-
         <Route path='/admin/report' element={<Reports />}/>
       </Routes>
     </Router>
