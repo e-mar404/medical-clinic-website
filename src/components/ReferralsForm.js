@@ -3,7 +3,10 @@ import DatePicker from 'react-datepicker';
 
 function ReferralsForm() {
   const [specialists, setSpecialists] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
+  const [patients, setPatients] = useState([{"patient_id": 0, "patient_fname": "", "patient_lname": ""}]);
+
   const specialistsRef = useRef();
+  const patientsRef = useRef();
 
   useEffect(() => {
     const requestOptions = {
@@ -24,13 +27,31 @@ function ReferralsForm() {
           setSpecialists(specialistsRef.current);
         });
       });
-
     }
 
+    const fetchPatients = async () => {
+      const doctor_id = localStorage.getItem("UserId");
+
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/patients_of/${doctor_id}`, requestOptions).then((response) => {
+        response.json().then((data) => {
+          if (response.status !== 200) {
+            alert(data.error);
+            return;
+          }
+
+          console.log(data.message);
+          patientsRef.current = data.message;
+          setPatients(patientsRef.current);
+        });
+      });
+    }
+
+
     fetchSpecialists();
+    fetchPatients();
 
     console.log('use effect called');
-  }, [specialistsRef]); 
+  }, [specialistsRef, patientsRef]); 
 
   return(
     <div className="login-page">
@@ -43,14 +64,20 @@ function ReferralsForm() {
           required
           >
           <option key={0} value={-1} disabled>Select a specialist</option>
-            {specialists.map((specialist) => (
-              <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name}</option>
-            ))}
+          {specialists.map((specialist) => (
+            <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name}</option>
+          ))}
         </select>
 
         <label className="d-flex justify-content-center text-secondary">Patient:</label>
-        <select name="doctorId" required >
-          <option>Select a patient</option>
+        <select 
+          name="patientId" 
+          defaultValue={-1}
+          required >
+          <option key={0} value={-1} disabled>Select one of your patients</option>
+          {patients.map((patient) => (
+            <option key={patient.patient_id} value={patient.patient_id}>{patient.patient_fname} {patient.patient_lname}</option>
+          ))}
         </select>
 
         <label className="d-flex text-secondary">Referral valid through:</label>
