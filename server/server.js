@@ -11,7 +11,8 @@ const {
   loginEmployee,
   createEmployeeAccount,
   employeeTransfer,
-  getSpecialists
+  getSpecialists,
+  getPatientsOf
 } = require('./controllers/employeeController');
 
 
@@ -97,6 +98,12 @@ const server = http.createServer((req, res) => {
         case /\/employee\/specialists/.test(req.url):
           
           getSpecialists(res, db);
+          break;
+
+        case /\/employee\/patients_of/.test(req.url):
+          const doctor_id = req.url.split('/')[3];
+
+          getPatientsOf(res, db, doctor_id);
           break;
 
         case /\/employee\/byclinic\//.test(req.url):
