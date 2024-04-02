@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import HomeCarousel from '../components/HomeCarousel';
 import HomeSection from '../components/HomeSection';
+import Footer  from '../components/Footer';
 
 function Homepage() {
   return(
@@ -28,6 +29,8 @@ function Homepage() {
       </div>
 
       <HomeSection />
+
+      <Footer />
     </>
   );
 }

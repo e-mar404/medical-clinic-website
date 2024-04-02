@@ -5,16 +5,19 @@ const { createAppointment, getClinicAppointments } = require('./controllers/appo
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient } = require('./controllers/patientController');
+const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
   loginEmployee,
   createEmployeeAccount,
-  employeeTransfer
+  employeeTransfer,
+  getSpecialists,
+  getPatientsOf
 } = require('./controllers/employeeController');
 
-
 require('dotenv').config();
+
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 const dbUser = process.env.DB_USER;
@@ -59,6 +62,10 @@ const server = http.createServer((req, res) => {
           loginEmployee(req, res, db);
           break;
 
+        case '/create_referral':
+          createReferral(req, res, db);
+          break;
+
         case '/make_appointment': 
           createAppointment(req, res, db);
           break;
@@ -91,6 +98,17 @@ const server = http.createServer((req, res) => {
           const type = req.url.split('/')[3];
 
           getEmployeesByType(res, db, type);
+          break;
+        
+        case /\/employee\/specialists/.test(req.url):
+          
+          getSpecialists(res, db);
+          break;
+
+        case /\/employee\/patients_of/.test(req.url):
+          const doctor_id = req.url.split('/')[3];
+
+          getPatientsOf(res, db, doctor_id);
           break;
 
         case /\/employee\/byclinic\//.test(req.url):
