@@ -5,7 +5,7 @@ async function createAppointment(req, res, db) {
   try {
     console.log('creating appointment');
     const body = await PostData(req);
-
+    
     const { clinicId, doctorId, date, time, patientEmail } = JSON.parse(body);
 
     const patientId = await getPatientId(db, patientEmail);
@@ -22,6 +22,7 @@ async function createAppointment(req, res, db) {
 
     res.writeHead(401, headers);
     res.end(JSON.stringify({ error: err }));
+
   }
 }
 
