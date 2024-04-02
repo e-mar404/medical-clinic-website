@@ -25,7 +25,7 @@ function DoctorHomepage() {
           <div className="col-md-4">
             <HomeCard 
               name="Update Patient Medical History (temp)" 
-              page_link="/doctor" 
+              page_link="/doctor/patient_medical_history" 
               icon="fa-address-card"/>
           </div>
         </div>
