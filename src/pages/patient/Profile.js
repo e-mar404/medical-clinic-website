@@ -25,6 +25,16 @@ const displayForm = (element) => {
 }
 
 function PatientProfile() {
+  const [thisPatient, setThisPatient] = useState(
+    {
+      "patient_id": 0,
+      "first_name": "",
+      "last_name": "",
+      "date_of_birth": "",
+      "gender": "",
+      "primary_doctor_id": 0
+    });
+
   useEffect(() => {
     const requestOptions = {
       method: 'GET',
@@ -33,7 +43,6 @@ function PatientProfile() {
 
     const fetchProfile = async () => {
       const patient_id = localStorage.getItem("UserId");
-      console.log(patient_id);
 
       fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/profile/${patient_id}`, requestOptions).then((response) => {
         response.json().then((data) => {
@@ -41,13 +50,14 @@ function PatientProfile() {
             alert(data.error);
             return;
           }
-
-          console.log(data.message);
+          setThisPatient(data.message[0]);
         });
       });
     }
+
     fetchProfile();
-  });
+
+  }, []);
 
   return (
     <>
@@ -79,19 +89,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Name</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="John Pham" readOnly />
+                  <input type="text" class="form-control mt-1" id="FullName" placeholder={`${thisPatient.first_name} ${thisPatient.last_name}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Email Address</label>
-                  <input type="text" class="form-control mt-1" id="EmailAddress" placeholder="john@gmail.com" readOnly />
+                  <input type="text" class="form-control mt-1" id="EmailAddress" placeholder={`${thisPatient.email_address}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Patient ID Number</label>
-                  <input type="text" class="form-control mt-1" id="PatientID" placeholder="1" readOnly />
+                  <input type="text" class="form-control mt-1" id="PatientID" placeholder={`${thisPatient.patient_id}`} readOnly />
                 </div>
               </div>
             </div>
@@ -99,19 +109,19 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Date of Birth</label>
-                  <input type="text" class="form-control mt-1" id="DateOfBirth" placeholder="2001-12-11" readOnly />
+                  <input type="text" class="form-control mt-1" id="DateOfBirth" placeholder={`${thisPatient.date_of_birth}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Gender</label>
-                  <input type="text" class="form-control mt-1" id="Gender" placeholder="M" readOnly />
+                  <input type="text" class="form-control mt-1" id="Gender" placeholder={`${thisPatient.gender}`} readOnly />
                 </div>
               </div>
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Primary Doctor</label>
-                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" placeholder="Emilio Marin M.D." readOnly />
+                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" placeholder={`${thisPatient.primary_doctor_id}`} readOnly />
                 </div>
               </div>
             </div>
