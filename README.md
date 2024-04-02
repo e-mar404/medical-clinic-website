@@ -24,7 +24,7 @@
 ### Medical Employee
 - [ ] home page with cards:
     - [ ] appointment calendar (for themselves) [Mohammad]
-    - [ ] referral request[Emilio]
+    - [x] referral request[Emilio]
         - patient to refer to what doctor
     - [ ] Edit medical history for patient [Emilio]
 
