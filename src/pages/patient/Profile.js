@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 // instead of giving each nav button its own page, i'm gonna just make it re-render the page with the correct form
@@ -24,6 +25,30 @@ const displayForm = (element) => {
 }
 
 function PatientProfile() {
+  useEffect(() => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    const fetchProfile = async () => {
+      const patient_id = localStorage.getItem("UserId");
+      console.log(patient_id);
+
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/profile/${patient_id}`, requestOptions).then((response) => {
+        response.json().then((data) => {
+          if (response.status !== 200) {
+            alert(data.error);
+            return;
+          }
+
+          console.log(data.message);
+        });
+      });
+    }
+    fetchProfile();
+  });
+
   return (
     <>
       <Navbar />
@@ -104,11 +129,6 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveProfile">Save Profile</button>
-              </div>
-            </div>
           </div>
         </form>
 
@@ -143,11 +163,6 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveFinancial">Save Financial</button>
-              </div>
-            </div>
           </div>
         </form>
 
@@ -174,11 +189,6 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveEmergency">Save Emergency</button>
-              </div>
-            </div>
           </div>
         </form>
 
@@ -199,13 +209,15 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveInsurance">Save Insurance</button>
-              </div>
-            </div>
           </div>
         </form>
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveButton">Save Changes</button>
+          </div>
+        </div>
+
       </div>
 
 
