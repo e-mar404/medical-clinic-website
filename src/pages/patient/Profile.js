@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 // instead of giving each nav button its own page, i'm gonna just make it re-render the page with the correct form
@@ -24,6 +25,40 @@ const displayForm = (element) => {
 }
 
 function PatientProfile() {
+  const [thisPatient, setThisPatient] = useState(
+    {
+      "patient_id": 0,
+      "first_name": "",
+      "last_name": "",
+      "date_of_birth": "",
+      "gender": "",
+      "primary_doctor_id": 0
+    });
+
+  useEffect(() => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    const fetchProfile = async () => {
+      const patient_id = localStorage.getItem("UserId");
+
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/profile/${patient_id}`, requestOptions).then((response) => {
+        response.json().then((data) => {
+          if (response.status !== 200) {
+            alert(data.error);
+            return;
+          }
+          setThisPatient(data.message[0]);
+        });
+      });
+    }
+
+    fetchProfile();
+
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -54,19 +89,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Name</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="John Pham" readOnly />
+                  <input type="text" class="form-control mt-1" id="FullName" placeholder={`${thisPatient.first_name} ${thisPatient.last_name}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Email Address</label>
-                  <input type="text" class="form-control mt-1" id="EmailAddress" placeholder="john@gmail.com" readOnly />
+                  <input type="text" class="form-control mt-1" id="EmailAddress" placeholder={`${thisPatient.email_address}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Patient ID Number</label>
-                  <input type="text" class="form-control mt-1" id="PatientID" placeholder="1" readOnly />
+                  <input type="text" class="form-control mt-1" id="PatientID" placeholder={`${thisPatient.patient_id}`} readOnly />
                 </div>
               </div>
             </div>
@@ -74,19 +109,19 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Date of Birth</label>
-                  <input type="text" class="form-control mt-1" id="DateOfBirth" placeholder="2001-12-11" readOnly />
+                  <input type="text" class="form-control mt-1" id="DateOfBirth" placeholder={`${thisPatient.date_of_birth}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Gender</label>
-                  <input type="text" class="form-control mt-1" id="Gender" placeholder="M" readOnly />
+                  <input type="text" class="form-control mt-1" id="Gender" placeholder={`${thisPatient.gender}`} readOnly />
                 </div>
               </div>
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Primary Doctor</label>
-                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" placeholder="Emilio Marin M.D." readOnly />
+                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" placeholder={`${thisPatient.primary_doctor_id}`} readOnly />
                 </div>
               </div>
             </div>
@@ -102,11 +137,6 @@ function PatientProfile() {
                   <label>Home Address</label>
                   <input type="text" class="form-control mt-1" id="Address" placeholder="" />
                 </div>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveProfile">Save Profile</button>
               </div>
             </div>
           </div>
@@ -143,11 +173,6 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveFinancial">Save Financial</button>
-              </div>
-            </div>
           </div>
         </form>
 
@@ -174,11 +199,6 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveEmergency">Save Emergency</button>
-              </div>
-            </div>
           </div>
         </form>
 
@@ -199,13 +219,15 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveInsurance">Save Insurance</button>
-              </div>
-            </div>
           </div>
         </form>
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <button type="button" class="btn btn-primary btn float-end mt-3" id="SaveButton">Save Changes</button>
+          </div>
+        </div>
+
       </div>
 
 

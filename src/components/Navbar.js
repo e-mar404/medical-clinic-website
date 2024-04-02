@@ -129,7 +129,7 @@ function Navbar() {
               <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span><span> ({localStorage.getItem("UserType")})</span>
             </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item disabled" href="/">Profile Information</a></li>
+              <li><a className="dropdown-item" href="/patient/profile">Profile Information</a></li>
               <li><a className="dropdown-item disabled" href="/">Medical History</a></li>
               <div className="dropdown-divider"></div>
               <li><a className="dropdown-item disabled" href="/">Schedule Appointment</a></li>

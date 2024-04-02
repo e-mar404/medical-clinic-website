@@ -120,4 +120,21 @@ async function getPatientId(db, email){
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId };
+function getPatientProfile(res, db, patient_id) {
+  console.log(`${patient_id}`);
+
+  db.query(`SELECT * FROM Patient WHERE patient_id=?`, [patient_id], (err, db_res) => {
+    if (err) {
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: err }));
+      return;
+    }
+
+    console.log(db_res);
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile };
