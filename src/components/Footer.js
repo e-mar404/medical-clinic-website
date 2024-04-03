@@ -8,7 +8,7 @@ function Footer() {
         <div className="container-fluid">
           <div className="row mx-auto">
             <div className="col">
-              <section className="p-4">
+              <section className="p-5">
                 <p className="fs-6 font-monospace">
                   © 2024 Team 16 Medical Clinic Database Application. All Rights Reserved.
                 </p>
