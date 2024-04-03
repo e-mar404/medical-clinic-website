@@ -28,11 +28,23 @@ function PatientProfile() {
   const [thisPatient, setThisPatient] = useState(
     {
       "patient_id": 0,
+      "phone_number": "",
+      "address": "",
+      "email_address": "",
       "first_name": "",
       "last_name": "",
       "date_of_birth": "",
+      "primary_doctor_id": 0,
       "gender": "",
-      "primary_doctor_id": 0
+      "name_on_card": "",
+      "card_number": "",
+      "cvv": "",
+      "expiration_date": "",
+      "contact_name": "",
+      "contact_number": "",
+      "contact_relationship": "",
+      "policy_number": "",
+      "group_number": ""
     });
 
   useEffect(() => {
@@ -129,13 +141,13 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Phone Number</label>
-                  <input type="text" class="form-control mt-1" id="PhoneNumber" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="PhoneNumber" placeholder={`${thisPatient.phone_number}`} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Home Address</label>
-                  <input type="text" class="form-control mt-1" id="Address" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="Address" placeholder={`${thisPatient.address}`} />
                 </div>
               </div>
             </div>
@@ -149,7 +161,7 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Name on Card</label>
-                  <input type="text" class="form-control mt-1" id="NameOnCard" placeholder="" readOnly />
+                  <input type="text" class="form-control mt-1" id="NameOnCard" placeholder={`${thisPatient.name_on_card}`} />
                 </div>
               </div>
             </div>
@@ -157,19 +169,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Card Number</label>
-                  <input type="text" class="form-control mt-1" id="CardNumber" placeholder="" readOnly />
+                  <input type="text" class="form-control mt-1" id="CardNumber" placeholder={`${thisPatient.card_number}`} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>CVV</label>
-                  <input type="text" class="form-control mt-1" id="CVV" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="CVV" placeholder={`${thisPatient.cvv}`} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Expiration Date</label>
-                  <input type="text" class="form-control mt-1" id="ExpirationDate" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="ExpirationDate" placeholder={`${thisPatient.expiration_date}`} />
                 </div>
               </div>
             </div>
@@ -183,19 +195,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Contact Name</label>
-                  <input type="text" class="form-control mt-1" id="EmergencyName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="EmergencyName" placeholder={`${thisPatient.contact_name}`} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Relationship</label>
-                  <input type="text" class="form-control mt-1" id="Relationship" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="Relationship" placeholder={`${thisPatient.contact_number}`} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Number</label>
-                  <input type="text" class="form-control mt-1" id="EmergencyNumber" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="EmergencyNumber" placeholder={`${thisPatient.contact_number}`} />
                 </div>
               </div>
             </div>
@@ -209,13 +221,13 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Policy Number</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="PolicyNumber" placeholder={`${thisPatient.policy_number}`} />
                 </div>
               </div>
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Group Number</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="GroupNumber" placeholder={`${thisPatient.group_number}`} />
                 </div>
               </div>
             </div>
