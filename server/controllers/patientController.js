@@ -93,8 +93,6 @@ async function loginPatient(req, res, db) {
           }
         }
       });
-
-
   } catch (error) {
     console.log(`patientController.js: ${error}`);
     res.writeHead(400, headers);
@@ -102,27 +100,7 @@ async function loginPatient(req, res, db) {
   } 
 }
 
-async function getPatientId(db, email){
-  return new Promise((resolve, reject) => {
-    db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
-      if (err) {
-        reject(err);
-        return
-      }
-
-      if (db_res.length === 0){
-        reject('Patient with that email was not found');
-        return;
-      }
-
-      resolve(db_res[0].patient_id);
-    });
-  });
-}
-
 function getPatientProfile(res, db, patient_id) {
-  console.log(`${patient_id}`);
-
   db.query(
     `
     SELECT
@@ -143,12 +121,94 @@ function getPatientProfile(res, db, patient_id) {
       res.end(JSON.stringify({ error: err }));
       return;
     }
-
-    console.log(db_res);
-
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: db_res }));
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile };
+async function postPatientProfile(req, res, db) {
+  try {
+    const body = await PostData(req);
+
+    const { 
+      patient_id, email_address, phone_number, address,
+      name_on_card, card_number, cvv, expiration_date,
+      contact_name, contact_relationship, contact_number,
+      policy_number, group_number
+    } = JSON.parse(body);
+    
+    console.log (patient_id, email_address, phone_number, address,
+      name_on_card, card_number, cvv, expiration_date,
+      contact_name, contact_relationship, contact_number,
+      policy_number, group_number);
+      db.query(`
+      UPDATE ContactInformation SET phone_number = '${phone_number}', address = '${address}' WHERE email_address = '${email_address}';
+  `, (err, result1) => {
+      if (err) {
+          // Handle error for the first query
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+      } else {
+          // Execute the second query
+          db.query(`
+              INSERT INTO Patient_FinancialInformation (patient_id, name_on_card, card_number, cvv, expiration_date)
+              VALUES (${patient_id}, '${name_on_card}', '${card_number}', '${cvv}', '2001-12-11')
+              ON DUPLICATE KEY UPDATE
+                  name_on_card = VALUES(name_on_card),
+                  card_number = VALUES(card_number),
+                  cvv = VALUES(cvv),
+                  expiration_date = VALUES(expiration_date);
+          `, (err, result2) => {
+              if (err) {
+                  // Handle error for the second query
+                  res.writeHead(400, headers);
+                  res.end(JSON.stringify({ message: err }));
+              } else {
+                  // Execute the third query
+                  db.query(`
+                      INSERT INTO Patient_EmergencyContacts (patient_id, contact_name, contact_relationship, contact_number)
+                      VALUES (${patient_id}, '${contact_name}', '${contact_relationship}', '${contact_number}')
+                      ON DUPLICATE KEY UPDATE
+                          contact_name = VALUES(contact_name),
+                          contact_relationship = VALUES(contact_relationship),
+                          contact_number = VALUES(contact_number);
+                  `, (err, result3) => {
+                      if (err) {
+                          // Handle error for the third query
+                          res.writeHead(400, headers);
+                          res.end(JSON.stringify({ message: err }));
+                      } else {
+                          // Execute the fourth query
+                          db.query(`
+                              INSERT INTO Patient_InsuranceInformation (patient_id, policy_number, group_number)
+                              VALUES (${patient_id}, '${policy_number}', '${group_number}')
+                              ON DUPLICATE KEY UPDATE
+                                  policy_number = VALUES(policy_number),
+                                  group_number = VALUES(group_number);
+                          `, (err, result4) => {
+                              if (err) {
+                                  // Handle error for the fourth query
+                                  res.writeHead(400, headers);
+                                  res.end(JSON.stringify({ message: err }));
+                              } else {
+                                  // All queries executed successfully
+                                  res.writeHead(200, headers);
+                                  res.end(JSON.stringify({ message: "All queries executed successfully" }));
+                              }
+                          });
+                      }
+                  });
+              }
+          });
+      }
+  });
+  
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  } 
+}
+
+
+module.exports = { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile };
