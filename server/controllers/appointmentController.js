@@ -38,4 +38,8 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-module.exports = { createAppointment };  
+function availableAppointments(req, res, db) {
+  res.writeHead(200, headers);
+  res.end(JSON.stringify({ message: 'sends available appointments' })); 
+}
+module.exports = { createAppointment, availableAppointments };  

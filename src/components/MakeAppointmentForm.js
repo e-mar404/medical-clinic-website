@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
+import { subDays } from "date-fns";
 import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
@@ -188,6 +189,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               selected={formData.date}
               onChange={(date) => setFormData({ ...formData, date })}
               dateFormat="yyyy-MM-dd"
+              minDate={subDays(new Date(), 0)}
               showIcon
               toggleCalendarOnIconClick
               required

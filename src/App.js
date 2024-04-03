@@ -16,6 +16,7 @@ import MakeAppointment from './pages/appointment/MakeAppointment';
 import TransferDoctor from './pages/employee/TransferDoctor';
 import AdminHomepage from './pages/employee/AdminHomepage';
 import Reports from './pages/employee/Reports';
+import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
@@ -42,6 +43,7 @@ function App() {
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
+        <Route path='/doctor/patient_medical_history' element={<PatientMedicalHistoryPage />} />
 
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
