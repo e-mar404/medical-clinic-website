@@ -140,14 +140,14 @@ function getPatientProfile(res, db, patient_id) {
 function getPatientMedicalHistory(res, db, patient_id) {
   console.log(`getting medical history for patient: ${patient_id}`);
 
-  db.query(`SELECT * FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
+  db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: err }));
       return;
     }
 
-    console.log(`success getting medical history: ${db_res}`);
+    console.log('success getting medical history');
     
     const msg = (db_res.length > 0) ? db_res : "No history for patient";
 
@@ -156,4 +156,72 @@ function getPatientMedicalHistory(res, db, patient_id) {
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, getPatientMedicalHistory };
+async function updatePatientMedicalHistory(req, res, db) {
+  try {
+
+    const body = await PostData(req);
+    const { patient_id, conditions, allergies, family_history } = JSON.parse(body);
+
+    if (!patientHasHistory(patient_id, db)) {
+      console.log('patient doesnt have history creating new entry');
+
+      await createPatientMedicalHistory(patient_id, conditions, allergies, family_history, res, db);
+      return;
+    }
+
+    console.log('updating medical history for patient');
+    
+    const msg = await new Promise((resolve, reject) => {
+      db.query('UPDATE Patient_MedicalHistory SET conditions=?, allergies=?, family_history=? WHERE patient_id=?', [conditions, allergies, family_history, patient_id], (err, db_res) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve('Medical History updated successfully');
+      });
+    });
+
+    console.log(msg);
+     
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+  } catch(err) {
+
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
+}
+
+function patientHasHistory(patient_id, db) {
+  return db.query('SELECT patient_id FROM Patient_MedicalHistory WHERE patient_id=?', [patient_id], (err, db_res) => {
+    if (err) {
+      return false;
+    }
+
+    return db_res.length > 0;
+  });
+}
+
+async function createPatientMedicalHistory(patient_id, conditions, allergies, family_history, res, db) {
+  try {
+    const msg = await new Promise((resolve, reject) => {
+      db.query('INSERT Patient_MedicalHistory(patient_id, conditions, allergies, family_history) VALUES(?, ?, ?, ?)', [patient_id, conditions, allergies, family_history], (err, db_res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve('Successfully created patient medical history record');
+      });
+    });
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+  } catch(err) {
+
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory };

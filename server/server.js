@@ -4,7 +4,7 @@ const { generateReportFor } = require('./controllers/reportController');
 const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, getPatientMedicalHistory } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
 const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
@@ -63,6 +63,10 @@ const server = http.createServer((req, res) => {
           loginEmployee(req, res, db);
           break;
 
+        case '/update_patient_medical_history':
+          updatePatientMedicalHistory(req, res, db);
+          break;
+
         case '/create_referral':
           createReferral(req, res, db);
           break;
@@ -106,8 +110,8 @@ const server = http.createServer((req, res) => {
 
         case /\/history_for_patient/.test(req.url):
           patient_id = req.url.split('/')[2];
-
-          getPatientMedicalHistory(res, db);
+          
+          getPatientMedicalHistory(res, db, patient_id);
           break;
 
         case /\/employee\/bytype/.test(req.url): 
