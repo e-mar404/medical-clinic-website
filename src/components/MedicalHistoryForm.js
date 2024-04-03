@@ -4,6 +4,9 @@ function MedicalHistoryForm({ patient_id }) {
   const [patientMedicalHistory, setPatientMedicalHistory] = useState({});
   const patientMedicalHistoryRef = useRef();
   
+  setPatientMedicalHistory('this is temp, for eslint');
+  console.log(patientMedicalHistory);
+
   useEffect(() => {
     console.log(`fetching medical history for patient ${patient_id}`);
 
