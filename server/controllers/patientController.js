@@ -123,7 +123,21 @@ async function getPatientId(db, email){
 function getPatientProfile(res, db, patient_id) {
   console.log(`${patient_id}`);
 
-  db.query(`SELECT * FROM Patient WHERE patient_id=?`, [patient_id], (err, db_res) => {
+  db.query(
+    `
+    SELECT
+      P.patient_id, P.email_address, P.first_name, P.last_name, P.date_of_birth, P.gender, P.primary_doctor_id,
+      CI.phone_number, CI.address,
+      FI.name_on_card, FI.card_number, FI.cvv, FI.expiration_date,
+      EC.contact_name, EC.contact_number, EC.contact_relationship,
+      II.policy_number, II.group_number
+    FROM Patient P
+    LEFT JOIN ContactInformation CI ON P.email_address = CI.email_address
+    LEFT JOIN Patient_FinancialInformation FI ON P.patient_id = FI.patient_id
+    LEFT JOIN Patient_EmergencyContacts EC ON P.patient_id = EC.patient_id
+    LEFT JOIN Patient_InsuranceInformation II ON P.patient_id = II.patient_id
+    WHERE P.patient_id = ${patient_id};    
+  `, (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: err }));

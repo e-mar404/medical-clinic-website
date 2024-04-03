@@ -28,11 +28,23 @@ function PatientProfile() {
   const [thisPatient, setThisPatient] = useState(
     {
       "patient_id": 0,
+      "phone_number": "",
+      "address": "",
+      "email_address": "",
       "first_name": "",
       "last_name": "",
       "date_of_birth": "",
+      "primary_doctor_id": 0,
       "gender": "",
-      "primary_doctor_id": 0
+      "name_on_card": "",
+      "card_number": "",
+      "cvv": "",
+      "expiration_date": "",
+      "contact_name": "",
+      "contact_number": "",
+      "contact_relationship": "",
+      "policy_number": "",
+      "group_number": ""
     });
 
   useEffect(() => {
@@ -89,19 +101,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Name</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder={`${thisPatient.first_name} ${thisPatient.last_name}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="FullName" value={`${thisPatient.first_name} ${thisPatient.last_name}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Email Address</label>
-                  <input type="text" class="form-control mt-1" id="EmailAddress" placeholder={`${thisPatient.email_address}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="EmailAddress" value={`${thisPatient.email_address}`} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Patient ID Number</label>
-                  <input type="text" class="form-control mt-1" id="PatientID" placeholder={`${thisPatient.patient_id}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="PatientID" value={`${thisPatient.patient_id}`} readOnly />
                 </div>
               </div>
             </div>
@@ -109,19 +121,19 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Date of Birth</label>
-                  <input type="text" class="form-control mt-1" id="DateOfBirth" placeholder={`${thisPatient.date_of_birth}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="DateOfBirth" value={thisPatient.patient_id === null ? "" : thisPatient.date_of_birth} readOnly />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Gender</label>
-                  <input type="text" class="form-control mt-1" id="Gender" placeholder={`${thisPatient.gender}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="Gender" value={thisPatient.patient_id === null ? "" : thisPatient.gender} readOnly />
                 </div>
               </div>
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Primary Doctor</label>
-                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" placeholder={`${thisPatient.primary_doctor_id}`} readOnly />
+                  <input type="text" class="form-control mt-1" id="PrimaryDoctor" value={thisPatient.patient_id === null ? "" : thisPatient.primary_doctor_id} readOnly />
                 </div>
               </div>
             </div>
@@ -129,13 +141,13 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Phone Number</label>
-                  <input type="text" class="form-control mt-1" id="PhoneNumber" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="PhoneNumber" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.phone_number} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Home Address</label>
-                  <input type="text" class="form-control mt-1" id="Address" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="Address" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.address} />
                 </div>
               </div>
             </div>
@@ -149,7 +161,7 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Name on Card</label>
-                  <input type="text" class="form-control mt-1" id="NameOnCard" placeholder="" readOnly />
+                  <input type="text" class="form-control mt-1" id="NameOnCard" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.name_on_card} />
                 </div>
               </div>
             </div>
@@ -157,19 +169,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Card Number</label>
-                  <input type="text" class="form-control mt-1" id="CardNumber" placeholder="" readOnly />
+                  <input type="text" class="form-control mt-1" id="CardNumber" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.card_number} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>CVV</label>
-                  <input type="text" class="form-control mt-1" id="CVV" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="CVV" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.cvv} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Expiration Date</label>
-                  <input type="text" class="form-control mt-1" id="ExpirationDate" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="ExpirationDate" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.expiration_date} />
                 </div>
               </div>
             </div>
@@ -183,19 +195,19 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Contact Name</label>
-                  <input type="text" class="form-control mt-1" id="EmergencyName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="EmergencyName" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.contact_name} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Relationship</label>
-                  <input type="text" class="form-control mt-1" id="Relationship" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="Relationship" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.contact_relationship} />
                 </div>
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Number</label>
-                  <input type="text" class="form-control mt-1" id="EmergencyNumber" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="EmergencyNumber" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.contact_number} />
                 </div>
               </div>
             </div>
@@ -209,13 +221,13 @@ function PatientProfile() {
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Policy Number</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="PolicyNumber" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.policy_number} />
                 </div>
               </div>
               <div class="col-6">
                 <div class="mr-3 ml-3">
                   <label>Group Number</label>
-                  <input type="text" class="form-control mt-1" id="FullName" placeholder="" />
+                  <input type="text" class="form-control mt-1" id="GroupNumber" defaultValue={thisPatient.patient_id === null ? "" : thisPatient.group_number} />
                 </div>
               </div>
             </div>
