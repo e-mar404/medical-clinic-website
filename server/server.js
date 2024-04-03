@@ -4,7 +4,7 @@ const { generateReportFor } = require('./controllers/reportController');
 const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, getPatientMedicalHistory } = require('./controllers/patientController');
 const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
@@ -39,7 +39,8 @@ db.connect(function (err) {
 });
 
 const server = http.createServer((req, res) => {
-    
+  let patient_id;
+
   console.log(`Server.js: METHOD: ${req.method}; URL: ${req.url}`);
 
   switch (req.method) {
@@ -99,8 +100,14 @@ const server = http.createServer((req, res) => {
           break;
 
         case /\/patient\/profile/.test(req.url):
-          const patient_id = req.url.split('/')[3]
+          patient_id = req.url.split('/')[3];
           getPatientProfile(res, db, patient_id);
+          break;
+
+        case /\/history_for_patient/.test(req.url):
+          patient_id = req.url.split('/')[2];
+
+          getPatientMedicalHistory(res, db);
           break;
 
         case /\/employee\/bytype/.test(req.url): 
@@ -110,7 +117,6 @@ const server = http.createServer((req, res) => {
           break;
         
         case /\/employee\/specialists/.test(req.url):
-          
           getSpecialists(res, db);
           break;
 

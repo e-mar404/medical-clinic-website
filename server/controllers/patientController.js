@@ -137,4 +137,23 @@ function getPatientProfile(res, db, patient_id) {
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile };
+function getPatientMedicalHistory(res, db, patient_id) {
+  console.log(`getting medical history for patient: ${patient_id}`);
+
+  db.query(`SELECT * FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
+    if (err) {
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: err }));
+      return;
+    }
+
+    console.log(`success getting medical history: ${db_res}`);
+    
+    const msg = (db_res.length > 0) ? db_res : "No history for patient";
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+  });
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, getPatientMedicalHistory };
