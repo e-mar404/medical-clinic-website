@@ -170,7 +170,7 @@ async function postPatientProfile(req, res, db) {
           // Execute the second query
           db.query(`
               INSERT INTO Patient_FinancialInformation (patient_id, name_on_card, card_number, cvv, expiration_date)
-              VALUES (${patient_id}, '${name_on_card}', '${card_number}', '${cvv}', '2001-12-11')
+              VALUES (${patient_id}, '${name_on_card}', '${card_number}', '${cvv}', '${expiration_date}')
               ON DUPLICATE KEY UPDATE
                   name_on_card = VALUES(name_on_card),
                   card_number = VALUES(card_number),
