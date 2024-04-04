@@ -220,7 +220,7 @@ function PatientProfile() {
               <div class="col-3">
                 <div class="mr-3 ml-3">
                   <label>Expiration Date</label>
-                  <input type="text" class="form-control mt-1" id="ExpirationDate" defaultValue={thisPatient.expiration_date === null ? "" : thisPatient.expiration_date} />
+                  <input type="date" class="form-control mt-1" id="ExpirationDate" defaultValue={thisPatient.expiration_date === null ? "" : thisPatient.expiration_date} />
                 </div>
               </div>
             </div>
