@@ -132,7 +132,7 @@ function Navbar() {
               <li><a className="dropdown-item" href="/patient/profile">Profile Information</a></li>
               <li><a className="dropdown-item disabled" href="/">Medical History</a></li>
               <div className="dropdown-divider"></div>
-              <li><a className="dropdown-item disabled" href="/">Schedule Appointment</a></li>
+              <li><a className="dropdown-item" href="/make_appointment">Schedule Appointment</a></li>
             </ul>
           </li>
           {SignOutButton()}
