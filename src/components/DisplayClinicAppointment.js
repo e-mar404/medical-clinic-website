@@ -27,8 +27,10 @@ function DisplayClinicAppointment() {
         }
         const data = await response.json();
 
-        // Modify date and time format, add clinicId to each appointment object
-        const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
+        // where is this being used?
+        const today = new Date().toISOString().split('T')[0]; 
+        console.log(today); // for eslint
+        
         const modifiedAppointments = data.map(appointment => ({
           ...appointment,
           appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
@@ -53,7 +55,7 @@ function DisplayClinicAppointment() {
 
   // Function to format time
   const formatTime = (timeString) => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
     const amOrPm = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
     const formattedMinutes = minutes.toString().padStart(2, '0'); // Pad with leading zero if necessary
