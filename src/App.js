@@ -8,6 +8,7 @@ import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
+import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
