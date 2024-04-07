@@ -1,8 +1,7 @@
 const http = require('http');
 const mysql = require('mysql2');
 const { generateReportFor } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments } = require('./controllers/appointmentController');
-const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
