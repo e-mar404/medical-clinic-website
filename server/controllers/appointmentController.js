@@ -38,6 +38,7 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
+
 async function getClinicAppointments(req, res, db) {
   try {
     const clinicId = req.headers['clinic-id'];
@@ -92,4 +93,11 @@ async function getClinicAppointments(req, res, db) {
 
 
 module.exports = { createAppointment, getClinicAppointments };
+
+
+function availableAppointments(req, res, db) {
+  res.writeHead(200, headers);
+  res.end(JSON.stringify({ message: 'sends available appointments' })); 
+}
+module.exports = { createAppointment, availableAppointments };  
 

@@ -2,19 +2,23 @@ const http = require('http');
 const mysql = require('mysql2');
 const { generateReportFor } = require('./controllers/reportController');
 const { createAppointment, getClinicAppointments } = require('./controllers/appointmentController');
+const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
+const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
   loginEmployee,
   createEmployeeAccount,
-  employeeTransfer
+  employeeTransfer,
+  getSpecialists,
+  getPatientsOf
 } = require('./controllers/employeeController');
 
-
 require('dotenv').config();
+
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 const dbUser = process.env.DB_USER;
@@ -36,7 +40,8 @@ db.connect(function (err) {
 });
 
 const server = http.createServer((req, res) => {
-    
+  let patient_id;
+
   console.log(`Server.js: METHOD: ${req.method}; URL: ${req.url}`);
 
   switch (req.method) {
@@ -55,12 +60,28 @@ const server = http.createServer((req, res) => {
           loginPatient(req, res, db);
           break;
 
+        case '/patient/profile':
+            postPatientProfile(req, res, db);
+          break;
+
         case '/employee/login':
           loginEmployee(req, res, db);
           break;
 
+        case '/update_patient_medical_history':
+          updatePatientMedicalHistory(req, res, db);
+          break;
+
+        case '/create_referral':
+          createReferral(req, res, db);
+          break;
+
         case '/make_appointment': 
           createAppointment(req, res, db);
+          break;
+
+        case '/available_appointments':
+          availableAppointments(req, res, db);
           break;
 
         case '/admin/newemployee':
@@ -87,10 +108,31 @@ const server = http.createServer((req, res) => {
           generateReportFor(res, db, reportType);
           break;
 
+        case /\/patient\/profile/.test(req.url):
+          patient_id = req.url.split('/')[3];
+          getPatientProfile(res, db, patient_id);
+          break;
+
+        case /\/history_for_patient/.test(req.url):
+          patient_id = req.url.split('/')[2];
+          
+          getPatientMedicalHistory(res, db, patient_id);
+          break;
+
         case /\/employee\/bytype/.test(req.url): 
           const type = req.url.split('/')[3];
 
           getEmployeesByType(res, db, type);
+          break;
+        
+        case /\/employee\/specialists/.test(req.url):
+          getSpecialists(res, db);
+          break;
+
+        case /\/employee\/patients_of/.test(req.url):
+          const doctor_id = req.url.split('/')[3];
+
+          getPatientsOf(res, db, doctor_id);
           break;
 
         case /\/employee\/byclinic\//.test(req.url):
