@@ -38,8 +38,66 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
+
+async function getClinicAppointments(req, res, db) {
+  try {
+    const clinicId = req.headers['clinic-id'];
+
+    console.log('Clinic ID:', clinicId); // Log clinic ID
+    
+    db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time FROM Appointment WHERE clinic_id = ?', [clinicId], async (err, results) => {
+      if (err) {
+        console.error(err);
+        res.writeHead(500, headers);
+        res.end(JSON.stringify({ error: 'Error fetching clinic appointments' }));
+      } else {
+        console.log('Fetched appointments:', results); // Log fetched appointments
+        
+        const appointmentsWithDetails = await Promise.all(results.map(async appointment => {
+          const { doctor_id, patient_id, appointment_date, appointment_time } = appointment;
+          
+          // Fetch doctor details from MEmployee table
+          const doctorQuery = 'SELECT memployee_id, first_name, last_name FROM MEmployee WHERE memployee_id = ?';
+          const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
+  
+          // Fetch patient details from Patient table
+          const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
+          const [patientResult] = await db.promise().query(patientQuery, [patient_id]);
+  
+          return {
+            doctor: {
+              first_name: doctorResult[0].first_name,
+              last_name: doctorResult[0].last_name
+            },
+            patient: {
+              first_name: patientResult[0].first_name,
+              last_name: patientResult[0].last_name
+            },
+            appointment_date,
+            appointment_time
+          };
+        }));
+  
+        console.log('Appointments with details:', appointmentsWithDetails); // Log appointments with details
+        
+        res.writeHead(200, headers);
+        res.end(JSON.stringify(appointmentsWithDetails));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: 'Error fetching clinic appointments' }));
+  }
+}
+
+
+module.exports = { createAppointment, getClinicAppointments };
+
+
 function availableAppointments(req, res, db) {
   res.writeHead(200, headers);
   res.end(JSON.stringify({ message: 'sends available appointments' })); 
 }
 module.exports = { createAppointment, availableAppointments };  
+

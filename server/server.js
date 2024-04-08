@@ -1,7 +1,7 @@
 const http = require('http');
 const mysql = require('mysql2');
 const { generateReportFor } = require('./controllers/reportController');
-const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
@@ -144,10 +144,15 @@ const server = http.createServer((req, res) => {
           getEmployeesByClinic(res, db, clinic_id, role);
           break;
 
+        case /clinicAppointments/.test(req.url):
+          getClinicAppointments(req, res, db);
+          break;
+          
         case /get_clinics/.test(req.url):
           getClinics(res, db);
           break; 
 
+      
         case /\/admin\/employeelist/.test(req.url): //might not be needed
           getEmployeesByType(res, req, type);
           break;
