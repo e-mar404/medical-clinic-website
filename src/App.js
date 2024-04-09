@@ -25,12 +25,12 @@ function App() {
   if (localStorage.getItem('LoggedIn') == null) {
     localStorage.setItem('LoggedIn', false);
     localStorage.setItem("LoggedIn", false);
-    localStorage.setItem("LoginEmail", null); // Email of logged in user
-    localStorage.setItem("UserEmail", null); // Email of logged in user
-    localStorage.setItem("UserId", null); // Email of logged in user
-    localStorage.setItem("UserFirstName", null); // First name of logged in user
-    localStorage.setItem("UserLastName", null); // Last name of logged in user
-    localStorage.setItem("UserType", null); // Type of logged in user (patient, employee)
+    localStorage.setItem("LoginEmail", null); 
+    localStorage.setItem("UserEmail", null); 
+    localStorage.setItem("UserId", null);
+    localStorage.setItem("UserFirstName", null);
+    localStorage.setItem("UserLastName", null);
+    localStorage.setItem("UserType", null); 
   }
 
   return (

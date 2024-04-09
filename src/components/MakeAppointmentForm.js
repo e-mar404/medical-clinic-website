@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
-import { subDays } from "date-fns";
+import { subDays } from 'date-fns';
+import fetchAvailableTimes from './AvailableTimes';
 import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
-  const [clinics, setClinics] = useState([{"clinic_id": 0, "clinic_name": "Select clinic"}]);
-  const [doctors, setDoctors] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
+  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Srelect clinic'}]);
+  const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
+  const [availableTimes, setAvailableTimes] = useState(['select date first']);
   const clinicsRef = useRef(clinics);
 
   const fetchClinicEmployees = async (clinic_id=0) => {
@@ -40,7 +42,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
           if (response.status !== 200) {
             alert(data.error);
             return;
-
           }
 
           clinicsRef.current = data.message;
@@ -151,6 +152,12 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     console.log(doctors);
   };
 
+  const handleDateChange = (date) => {
+    setFormData({ ...formData, date });
+
+    setAvailableTimes(fetchAvailableTimes(date));
+  };
+
   return (
     <>
       <div className="login-page">
@@ -160,7 +167,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               name="clinicId"
               value={formData.clinicId}
               onChange={handleClinicChange}
-              defaultValue={-1}
               required
             >
               <option key={0} value={-1} disabled>Select a clinic</option>
@@ -174,7 +180,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               name="doctorId"
               value={formData.doctorId}
               onChange={handleInputChange}
-              defaultValue={-1}
               required
             >
               <option key={0} value={-1} disabled>Select a doctor</option>
@@ -187,7 +192,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             <DatePicker
               name="date"
               selected={formData.date}
-              onChange={(date) => setFormData({ ...formData, date })}
+              onChange={handleDateChange}
               dateFormat="yyyy-MM-dd"
               minDate={subDays(new Date(), 0)}
               showIcon
@@ -203,17 +208,9 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               onChange={handleInputChange}
               required
             >
-              <option value="">Select Time</option>
-              <option value="08:00 AM">8:00 AM</option>
-              <option value="09:00 AM">9:00 AM</option>
-              <option value="10:00 AM">10:00 AM</option>
-              <option value="11:00 AM">11:00 AM</option>
-              <option value="12:00 PM">12:00 PM</option>
-              <option value="01:00 PM">1:00 PM</option>
-              <option value="02:00 PM">2:00 PM</option>
-              <option value="03:00 PM">3:00 PM</option>
-              <option value="04:00 PM">4:00 PM</option>
-              <option value="05:00 PM">5:00 PM</option>
+              {availableTimes.map(time => (
+                <option key={Math.random()} value={time}>{time}</option>
+              ))}
             </select>
 
             <button className="submit-button" type="submit">
