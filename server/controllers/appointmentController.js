@@ -38,7 +38,6 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-
 async function getClinicAppointments(req, res, db) {
   try {
     const clinicId = req.headers['clinic-id'];
@@ -52,18 +51,17 @@ async function getClinicAppointments(req, res, db) {
         res.end(JSON.stringify({ error: 'Error fetching clinic appointments' }));
       } else {
         console.log('Fetched appointments:', results); // Log fetched appointments
-        
+
         const appointmentsWithDetails = await Promise.all(results.map(async appointment => {
           const { doctor_id, patient_id, appointment_date, appointment_time } = appointment;
-          
-          // Fetch doctor details from MEmployee table
-          const doctorQuery = 'SELECT memployee_id, first_name, last_name FROM MEmployee WHERE memployee_id = ?';
+
+          const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
-  
-          // Fetch patient details from Patient table
+
           const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
           const [patientResult] = await db.promise().query(patientQuery, [patient_id]);
-  
+
+
           return {
             doctor: {
               first_name: doctorResult[0].first_name,
@@ -77,9 +75,9 @@ async function getClinicAppointments(req, res, db) {
             appointment_time
           };
         }));
-  
+
         console.log('Appointments with details:', appointmentsWithDetails); // Log appointments with details
-        
+
         res.writeHead(200, headers);
         res.end(JSON.stringify(appointmentsWithDetails));
       }
@@ -91,13 +89,10 @@ async function getClinicAppointments(req, res, db) {
   }
 }
 
-
-module.exports = { createAppointment, getClinicAppointments };
-
-
 function availableAppointments(req, res, db) {
   res.writeHead(200, headers);
   res.end(JSON.stringify({ message: 'sends available appointments' })); 
 }
-module.exports = { createAppointment, availableAppointments };  
+
+module.exports = { createAppointment, getClinicAppointments, availableAppointments };
 
