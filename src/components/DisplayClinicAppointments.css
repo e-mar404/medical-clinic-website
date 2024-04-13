@@ -1,0 +1,28 @@
+.ClinicInfo {
+    margin: 0;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+    align-items: flex-end;
+  }
+  
+  .clinic-appointment-filter-label {
+    font-weight: bold;
+    font-size: 1.125rem;
+    color: #333;
+    margin-right: 0.625rem;
+  }
+  
+  .clinic-appointment-filter-select {
+    padding: 0.5rem 2.5rem 0.5rem 1.5rem; /* Adjust padding */
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='%23333' width='16' height='16'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    appearance: none;
+  }
+  

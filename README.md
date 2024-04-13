@@ -8,8 +8,9 @@
 
 - [X] log in
 - [ ] home page with cards:
-    - [ ] schedule appointment
-    - [ ] profile
+    - [ ] schedule appointment [Emilio]
+        - needs to check for occupied times
+    - [x] profile [John]
     - [ ] appointment history
 - [X] not signed in navbar [Logo    log in]
 - [X] signed in navbar [appointments    history    profile(contact info, sign out)] **only added sign out**
@@ -22,12 +23,14 @@
 
 ### Medical Employee
 - [ ] home page with cards:
-    - [ ] appointment calendar (for themselves) 
-    - [ ] referral request
+    - [ ] appointment calendar (for themselves) [Mohammad]
+    - [x] referral request[Emilio]
+        - patient to refer to what doctor
+    - [ ] Edit medical history for patient [Emilio]
 
 ### Receptionist
 
-- [ ] appointment calendar (for everyone at the clinic they work at)  
+- [ ] appointment calendar (for everyone at the clinic they work at) [Mohammad]  
 
 ### Admin [Yesenia]
 
@@ -65,7 +68,7 @@
     - [x] createPatientLogin
     - [x] error handling for register
 
-- [ ] get appointment filtered by:
+- [ ] get appointment filtered by: [Mohammad]
     - [ ] date/time
     - [ ] doctor 
     - [ ] clinic
@@ -82,7 +85,8 @@
 - [x] compare clinics
     - [x] number of patients at a clinic
 
-# Hosting [Mohammad]
+# Hosting [Mohammad + Emilio]
 
-- [ ] host MySQL db
-- [ ] host website
+- [x] host MySQL db
+- [x] host website (https://clinic-website.up.railway.app/)
+- [x] host backend (https://medical-clinic-backend.up.railway.app/)

@@ -187,6 +187,46 @@ async function employeeTransfer(req, res, db){
   }
 }
 
+
+function getSpecialists(res, db) {
+  try{
+    console.log('getting specialists');
+
+    db.query('SELECT D.employee_id, D.first_name, D.last_name FROM Employee AS D WHERE D.specialist', (err, db_res) => {
+      if (err) {
+        throw err;
+      }
+
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    });
+  } catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+function getPatientsOf(res, db, doctor_id) {
+  try{
+    console.log(`getting patients of doctor with id ${doctor_id}`);
+
+    db.query('SELECT patient_id, patient_fname, patient_lname FROM primary_doctor_for_patient WHERE doctor_id=?;', [doctor_id], (err, db_res) => {
+      if (err) {
+        throw err;
+      }
+
+      const msg = (db_res.length > 0) ? db_res : "no patients";
+
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: msg }));
+    });
+  } catch (err) {
+        res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+
 async function getAppointments(res, db, empId){
   try {
     // ADD THE QUERY FOR ALL APPOINTMENTS 
@@ -224,4 +264,5 @@ async function getDoctorInformation(res, db, doctorID){
   }
 }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getAppointments,getDoctorInformation };
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation };
+
