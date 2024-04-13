@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
 import { subDays } from 'date-fns';
-import fetchAvailableTimes from './AvailableTimes';
 import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
@@ -48,7 +47,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
           setClinics(clinicsRef.current);
         });
       });
-
     }
 
     fetchClinics();
@@ -65,10 +63,11 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     time: '1100',
     patientEmail: patientEmail,
   });
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
+
     setFormData({
       ...formData,
       [name]: value,
@@ -152,10 +151,29 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     console.log(doctors);
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = async (date) => {
     setFormData({ ...formData, date });
 
-    setAvailableTimes(fetchAvailableTimes(date));
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        'clinic_id': formData.clinicId,
+        'doctor_id': formData.doctorId,
+        'date': date.toISOString().slice(0, 10) 
+      })
+    };
+
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/available_appointments`, requestOptions).then((response) => {
+      response.json().then((data) => {
+        if (response.status !== 200) {
+          alert(data.error);
+          return;
+        }
+
+        setAvailableTimes(data.message);
+      });
+    });
   };
 
   return (
@@ -200,7 +218,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               required
             />
 
-            {/*Add taken slot later*/}
             <label className="d-flex justify-content-center text-secondary">Time:</label>
             <select
               name="time"

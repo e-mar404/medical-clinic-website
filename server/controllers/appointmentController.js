@@ -120,7 +120,7 @@ async function availableAppointments(req, res, db) {
     console.log(`available times for doctor ${doctor_id} at clinic ${clinic_id}: ${availableTimes}`);
 
     res.writeHead(200, headers);
-    res.end(JSON.stringify(availableTimes));
+    res.end(JSON.stringify({ message: availableTimes }));
 
   } catch(err) {
     console.error(err);
