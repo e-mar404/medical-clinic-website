@@ -240,7 +240,7 @@ function getPatientMedicalHistory(res, db, patient_id) {
 
     console.log('success getting medical history');
     
-    const msg = (db_res.length > 0) ? db_res : "No history for patient";
+    const msg = (db_res.length > 0) ? db_res[0] : {conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed'};
 
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
