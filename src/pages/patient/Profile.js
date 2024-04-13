@@ -71,6 +71,11 @@ function PatientProfile() {
   }, []);
 
   const saveFunction = (e) => {
+    var regExp = /[a-zA-Z]/g;
+    if (document.querySelector('#ExpirationDate').value.length > 0 & (document.querySelector('#ExpirationDate').value.length !== 5 || !document.querySelector('#ExpirationDate').value.includes('/') || regExp.test(document.querySelector('#ExpirationDate').value))) {
+      alert("Please enter valid input for Expiration Date!");
+      return;
+    }
   
     const postMethod = {
       method: 'POST',
@@ -219,8 +224,8 @@ function PatientProfile() {
               </div>
               <div class="col-3">
                 <div class="mr-3 ml-3">
-                  <label>Expiration Date</label>
-                  <input type="date" class="form-control mt-1" id="ExpirationDate" defaultValue={thisPatient.expiration_date === null ? "" : thisPatient.expiration_date} />
+                  <label>Expiration Date (MM/YY)</label>
+                  <input type="text" class="form-control mt-1" id="ExpirationDate" defaultValue={thisPatient.expiration_date === null ? "" : thisPatient.expiration_date} />
                 </div>
               </div>
             </div>
