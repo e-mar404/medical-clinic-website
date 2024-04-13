@@ -10,7 +10,9 @@ const {
   getEmployeesByClinic,
   loginEmployee,
   createEmployeeAccount,
-  employeeTransfer
+  employeeTransfer,
+  getAppointments,
+  getDoctorInformation
 } = require('./controllers/employeeController');
 
 
@@ -22,11 +24,11 @@ const dbPassword = process.env.DB_PASSWORD;
 const database = process.env.DATABASE;
 
 const db = mysql.createConnection({
-  host: dbHost,
-  port: dbPort,
-  user: dbUser,
-  password: dbPassword,
-  database: database
+  host: '127.0.0.1',
+  port: '3306',
+  user: 'root',
+  password: 'Saul2014!',
+  database: 'mdb'
 });
 
 db.connect(function (err) {
@@ -109,6 +111,30 @@ const server = http.createServer((req, res) => {
 
         case /\/admin\/employeelist/.test(req.url): //might not be needed
           getEmployeesByType(res, req, type);
+          break;
+
+        case /viewappointment/.test(req.url): // should get employee id and then call function that returns all appointments
+          const empId = req.url.split('/')[2];
+          getAppointments(res, db, empId);
+          //res.writeHead(404, headers);
+          //res.end(JSON.stringify({ message: 'Route for appointment' }));
+          break;
+
+        case /get_doctor/.test(req.url):
+          const doctorID = req.url.split('/')[2];
+          getDoctorInformation(res, db, doctorID);
+          //res.writeHead(404, headers);
+          //res.end(JSON.stringify({ message: 'Route for doctor info' }));
+          break;
+
+        case /accounts_created/.test(req.url):
+          //needs the start date and x for report
+          //const start_date = req.url.split('/')[2];
+          //const end_date = req.url.split('/')[3];
+          //const report_type = req.url.split('/')[4]; // going to do a switch case so the user chooses the report
+          //getNewUsersReport(res, db, start_date, end_date, report_type);
+          res.writeHead(404, headers);
+          res.end(JSON.stringify({ message: 'Route for new accounts created' }));
           break;
 
         default:

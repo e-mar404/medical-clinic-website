@@ -15,6 +15,7 @@ import MakeAppointment from './pages/appointment/MakeAppointment';
 import TransferDoctor from './pages/employee/TransferDoctor';
 import AdminHomepage from './pages/employee/AdminHomepage';
 import Reports from './pages/employee/Reports';
+import AdminLoadReports from './pages/employee/LoadReport';
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
@@ -42,14 +43,15 @@ function App() {
         <Route path='/employee/login' element={<EmployeeLogIn />} />
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
-        <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
-        <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
-        <Route path='/admin/transfer' element ={<TransferDoctor />} />
+        <Route path='/admin/employeelist/newemployee' element ={<NewEmployeeForm />} />
+        <Route path='/admin/employeelist/viewappointment' element ={<ViewDoctorAppointments />} />
+        <Route path='/admin/employeelist/transfer' element ={<TransferDoctor />} />
 
         <Route path='/admin' element={<AdminHomepage />}/>
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
-        <Route path='/admin/report' element={<Reports />}/>
+        <Route path='/admin/report_form' element={<Reports />}/>
+        <Route path='/admin/report' element={<AdminLoadReports />} />
       </Routes>
     </Router>
   );
