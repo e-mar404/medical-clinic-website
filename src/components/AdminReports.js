@@ -7,12 +7,14 @@ function AdminReports(){
     // after update change form values
     // on click send form to other page using useNavigate and use Location
     
+    /*
     const fetchReport = async () => {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         }
     };
+    */
     
    //fetch(`${process.env.REACT_APP_BACKEND_HOST}/get`)
 
