@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 function TransferDoctorForm(){
-    const [clinic_id, setClinic] = useState('');
+    const [clinics, setClinic] = useState('');
     const [email, setEmail] = useState({
         email:"employee11@email.com"
     });
+    // need to have employee id, clinics list and 
+    const clinicsRef = useRef(clinics);
     //const email = localStorage.getItem('UserEmail'); // should save the user email to send to post request
     console.log(setEmail);
     function TransferEmployee(e){
@@ -16,7 +18,7 @@ function TransferDoctorForm(){
             body: JSON.stringify(
                 {
                     'email': email,
-                    'clinic_id': clinic_id
+                    //'clinic_id': clinic_id
                 }
             )
         };

@@ -187,6 +187,7 @@ async function employeeTransfer(req, res, db){
   }
 }
 
+
 function getSpecialists(res, db) {
   try{
     console.log('getting specialists');
@@ -220,9 +221,48 @@ function getPatientsOf(res, db, doctor_id) {
       res.end(JSON.stringify ({ message: msg }));
     });
   } catch (err) {
+        res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+
+async function getAppointments(res, db, empId){
+  try {
+    // ADD THE QUERY FOR ALL APPOINTMENTS 
+    db.query(`SELECT DISTINCT P.first_name, P.last_name, A.appointment_date, A.appointment_time, C.clinic_name 
+    FROM Patient AS P, Employee AS E, Appointment AS A, Clinic AS C
+    WHERE A.patient_id = P.patient_id AND A.doctor_id = '${empId}' AND A.clinic_id = C.clinic_id;`, (err, db_res) => {
+        if (err) {
+          throw (err);
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: db_res}));
+      }); 
+  }
+  catch(err){
     res.writeHead(400, headers);
     res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
   }
 }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf };
+async function getDoctorInformation(res, db, doctorID){
+  try {
+    db.query(`SELECT E.first_name, E.last_name, E.email_address, E.title, E.primary_clinic 
+    FROM Employee AS E
+    WHERE  E.employee_id = ${doctorID}; `, (err, db_res) => {
+        if (err) {
+          throw (err);
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: db_res}));
+      }); 
+  }
+  catch(err){
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation };
+
