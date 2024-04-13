@@ -1,4 +1,4 @@
-function fetchAvailableTimes(date) {
+function fetchAvailableTimes(clinic_id, date) {
   const availableTimes = [
     "9:00 AM",
     "10:00 AM",

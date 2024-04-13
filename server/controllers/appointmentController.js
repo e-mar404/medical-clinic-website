@@ -89,9 +89,58 @@ async function getClinicAppointments(req, res, db) {
   }
 }
 
-function availableAppointments(req, res, db) {
-  res.writeHead(200, headers);
-  res.end(JSON.stringify({ message: 'sends available appointments' })); 
+async function availableAppointments(req, res, db) {
+  try {
+    const body = await PostData(req);
+    const { clinic_id, doctor_id, date } = JSON.parse(body);
+    
+    console.log(`getting available appointments for clinic ${clinic_id} on date ${date}`);
+
+    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
+
+    const availableTimes = [
+      "09:00 AM",
+      "10:00 AM",
+      "11:00 AM",
+      "12:00 PM",
+      "01:00 PM",
+      "02:00 PM",
+      "03:00 PM",
+      "04:00 PM",
+      "05:00 PM"];
+
+    timesToRemove.forEach(time => {
+      const index = availableTimes.indexOf(time.time_taken);
+
+      if (index !== -1) {
+        availableTimes.splice(index, 1);
+      }
+    });
+
+    console.log(`available times for doctor ${doctor_id} at clinic ${clinic_id}: ${availableTimes}`);
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(availableTimes));
+
+  } catch(err) {
+    console.error(err);
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
+}
+
+async function scheduledAppointments(clinic_id, doctor_id, date, db) {
+  return await new Promise((resolve, reject) => {
+    const query = `SELECT TIME_FORMAT(appointment_time, '%h:%i %p') AS time_taken FROM Appointment WHERE appointment_status='scheduled' AND appointment_time>=CURTIME() AND appointment_date=? AND clinic_id=? AND doctor_id=?`
+
+    db.query(query, [date, clinic_id, doctor_id], (err, db_res) => {
+      if (err) { 
+        reject('something went wrong when getting available appointments');
+      }
+
+      resolve(db_res);
+    });
+  });
 }
 
 module.exports = { createAppointment, getClinicAppointments, availableAppointments };
