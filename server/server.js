@@ -5,6 +5,7 @@ const { createAppointment, getClinicAppointments, availableAppointments } = requ
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
+const { prescribeMedicationToPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
@@ -74,6 +75,10 @@ const server = http.createServer((req, res) => {
 
           case '/update_patient_medical_history':
             updatePatientMedicalHistory(req, res, db);
+            break;
+
+          case '/prescribe_medication':
+            prescribeMedicationToPatient(req, res, db);
             break;
 
           case '/create_referral':
