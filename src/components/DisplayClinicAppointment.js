@@ -14,10 +14,9 @@ function DisplayClinicAppointment() {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
-            'Clinic-Id': clinicId // Pass clinicId in a custom header
           }
         };
-        const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments`;
+        const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments/${clinicId}`;
     
         console.log('Request headers:', requestOptions.headers); // Log request headers
     
@@ -27,10 +26,6 @@ function DisplayClinicAppointment() {
         }
         const data = await response.json();
 
-        // where is this being used?
-        const today = new Date().toISOString().split('T')[0]; 
-        console.log(today); // for eslint
-        
         const modifiedAppointments = data.map(appointment => ({
           ...appointment,
           appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
