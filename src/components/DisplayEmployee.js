@@ -16,6 +16,7 @@ function DisplayEmployee(){
       const fetchDoctors = async () => {
         fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/bytype/medical`, requestOptions).then((response) => {
           response.json().then((data) => {
+            
             if (response.status !== 200) {
               alert(data.error);
               return;
