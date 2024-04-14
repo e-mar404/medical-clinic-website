@@ -38,10 +38,8 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-async function getClinicAppointments(req, res, db) {
+async function getClinicAppointments(res, db, clinicId) {
   try {
-    const clinicId = req.headers['clinic-id'];
-
     console.log('Clinic ID:', clinicId); // Log clinic ID
     
     db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time FROM Appointment WHERE clinic_id = ?', [clinicId], async (err, results) => {
