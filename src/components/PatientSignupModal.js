@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { subDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import './PatientSignupModal.css';
 
@@ -75,7 +76,7 @@ function PatientSignupModal() {
             <input type="text" name="last_name" placeholder="last name" onChange={registerInput} required/>
     
             <label className="d-flex text-secondary">Date of Birth</label>
-            <DatePicker className="w-100" selected={formData.date} onChange={(date) => setFormData({...formData, date})} dateFormat="yyyy-MM-dd" showIcon toggleCalendarOnIconClick required />
+            <DatePicker className="w-100" selected={formData.date} onChange={(date) => setFormData({...formData, date})} maxDate={subDays(new Date(), 0)} dateFormat="yyyy-MM-dd" showIcon toggleCalendarOnIconClick required />
             
             <label className="d-flex text-secondary">Password (min length: 8)</label>
             <input type="password" name="password" placeholder="password" minLength="8" onChange={registerInput} required/>
