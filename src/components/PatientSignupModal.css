@@ -6,6 +6,10 @@
   width: 0.5rem;
 }
 
+.date-picker {
+  padding: 6px 10px 5px 35px;
+}
+
 .form .submit-button {
   width: 100%;
 }
