@@ -1,6 +1,6 @@
 const http = require('http');
 const mysql = require('mysql2');
-const { generateReportFor } = require('./controllers/reportController');
+const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
 const { createAppointment, getClinicAppointments, availableAppointments } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
@@ -27,11 +27,11 @@ const dbPassword = process.env.DB_PASSWORD;
 const database = process.env.DATABASE;
 
 const db = mysql.createConnection({
-  host: dbHost,
-  port: dbPort,
-  user: dbUser,
-  password: dbPassword,
-  database: database
+  host: '127.0.0.1',
+  port: '3306',
+  user: 'root',
+  password: 'Saul2014!',
+  database: 'mdb'
 });
 
 db.connect(function (err) {
@@ -175,12 +175,27 @@ const server = http.createServer((req, res) => {
 
         case /accounts_created/.test(req.url):
           //needs the start date and x for report
-          //const start_date = req.url.split('/')[2];
-          //const end_date = req.url.split('/')[3];
-          //const report_type = req.url.split('/')[4]; // going to do a switch case so the user chooses the report
-          //getNewUsersReport(res, db, start_date, end_date, report_type);
+          const start_date = req.url.split('/')[2];
+          const end_date =  req.url.split('/')[3];
+
+          getNewUsersReport(res, db, start_date, end_date);
+          //res.writeHead(404, headers);
+          //res.end(JSON.stringify({ message: `Route for new accounts created between: ${start_date} and ${end_date}` }));
+          break;
+
+        case /doctor_total/.test(req.url):
+            //needs the start date and x for report
+            const startDate = req.url.split('/')[2];
+            const endDate =  req.url.split('/')[3];
+            const clinicId = req.url.split('/')[4];
+            generateDoctorTotal(res, db, startDate, endDate, clinicId);
+            //res.writeHead(404, headers);
+            //res.end(JSON.stringify({ message: `Route for total appointments created between: ${startDate} and ${endDate}` }));
+            break;
+
+        case /get_report/.test(req.url):
           res.writeHead(404, headers);
-          res.end(JSON.stringify({ message: 'Route for new accounts created' }));
+          res.end(JSON.stringify({ message: 'Route for reports' }));
           break;
 
         default:
