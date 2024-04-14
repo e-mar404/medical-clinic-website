@@ -6,9 +6,9 @@ import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
   patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
-  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Srelect clinic'}]);
+  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Select clinic'}]);
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
-  const [availableTimes, setAvailableTimes] = useState(['Select a date']);
+  const [availableTimes, setAvailableTimes] = useState(['']);
   const [formData, setFormData] = useState({
     clinicId: -1,
     doctorId: -1,
@@ -203,7 +203,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             >
               <option key={0} value={-1} disabled>Select a doctor</option>
               {doctors.map((doctor) => (
-                <option key={doctor.employee_id} value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
+                <option key={doctor.employee_id} value={doctor.employee_id}>{doctor.first_name ? `Dr. ${doctor.first_name} ${doctor.last_name}` : 'Select a clinic first'}</option>
               ))}
             </select>
 
@@ -229,7 +229,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             >
               <option key={0} value={-1} disabled>Select a time</option>
               {availableTimes.map(time => (
-                <option key={availableTimes.indexOf(time)} value={time}>{time}</option>
+                <option key={availableTimes.indexOf(time)} value={time}>{time ? time : 'Select a doctor first'}</option>
               ))}
             </select>
 
