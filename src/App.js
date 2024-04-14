@@ -56,7 +56,7 @@ function App() {
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
 
-        <Route path='/viewclinicappointment' element ={<ViewClinicAppointments />} />
+        <Route path='/receptionist' element ={<ViewClinicAppointments />} />
 
         <Route path='/admin' element={<AdminHomepage />}/>
  
