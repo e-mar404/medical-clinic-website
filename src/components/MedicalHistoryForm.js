@@ -98,7 +98,6 @@ function MedicalHistoryForm({ patient_id }) {
           </div>
         </div>
 
-
         <div className="row">
           <div className="col">
             <button type="submit" className="btn btn-primary btn float-end" id="SaveProfile">Save History</button>
@@ -106,7 +105,7 @@ function MedicalHistoryForm({ patient_id }) {
         </div>
       </form>
       
-      <PrescribeMedicationForm />
+      <PrescribeMedicationForm patient_id={patient_id} doctor_id={localStorage.getItem('UserId')} />
     </>
   );
 }
