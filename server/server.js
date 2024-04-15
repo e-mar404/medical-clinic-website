@@ -35,7 +35,7 @@ const pool = mysql.createPool({
   port: dbPort,
   user: dbUser,
   password: dbPassword,
-  database: database
+  database: database,
 
   enableKeepAlive: true
 });
