@@ -35,7 +35,7 @@ function PatientSignupModal() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...formData,
-        'date': formData.date_of_birth.toISOString().slice(0, 10)
+        'date_of_birth': formData.date_of_birth.toISOString().slice(0, 10)
       })
     };
 
