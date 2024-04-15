@@ -15,7 +15,8 @@ const {
   getSpecialists,
   getPatientsOf,
   getAppointments,
-  getDoctorInformation
+  getDoctorInformation,
+  getAdminClinic
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
@@ -195,6 +196,11 @@ const server = http.createServer((req, res) => {
         case /get_report/.test(req.url):
           res.writeHead(404, headers);
           res.end(JSON.stringify({ message: 'Route for reports' }));
+          break;
+        
+        case /getAdminClinic/.test(req.url):
+          const adminEmail = req.url.split('/')[2];
+          getAdminClinic(res, db, adminEmail);
           break;
 
         default:
