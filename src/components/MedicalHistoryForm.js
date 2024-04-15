@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import PrescribeMedicationForm from './PrescribeMedicationForm.js';
 
-function MedicalHistoryForm({ patient_id }) {
+function MedicalHistoryForm() {
+  const { patient_id } = useParams();
+  console.log(patient_id);
+
   const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
   const patientMedicalHistoryRef = useRef();
   
@@ -20,7 +24,7 @@ function MedicalHistoryForm({ patient_id }) {
 
         setPatientMedicalHistory({
           ...data.message,
-          'patient_id':patient_id
+          'patient_id': patient_id
         });
       });
     });

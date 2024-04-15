@@ -50,7 +50,7 @@ function App() {
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
-        <Route path='/doctor/patient_medical_history' element={<PatientMedicalHistoryPage />} />
+        <Route path='/doctor/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
