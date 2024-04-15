@@ -36,7 +36,7 @@ function PrescribeMedicationForm({ patient_id, doctor_id }) {
       headers: { 'Content-Type': 'application/json' },
     } 
 
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}/medications_for_patient/1`, requestOptions).then(response => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/medications_for_patient/${patient_id}`, requestOptions).then(response => {
       response.json().then((data) => {
         if (response.status !== 200) {
           alert(data.error);
