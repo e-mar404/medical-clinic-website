@@ -31,11 +31,12 @@ const database = process.env.DATABASE;
 
 
 const pool = mysql.createPool({
-  host: '127.0.0.1',
-  port: '3306',
-  user: 'root',
-  password: 'Saul2014!',
-  database: 'mdb',
+  host: dbHost,
+  port: dbPort,
+  user: dbUser,
+  password: dbPassword,
+  database: database
+
   enableKeepAlive: true
 });
 
