@@ -3,6 +3,8 @@ import './LoginModal.css';
 
 function NewEmployee() {
 
+  const [specialistValue, setSpecialistValue] = useState(false);
+  //const adminID = localStorage.getItem('UserEmail'); //NEED TO FETCH THE CLINIC ID
   const [formData, setFormData] = useState({
     email: null, 
     phone_number: '',
@@ -12,15 +14,16 @@ function NewEmployee() {
     last_name: '',
     role: '',
     type: '',
-    specialist: ''
+    title: '',
   });
 
   function handleInputChange(e) {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    //console.log(formData);
   }
 
   const handleRoleChange = (e) => {
@@ -33,9 +36,33 @@ function NewEmployee() {
       handleInputChange(e);
   };
 
+  const handleSpecialist = (e) => {
+    if(e.target.value === "true"){
+      setSpecialistValue(true);
+    }
+    else{
+      setSpecialistValue(false);
+    }
+  }
+  
   function registerEmployee(e){
     e.preventDefault();
-    console.log(formData);
+
+    const request = {
+      method:'GET',
+      headers: { 'Content-Type': 'application/json'},
+    };
+
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/admin1@medc.org`, request).then((response) => {
+      response.json().then((data) => {
+      if(response.status !== 200){
+        alert("fix admin fetch clinic");
+        return;
+      }
+
+      const clinic = data.message[0].primary_clinic;
+
+    
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
@@ -48,9 +75,10 @@ function NewEmployee() {
         'middle_name': formData.middle_name,
         'last_name': formData.last_name,
         'employee_role': formData.role,
-        'employee_type': formData.type
-        //'primary_clinic': localStorage
-        //need to figure out how to get the primary clinic and employee type and phone number
+        'employee_type': formData.type,
+        'specialist': specialistValue,
+        'title': formData.title,
+        'primary_clinic': clinic
       })
     };
     
@@ -64,7 +92,10 @@ function NewEmployee() {
           alert("Failed to create new employee!");
         }
       });
+    }); 
     });
+  });
+
     
   }
 
@@ -88,7 +119,12 @@ function NewEmployee() {
                 <option value="Receptionist">Receptionist</option>
                 <option value="Administrator">Administrator</option>
             </select>
-
+              <select className="form-select" name="specialist" onChange={handleSpecialist} required> 
+                  <option selected disabled>Specialist?</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+              </select>
+              <input type="text" name="title" placeholder="Title" onChange={registerInput} required/>
             <button className="submit-button" type="submit">Register</button>
          </form>
         </div>
@@ -98,3 +134,5 @@ function NewEmployee() {
 }
 
 export default NewEmployee;
+
+// on submit 1 get admin id and then s
