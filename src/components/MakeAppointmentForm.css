@@ -10,3 +10,62 @@
 .form .submit-button {
   width: 100%;
 }
+
+
+
+.date-picker-container .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.date-picker-container .react-datepicker__input-container {
+  width: 100%;
+}
+
+.time-label {
+  margin-bottom: 1rem;
+}
+
+.form select[name="time"] {
+  margin-bottom: 2rem; /* Adjust this value as needed */
+}
+
+.date-picker-container .react-datepicker__input-container input {
+ width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form input[type="time"] {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form button {
+  margin-top: 1rem;
+  width: 0.5rem;
+}
+
+.form .submit-button {
+  width: 100%;
+}
+
+.form input[type="email"] {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+

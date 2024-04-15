@@ -1,8 +1,7 @@
 const http = require('http');
 const mysql = require('mysql2');
 const { generateReportFor } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments } = require('./controllers/appointmentController');
-const { createAppointment, availableAppointments } = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
@@ -157,6 +156,12 @@ const server = http.createServer((req, res) => {
         case /\/admin\/employeelist/.test(req.url): //might not be needed
           getEmployeesByType(res, req, type);
           break;
+
+        case /\/getClinicOfReceptionist\/\d+/.test(req.url):
+          const userId = req.url.split('/')[2];
+      
+          getClinicOfReceptionist(res, db, userId);
+          break;      
 
         default:
           res.writeHead(404, headers);

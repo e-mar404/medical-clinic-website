@@ -4,13 +4,13 @@ import DatePicker from 'react-datepicker';
 import { subDays } from "date-fns";
 import './MakeAppointmentForm.css';
 
-const MakeAppointmentForm = ({ patientEmail }) => {
+const MakeAppointmentForm = () => {
   const [clinics, setClinics] = useState([{"clinic_id": 0, "clinic_name": "Select clinic"}]);
   const [doctors, setDoctors] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
+  const [patientEmail, setPatientEmail] = useState('');
   const clinicsRef = useRef(clinics);
 
   const fetchClinicEmployees = async (clinic_id=0) => {
-
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'text/plain' }
@@ -40,29 +40,24 @@ const MakeAppointmentForm = ({ patientEmail }) => {
           if (response.status !== 200) {
             alert(data.error);
             return;
-
           }
 
           clinicsRef.current = data.message;
           setClinics(clinicsRef.current);
         });
       });
-
     }
 
     fetchClinics();
-
     console.log('use effect called');
   }, [clinicsRef]); 
-
-  patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
 
   const [formData, setFormData] = useState({
     clinicId: -1,
     doctorId: -1,
     date: null, 
     time: '1100',
-    patientEmail: patientEmail,
+    patientEmail: '',
   });
 
   const handleInputChange = (e) => {
@@ -183,20 +178,18 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               ))}
             </select>
 
-            <label className="d-flex text-secondary">Date: (yyyy-mm-dd)</label>
-            <DatePicker
-              name="date"
-              selected={formData.date}
-              onChange={(date) => setFormData({ ...formData, date })}
-              dateFormat="yyyy-MM-dd"
-              minDate={subDays(new Date(), 0)}
-              showIcon
-              toggleCalendarOnIconClick
-              required
-            />
+            <label className="date-label d-flex justify-content-center text-secondary">Date:</label>
+            <div className="date-label date-picker-container">
+              <DatePicker
+                selected={formData.date}
+                onChange={(date) => setFormData({ ...formData, date })}
+                dateFormat="yyyy-MM-dd"
+                minDate={subDays(new Date(), 0)}
+                required
+              />
+            </div>
 
-            {/*Add taken slot later*/}
-            <label className="d-flex justify-content-center text-secondary">Time:</label>
+            <label className=" d-flex justify-content-center text-secondary">Time:</label>
             <select
               name="time"
               value={formData.time}
@@ -215,6 +208,15 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               <option value="04:00 PM">4:00 PM</option>
               <option value="05:00 PM">5:00 PM</option>
             </select>
+
+            <label className="d-flex justify-content-center text-secondary">Email:</label>
+            <input
+              type="email"
+              name="patientEmail"
+              value={formData.patientEmail}
+              onChange={handleInputChange}
+              required
+            />
 
             <button className="submit-button" type="submit">
               Book Appointment

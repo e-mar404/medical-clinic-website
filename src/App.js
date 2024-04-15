@@ -7,8 +7,10 @@ import PatientSignup from './pages/patient/Signup';
 import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
+import ReceptionistHome from './pages/employee/ReceptionistHome';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
+import EmployeeHome from './pages/employee/EmployeeHome';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
@@ -41,10 +43,11 @@ function App() {
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
 
-
+ 
         <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
-
+    
+        <Route path='/receptionist' element={<ReceptionistHome />} />
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
         <Route path='/doctor/patient_medical_history' element={<PatientMedicalHistoryPage />} />
