@@ -23,7 +23,6 @@ function NewEmployee() {
         ...formData,
         [name]: value,
       });
-    //console.log(formData);
   }
 
   const handleRoleChange = (e) => {
@@ -124,7 +123,7 @@ function NewEmployee() {
                   <option value="true">Yes</option>
                   <option value="false">No</option>
               </select>
-              <input type="text" name="title" placeholder="Title" onChange={registerInput} required/>
+              <input type="text" name="title" placeholder="Title" onChange={handleInputChange} required/>
             <button className="submit-button" type="submit">Register</button>
          </form>
         </div>
