@@ -17,7 +17,8 @@ const {
   getPatientsOf,
   getAppointments,
   getDoctorInformation,
-  getAdminClinic
+  getAdminClinic,
+  getClinicEmployees
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
@@ -30,11 +31,11 @@ const database = process.env.DATABASE;
 
 
 const pool = mysql.createPool({
-  host: dbHost,
-  port: dbPort,
-  user: dbUser,
-  password: dbPassword,
-  database: database,
+  host: '127.0.0.1',
+  port: '3306',
+  user: 'root',
+  password: 'Saul2014!',
+  database: 'mdb',
   enableKeepAlive: true
 });
 
@@ -197,8 +198,9 @@ const server = http.createServer((req, res) => {
          case /accounts_created/.test(req.url):
             const start_date = req.url.split('/')[2];
             const end_date =  req.url.split('/')[3];
+            const clinic_id = req.url.split('/')[4];
 
-            getNewUsersReport(res, db, start_date, end_date);
+            getNewUsersReport(res, db, start_date, end_date, clinic_id);
             break;
 
         case /doctor_total/.test(req.url):
@@ -216,6 +218,11 @@ const server = http.createServer((req, res) => {
         case /getAdminClinic/.test(req.url):
           const adminEmail = req.url.split('/')[2];
           getAdminClinic(res, db, adminEmail);
+          break;
+        
+        case /getClinicEmployees/.test(req.url):
+          const adminClinic = req.url.split('/')[2];
+          getClinicEmployees(res, db, adminClinic);
           break;
 
         default:

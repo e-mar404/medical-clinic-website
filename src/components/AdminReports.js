@@ -35,17 +35,27 @@ function AdminReports(){
         };
         console.log(formatDate);
         
+        // get the clinic id before i send in the info and add that to query 
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         };
-
-        console.log(`checking the reportId ${formatDate.reportId}`);
+        let clinic_id;
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/admin1@medc.org`, requestOptions).then((response) => {
+            response.json().then((data) => {
+            if(response.status !== 200){
+              alert("fix admin fetch clinic");
+              return;
+            }
+            clinic_id = data.message[0].primary_clinic;
+            console.log(clinic_id);
+        
+        console.log(`checking the reportId ${formatDate.reportId} and clinic id ${clinic_id}`);
         if(formData.reportId === '1'){
             console.log(`in the if statement of reportId ${formatDate.reportId}`);
         
             console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}/accounts_created/${formatDate.startDate}/${formatDate.endDate}`, requestOptions).then((response) =>{
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}/accounts_created/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
                     response.json().then((data) => {
                         if(response.status !== 200){
                             alert(data.error);
@@ -54,6 +64,13 @@ function AdminReports(){
                         console.log(data.message);
                         setUserAccounts(data.message);
 
+                        const fixDate = data.message.map(account => ({
+                            ...account,
+                            created: account.created.split('T')[0],
+                            
+                          }));
+                          
+                        setUserAccounts(fixDate);
                         
                         setTable(true);
                     });
@@ -64,7 +81,7 @@ function AdminReports(){
             console.log(`in the if else statement of reportId ${formatDate.reportId}`);
         
             console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}/doctor_total/${formatDate.startDate}/${formatDate.endDate}/1`, requestOptions).then((response) =>{
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}/doctor_total/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
                     response.json().then((data) => {
                         if(response.status !== 200){
                             alert(data.error);
@@ -72,6 +89,7 @@ function AdminReports(){
                         }
                         console.log(data.message);
                         setAppointments(data.message);
+                        
                         setTable(true);
                     });
                 });
@@ -84,6 +102,8 @@ function AdminReports(){
             alert('Please choose valid report');
             return;
         }
+        });
+        });
     };
     
     function reportOne(){

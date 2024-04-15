@@ -287,5 +287,23 @@ function getAdminClinic(res, db, adminEmail){
   }
 }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic };
+function getClinicEmployees(res, db, clinicId){
+  try{
+    db.query(`SELECT 
+    employee_id, email_address, employee_role, first_name, last_name
+    FROM Employee WHERE primary_clinic=${clinicId};`, (err, db_res) => {
+      if(err){
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ message: db_res}));
+    });
+  }
+  catch(err){
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic, getClinicEmployees };
 
