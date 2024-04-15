@@ -14,9 +14,9 @@ async function prescribeMedicationToPatient(req, res, db) {
         if (err) {
           console.log(err);
 
-          reject('Could not prescribe medication to patient');
+          reject(err.sqlMessage.includes('prescribed') ? err.sqlMessage : 'Could not prescribe medication to patient');
         }
-
+        
         resolve('Successfully prescribed medication');
       });
     });

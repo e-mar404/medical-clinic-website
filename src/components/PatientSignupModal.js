@@ -55,7 +55,7 @@ function PatientSignupModal() {
         localStorage.setItem("UserLastName", formData.last_name);
         localStorage.setItem("UserId", data.message.id);
 
-        // nav('/patient', {});
+        nav('/patient', {});
       });
     });
   }
