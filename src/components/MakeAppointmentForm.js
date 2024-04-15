@@ -6,9 +6,9 @@ import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
   patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
-  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Srelect clinic'}]);
+  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Select clinic'}]);
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
-  const [availableTimes, setAvailableTimes] = useState(['Select a date']);
+  const [availableTimes, setAvailableTimes] = useState(['']);
   const [formData, setFormData] = useState({
     clinicId: -1,
     doctorId: -1,
@@ -16,40 +16,33 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     time: -1,
     patientEmail: patientEmail,
   });
-  const clinicsRef = useRef(clinics);
 
-  useEffect(() => {
+
+  const fetchClinics = () => {
+    console.log('fetching clinics');
+
+    const requestOptions = {
+      method: 'get',
+      headers: { 'content-type': 'application/json' }
+    };
+
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/get_clinics`, requestOptions).then((response) => {
+      response.json().then((data) => {
+        if (response.status !== 200) {
+          alert(data.error);
+          return;
+        }
+
+        clinicsRef.current = data.message;
+        setClinics(clinicsRef.current);
+      });
+    });
+  }
+
+  const fetchClinicEmployees = (clinic_id=0) => {
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
-    };
-
-    const fetchClinics = async () => {
-      console.log('fetching clinics');
-
-      fetch(`${process.env.REACT_APP_BACKEND_HOST}/get_clinics`, requestOptions).then((response) => {
-        response.json().then((data) => {
-          if (response.status !== 200) {
-            alert(data.error);
-            return;
-          }
-
-          clinicsRef.current = data.message;
-          setClinics(clinicsRef.current);
-        });
-      });
-    }
-
-    fetchClinics();
-
-    console.log('use effect called');
-  }, [clinicsRef]); 
-
-  const fetchClinicEmployees = async (clinic_id=0) => {
-
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'text/plain' }
     };
 
     fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/byclinic/${clinic_id}/doctor`, requestOptions).then((response) => {
@@ -63,8 +56,8 @@ const MakeAppointmentForm = ({ patientEmail }) => {
       });
     });
   }
- 
-  const fetchAvailableTimes = async (clinic_id, doctor_id, date) => {
+  
+  const fetchAvailableTimes = (clinic_id, doctor_id, date) => {
     date = date.toISOString().slice(0, 10);
 
     console.log(`fetching available appointments with values clinic_id:${clinic_id} doctor_id:${doctor_id} date:${date}`);
@@ -90,43 +83,37 @@ const MakeAppointmentForm = ({ patientEmail }) => {
       });
     });
   }
-  
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+     
+    const { name, value } = e.target ? e.target : { name: 'date', value: e };
     console.log(name, value);
 
     setFormData(prevData => {
       const updatedData = {
         ...prevData,
         [name]: value,
-      }
-
-      if (name === 'doctorId') {
+      };
+      
+      if (name === 'doctorId' || name === 'date') {
         fetchAvailableTimes(updatedData.clinicId, updatedData.doctorId, updatedData.date);
       }
 
       if (name === 'clinicId' && parseInt(value) !== -1) {
-        setDoctors([{"employee_id": 0, "first_name": "", "last_name": ""}]);
+        setDoctors([{ "employee_id": 0, "first_name": "", "last_name": "" }]);
         fetchClinicEmployees(value);
       }
 
       return updatedData;
     });
-
   };
+  
+  const clinicsRef = useRef(clinics);
+  const fetchClinicsRef = useRef(fetchClinics);
 
-  const handleDateChange = (date) => {
-    setFormData(prevData => {
-      const updatedData = { 
-        ...prevData, 
-        'date': date
-      }
-
-      fetchAvailableTimes(updatedData.clinicId, updatedData.doctorId, updatedData.date);    
-
-      return updatedData;
-    });
-  };
+  useEffect(() => {
+    fetchClinicsRef.current();
+  }, [clinicsRef, fetchClinicsRef]); 
   
   const nav = useNavigate();
 
@@ -203,7 +190,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             >
               <option key={0} value={-1} disabled>Select a doctor</option>
               {doctors.map((doctor) => (
-                <option key={doctor.employee_id} value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
+                <option key={doctor.employee_id} value={doctor.employee_id}>{doctor.first_name ? `Dr. ${doctor.first_name} ${doctor.last_name}` : 'Select a clinic first'}</option>
               ))}
             </select>
 
@@ -212,7 +199,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               name="date"
               className="date-picker"
               selected={formData.date}
-              onChange={handleDateChange}
+              onChange={handleInputChange}
               dateFormat="yyyy-MM-dd"
               minDate={subDays(new Date(), 0)}
               showIcon
@@ -229,7 +216,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             >
               <option key={0} value={-1} disabled>Select a time</option>
               {availableTimes.map(time => (
-                <option key={availableTimes.indexOf(time)} value={time}>{time}</option>
+                <option key={availableTimes.indexOf(time)} value={time}>{time ? time : 'Select a doctor first'}</option>
               ))}
             </select>
 
