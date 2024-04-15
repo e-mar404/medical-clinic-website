@@ -31,7 +31,7 @@ async function createPatientContact(email, phone_number, address, res, db){
     db.query('INSERT INTO ContactInformation(email_address, phone_number, address) VALUES (?, ?, ?)',
       [email, phone_number, address], (err, db_res) => {
         if (err) {
-          reject(`createPatientContact: ${err.sqlMessage}`);
+          reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
         }
 
         resolve(email);
@@ -44,7 +44,7 @@ async function createPatient(email, first_name, last_name, date_of_birth, db){
     db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth) VALUES (?, ?, ?, DATE ?)', 
       [email, first_name, last_name, date_of_birth], async (err, db_res) => {
         if (err) {
-          reject(`createPatient: ${err.sqlMessage}`);
+          reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
         }
 
         resolve(db_res.insertId);
@@ -57,7 +57,7 @@ async function createPatientLogin(email, password, patient_id, db) {
     db.query('INSERT INTO Patient_Login(email_address, password, patient_id) VALUES(?, ?, ?)', 
       [email, password, patient_id], (err, db_res) => {
         if (err) {
-          reject(`createPatientLogin: ${err}`);
+          reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
         }
 
         resolve({
@@ -80,8 +80,10 @@ async function loginPatient(req, res, db) {
       [email, password], 
       (err, db_res) => {
         if (err) {
+          console.log(err);
+
           res.writeHead(400, headers);
-          res.end(JSON.stringify({ message: err }));
+          res.end(JSON.stringify({ message: 'Unkown error occured' }));
         } else {
           if (db_res.length === 0) {
             res.writeHead(401, headers);
@@ -93,10 +95,10 @@ async function loginPatient(req, res, db) {
           }
         }
       });
-  } catch (error) {
-    console.log(`patientController.js: ${error}`);
+  } catch (err) {
+    console.log(`patientController.js: ${err}`);
     res.writeHead(400, headers);
-    res.end(JSON.stringify({ 'message': error }));
+    res.end(JSON.stringify({ error: err }));
   } 
 }
 
@@ -117,8 +119,10 @@ function getPatientProfile(res, db, patient_id) {
     WHERE P.patient_id = ${patient_id};    
   `, (err, db_res) => {
     if (err) {
+      console.log(err);
+
       res.writeHead(400, headers);
-      res.end(JSON.stringify({ error: err }));
+      res.end(JSON.stringify({ error: 'Error when getting user profile' }));
       return;
     }
     res.writeHead(200, headers);
@@ -130,7 +134,9 @@ async function getPatientId(db, email){
   return new Promise((resolve, reject) => {
     db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
       if (err) {
-        reject(err);
+        console.log(err);
+
+        reject('Cant retrive patient');
         return
       }
 
@@ -233,8 +239,10 @@ function getPatientMedicalHistory(res, db, patient_id) {
 
   db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
     if (err) {
+      console.log(err);
+
       res.writeHead(400, headers);
-      res.end(JSON.stringify({ error: err }));
+      res.end(JSON.stringify({ error: 'Cant retrieve patients medical history' }));
       return;
     }
 
@@ -265,7 +273,9 @@ async function updatePatientMedicalHistory(req, res, db) {
     const msg = await new Promise((resolve, reject) => {
       db.query('UPDATE Patient_MedicalHistory SET conditions=?, allergies=?, family_history=? WHERE patient_id=?', [conditions, allergies, family_history, patient_id], (err, db_res) => {
         if (err) {
-          reject(err);
+          console.log(err);
+
+          reject(`Could not update patient's medical history`);
         }
 
         resolve('Medical History updated successfully');
@@ -286,6 +296,8 @@ async function updatePatientMedicalHistory(req, res, db) {
 function patientHasHistory(patient_id, db) {
   return db.query('SELECT patient_id FROM Patient_MedicalHistory WHERE patient_id=?', [patient_id], (err, db_res) => {
     if (err) {
+      console.log(err);
+
       return false;
     }
 
@@ -298,7 +310,9 @@ async function createPatientMedicalHistory(patient_id, conditions, allergies, fa
     const msg = await new Promise((resolve, reject) => {
       db.query('INSERT Patient_MedicalHistory(patient_id, conditions, allergies, family_history) VALUES(?, ?, ?, ?)', [patient_id, conditions, allergies, family_history], (err, db_res) => {
         if (err) {
-          reject(err);
+          console.log(err);
+
+          reject(`Could not update patient's medical history`);
           return;
         }
 

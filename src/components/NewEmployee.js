@@ -1,21 +1,7 @@
 import React, { useState } from 'react';
 import './LoginModal.css';
 
-// need function to register the employee ahhhhhhhhhhh
-// then do fetch to the console to see the output
-
 function NewEmployee() {
-  /*
-  const [email, setEmail] = useState('');
-  const [phone_number, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [first_name, setFirstName] = useState('');
-  const [middle_name, setMiddleName] = useState('');
-  const [last_name, setLastName] = useState('');
-  const [role, setRole] = useState('');
-  const [type, setType] = useState('');
- */
 
   const [specialistValue, setSpecialistValue] = useState(false);
   //const adminID = localStorage.getItem('UserEmail'); //NEED TO FETCH THE CLINIC ID
@@ -31,7 +17,7 @@ function NewEmployee() {
     title: '',
   });
 
-  function registerInput(e) {
+  function handleInputChange(e) {
     const { name, value } = e.target;
       setFormData({
         ...formData,
@@ -47,7 +33,7 @@ function NewEmployee() {
       }else{
         formData.type = "Staff";
       }
-      registerInput(e);
+      handleInputChange(e);
   };
 
   const handleSpecialist = (e) => {
@@ -58,7 +44,7 @@ function NewEmployee() {
       setSpecialistValue(false);
     }
   }
-
+  
   function registerEmployee(e){
     e.preventDefault();
 
@@ -119,13 +105,13 @@ function NewEmployee() {
         <div className="form">
           <form className="login-form" onSubmit={registerEmployee}>
           <label>New employee</label>
-            <input type="text" name="email" placeholder="email" onChange={registerInput} required/>
-            <input type="tel" name="phone_number" placeholder="phone number" onChange={registerInput} required/>
-            <input type="text" name="address" placeholder="address" onChange={registerInput} required/>
-            <input type="password" name="password" placeholder="password" onChange={registerInput} required/>
-            <input type="text" name="first_name" placeholder="first name" onChange={registerInput} required/>
-            <input type="text" placeholder="middle initial" onChange={registerInput} />
-            <input type="text" name="last_name" placeholder="last name" onChange={registerInput} required/>
+            <input type="text" name="email" placeholder="email" onChange={handleInputChange} required/>
+            <input type="tel" name="phone_number" placeholder="phone number" onChange={handleInputChange} required/>
+            <input type="text" name="address" placeholder="address" onChange={handleInputChange} required/>
+            <input type="password" name="password" placeholder="password" onChange={handleInputChange} required/>
+            <input type="text" name="first_name" placeholder="first name" onChange={handleInputChange} required/>
+            <input type="text" placeholder="middle initial" onChange={handleInputChange} />
+            <input type="text" name="last_name" placeholder="last name" onChange={handleInputChange} required/>
             <select className="form-select" name="role" onChange={handleRoleChange} required> 
                 <option selected disabled>Role</option>
                 <option value="Doctor">Doctor</option>

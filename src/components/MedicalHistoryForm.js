@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import PrescribeMedicationForm from './PrescribeMedicationForm.js';
 
 function MedicalHistoryForm({ patient_id }) {
   const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
@@ -97,12 +98,6 @@ function MedicalHistoryForm({ patient_id }) {
           </div>
         </div>
 
-        <div className="col">
-          <div className="mr ml">
-            <label>Prescribe Medications</label>
-            <p>medications will be prescribed here later</p>
-          </div>
-        </div>
 
         <div className="row">
           <div className="col">
@@ -110,6 +105,8 @@ function MedicalHistoryForm({ patient_id }) {
           </div>
         </div>
       </form>
+      
+      <PrescribeMedicationForm />
     </>
   );
 }
