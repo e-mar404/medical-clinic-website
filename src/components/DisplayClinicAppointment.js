@@ -44,6 +44,7 @@ function DisplayClinicAppointment() {
   };
   
   const fetchAppointments = async () => {
+    console.log(clinicId);
     try {
       const requestOptions = {
         method: 'GET',
@@ -84,7 +85,7 @@ function DisplayClinicAppointment() {
 
   // Function to format time
   const formatTime = (timeString) => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
     const amOrPm = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
     const formattedMinutes = minutes.toString().padStart(2, '0'); // Pad with leading zero if necessary
@@ -120,7 +121,7 @@ function DisplayClinicAppointment() {
             <option value="upcoming">Upcoming Appointments</option>
           </select>
         </div>
-        <Link to="/make_appointment"> 
+        <Link to="/receptionist/makeAppointment"> 
           <button className="make-appointment-button">Make Appointment</button>
         </Link>
       </div>

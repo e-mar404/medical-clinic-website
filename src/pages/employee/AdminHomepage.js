@@ -19,7 +19,7 @@ function AdminHomepage(){
           <div className="col-md-4">
             <HomeCard 
                 name="Reports"
-                page_link='/admin/report'
+                page_link='/admin/report_form'
                 icon="fa-file"
                 />
           </div>

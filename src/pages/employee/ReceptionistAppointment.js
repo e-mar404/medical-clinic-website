@@ -2,22 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
 import { subDays } from 'date-fns';
-import './MakeAppointmentForm.css';
+import '../appointment/MakeAppointment.css';
 
-const MakeAppointmentForm = ({ patientEmail }) => {
-  patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
+const MakeAppointmentForm = () => {
   const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Select clinic'}]);
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
   const [availableTimes, setAvailableTimes] = useState(['']);
+  const [email, setEmail] = useState('');
+
+console.log('email:', email);
   const [formData, setFormData] = useState({
     clinicId: -1,
     doctorId: -1,
     date: new Date(), 
     time: -1,
-    patientEmail: patientEmail,
+    patientEmail: email,
   });
-
-
+ 
   const fetchClinics = () => {
     console.log('fetching clinics');
 
@@ -85,7 +86,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
   }
 
   const handleInputChange = (e) => {
-     
     const { name, value } = e.target ? e.target : { name: 'date', value: e };
     console.log(name, value);
 
@@ -95,6 +95,11 @@ const MakeAppointmentForm = ({ patientEmail }) => {
         [name]: value,
       };
       
+      if (name === 'email') {
+        setEmail(value); // Update email state
+        updatedData.patientEmail = value; // Update patientEmail in the form data
+      }  
+
       if (name === 'doctorId' || name === 'date') {
         fetchAvailableTimes(updatedData.clinicId, updatedData.doctorId, updatedData.date);
       }
@@ -159,7 +164,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
         }
 
         alert(data.message);
-        nav('/', {});
+        nav('/receptionist/clinicAppointments', {});
       });
     });
   };
@@ -219,6 +224,16 @@ const MakeAppointmentForm = ({ patientEmail }) => {
                 <option key={availableTimes.indexOf(time)} value={time}>{time ? time : 'Select a doctor first'}</option>
               ))}
             </select>
+.
+            {/* Add email input field */}
+            <label className="d-flex justify-content-center text-secondary">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={handleInputChange}
+              required
+            />
 
             <button className="submit-button" type="submit">
               Book Appointment

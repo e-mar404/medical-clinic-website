@@ -11,7 +11,7 @@ function ReceptionistHome() {
           <div className="col-md-4">
             <HomeCard 
               name="Appointment Calendar" 
-              page_link="viewclinicappointment" 
+              page_link="/receptionist/clinicAppointments" 
               icon="fa-calendar"/>
           </div>
 

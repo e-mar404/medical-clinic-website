@@ -8,9 +8,10 @@ import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
 import ReceptionistHome from './pages/employee/ReceptionistHome';
+import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
-import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import EmployeeHome from './pages/employee/EmployeeHome';
+import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
 import ViewDoctorAppointments from './pages/employee/ViewDoctorAppointments';
@@ -21,17 +22,19 @@ import AdminHomepage from './pages/employee/AdminHomepage';
 
 import Reports from './pages/employee/Reports';
 import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
+import AdminLoadReports from './pages/employee/LoadReport';
+
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
     localStorage.setItem('LoggedIn', false);
     localStorage.setItem("LoggedIn", false);
-    localStorage.setItem("LoginEmail", null); // Email of logged in user
-    localStorage.setItem("UserEmail", null); // Email of logged in user
-    localStorage.setItem("UserId", null); // Email of logged in user
-    localStorage.setItem("UserFirstName", null); // First name of logged in user
-    localStorage.setItem("UserLastName", null); // Last name of logged in user
-    localStorage.setItem("UserType", null); // Type of logged in user (patient, employee)
+    localStorage.setItem("LoginEmail", null); 
+    localStorage.setItem("UserEmail", null); 
+    localStorage.setItem("UserId", null);
+    localStorage.setItem("UserFirstName", null);
+    localStorage.setItem("UserLastName", null);
+    localStorage.setItem("UserType", null); 
   }
 
   return (
@@ -47,20 +50,27 @@ function App() {
         <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
     
+    ``  <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
         <Route path='/receptionist' element={<ReceptionistHome />} />
+        <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
+
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
         <Route path='/doctor/patient_medical_history' element={<PatientMedicalHistoryPage />} />
 
-        <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
-        <Route path='/admin/newemployee' element ={<NewEmployeeForm />} />
-        <Route path='/admin/viewappointment' element ={<ViewDoctorAppointments />} />
-        <Route path='/viewclinicappointment' element ={<ViewClinicAppointments />} />
-        <Route path='/admin/transfer' element ={<TransferDoctor />} />
+
+
         <Route path='/admin' element={<AdminHomepage />}/>
-        <Route path='/admin/report' element={<Reports />}/>
+ 
+        <Route path='/admin/employeelist/newemployee' element ={<NewEmployeeForm />} />
+        <Route path='/admin/employeelist/viewappointment' element ={<ViewDoctorAppointments />} />
+        <Route path='/admin/employeelist/transfer' element ={<TransferDoctor />} />
+        <Route path="/make_appointment" element={<MakeAppointment />} /> 
+
+        <Route path='/admin/report_form' element={<Reports />}/>
+        <Route path='/admin/report' element={<AdminLoadReports />} />
       </Routes>
     </Router>
   );

@@ -68,13 +68,13 @@ function getEmployeesByClinic(res, db, clinic_id, role) {
 async function createEmployeeAccount(req, res, db){
   try { 
     const body = await PostData(req);
-    const { email, phone_number, address, password, first_name, middle_name, last_name, employee_role, employee_type } = JSON.parse(body); 
+    const { email, phone_number, address, password, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic } = JSON.parse(body); 
 
-    console.log(`creating employee account with email:  ${email} ${phone_number} ${address} ${password} ${first_name} ${middle_name} ${last_name} ${employee_role} ${employee_type}`);
+    console.log(`creating employee account with email:  ${email} ${phone_number} ${address} ${password} ${first_name} ${middle_name} ${last_name} ${employee_role} ${employee_type} ${specialist} ${title} ${primary_clinic}`);
 
-    const email_address = await createEmployeeContact(email, phone_number, address, res, db);
+    const email_address = await createEmployeeContact(email, phone_number, address, res, db); 
 
-    const employee_id = await createEmployee(email_address, first_name, middle_name, last_name, employee_role, employee_type, db);
+    const employee_id = await createEmployee(email_address, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic, db);
 
     const msg = await createEmployeeLogin(email_address, password, employee_id, db);
 
@@ -106,12 +106,19 @@ async function createEmployeeContact(email, phone_number, address, res, db){
 
 }
 
-async function createEmployee(email, first_name, middle_name, last_name, employee_role, employee_type, db){
+async function createEmployee(email, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic, db){
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Employee(email_address, first_name, middle_name, last_name, employee_role, employee_type) VALUES (?, ?, ?, ?, ?, ?)',
-      [email, first_name, middle_name, last_name, employee_role, employee_type], async (err, db_res) => {
+    let specialistValue;
+    if(specialist === 'true'){
+      specialistValue = 1;
+    }
+    else{
+      specialistValue = 0;
+    }
+    db.query('INSERT INTO Employee(email_address, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [email, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic], async (err, db_res) => {
         if(err) {
-          reject (`createEmployeeContact: ${err.sqlMessage}`);
+          reject (`createEmployee: ${err.sqlMessage}`);
         }
         resolve(db_res.insertId);
       });
@@ -187,6 +194,7 @@ async function employeeTransfer(req, res, db){
   }
 }
 
+
 function getSpecialists(res, db) {
   try{
     console.log('getting specialists');
@@ -220,9 +228,64 @@ function getPatientsOf(res, db, doctor_id) {
       res.end(JSON.stringify ({ message: msg }));
     });
   } catch (err) {
+        res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+
+async function getAppointments(res, db, empId){
+  try {
+    // ADD THE QUERY FOR ALL APPOINTMENTS 
+    db.query(`SELECT DISTINCT P.first_name, P.last_name, A.appointment_date, A.appointment_time, C.clinic_name 
+    FROM Patient AS P, Employee AS E, Appointment AS A, Clinic AS C
+    WHERE A.patient_id = P.patient_id AND A.doctor_id = '${empId}' AND A.clinic_id = C.clinic_id;`, (err, db_res) => {
+        if (err) {
+          throw (err);
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: db_res}));
+      }); 
+  }
+  catch(err){
     res.writeHead(400, headers);
     res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
   }
 }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf };
+async function getDoctorInformation(res, db, doctorID){
+  try {
+    db.query(`SELECT E.first_name, E.last_name, E.email_address, E.title, E.primary_clinic 
+    FROM Employee AS E
+    WHERE  E.employee_id = ${doctorID}; `, (err, db_res) => {
+        if (err) {
+          throw (err);
+        }
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: db_res}));
+      }); 
+  }
+  catch(err){
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+function getAdminClinic(res, db, adminEmail){
+  try{
+    db.query(`SELECT E.primary_clinic FROM Employee AS E WHERE E.email_address = '${adminEmail}';`, (err, db_res) => {
+      if(err){
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ message: db_res}));
+    });
+  }
+  catch(err){
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic };
+

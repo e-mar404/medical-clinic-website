@@ -38,11 +38,9 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-
-async function getClinicAppointments(req, res, db) {
+async function getClinicAppointments(res, db, req) {
   try {
     const clinicId = req.headers['clinic-id'];
-
     console.log('Clinic ID:', clinicId); // Log clinic ID
     
     // Fetch clinic details from Clinic table
@@ -57,18 +55,17 @@ async function getClinicAppointments(req, res, db) {
         res.end(JSON.stringify({ error: 'Error fetching clinic appointments' }));
       } else {
         console.log('Fetched appointments:', results); // Log fetched appointments
-        
+
         const appointmentsWithDetails = await Promise.all(results.map(async appointment => {
           const { doctor_id, patient_id, appointment_date, appointment_time } = appointment;
-          
-          // Fetch doctor details from MEmployee table
-          const doctorQuery = 'SELECT memployee_id, first_name, last_name FROM MEmployee WHERE memployee_id = ?';
+
+          const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
-  
-          // Fetch patient details from Patient table
+
           const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
           const [patientResult] = await db.promise().query(patientQuery, [patient_id]);
-  
+
+
           return {
             clinic_name: clinicName,
             doctor: {
@@ -83,9 +80,9 @@ async function getClinicAppointments(req, res, db) {
             appointment_time
           };
         }));
-  
+
         console.log('Appointments with details:', appointmentsWithDetails); // Log appointments with details
-        
+
         res.writeHead(200, headers);
         res.end(JSON.stringify(appointmentsWithDetails));
       }
@@ -96,6 +93,7 @@ async function getClinicAppointments(req, res, db) {
     res.end(JSON.stringify({ error: 'Error fetching clinic appointments' }));
   }
 }
+
 
 const getClinicOfReceptionist = (res, db, userId) => {
   const query = `SELECT primary_clinic FROM Employee WHERE employee_id = '${userId}'`;
@@ -118,9 +116,88 @@ const getClinicOfReceptionist = (res, db, userId) => {
   });
 };
 
-function availableAppointments(req, res, db) {
-  res.writeHead(200, headers);
-  res.end(JSON.stringify({ message: 'sends available appointments' })); 
+async function availableAppointments(req, res, db) {
+  try {
+    const body = await PostData(req);
+    const { clinic_id, doctor_id, date } = JSON.parse(body);
+    
+    console.log(`getting available appointments for doctor ${doctor_id} at clinic ${clinic_id} on date ${date}`);
+    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
+
+    const baseTimes = [
+      "09:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00"];
+    let availableTimes = baseTimes;
+
+    timesToRemove.forEach(time => {
+      const index = baseTimes.indexOf(time.time_taken);
+
+
+      if (index !== -1) {
+        baseTimes.splice(index, 1);
+      }
+    });
+
+    const curDate = new Date();
+    const appointmentDate = new Date(date.replace('-', '/'));
+
+    const sameDateAppointment = (appointmentDate.getDate() === curDate.getDate());
+
+    if (sameDateAppointment) {
+      console.log('this is a same day appointment, making sure to return only future times');
+
+      availableTimes = baseTimes.reduce((acc, time, _index)  => {
+        const timeOptions = { timeZone: 'America/Chicago', hour12: false };
+        const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
+        
+        console.log(`comparing curTime:${curTime} < time: ${time} = ${curTime < time}`);
+
+        if (curTime < time) {
+          acc.push(time);
+        }
+
+        return acc;
+      }, []);
+    } 
+    
+    const msg = (availableTimes.length > 0) ? availableTimes : ['No appointments available for this day'];
+    
+    console.log('getting available appointments successful');
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+
+  } catch(err) {
+    console.error(err);
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
 }
+
+
+
+
+async function scheduledAppointments(clinic_id, doctor_id, date, db) {
+  return await new Promise((resolve, reject) => {
+    const query = `SELECT TIME_FORMAT(appointment_time, '%h:%i') AS time_taken FROM Appointment WHERE appointment_status='scheduled' AND appointment_time>=CURTIME() AND appointment_date=? AND clinic_id=? AND doctor_id=?`
+
+    db.query(query, [date, clinic_id, doctor_id], (err, db_res) => {
+      if (err) { 
+        reject('something went wrong when getting available appointments');
+      }
+
+      resolve(db_res);
+    });
+  });
+}
+
 module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist };  
+
 
