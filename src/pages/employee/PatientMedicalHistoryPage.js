@@ -5,7 +5,9 @@ function PatientMedicalHistoryPage(){
     return(
       <>
         <Navbar />
-        <MedicalHistoryForm patient_id={1} />
+
+        <MedicalHistoryForm />
+
       </>
     );
 }

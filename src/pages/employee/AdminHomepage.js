@@ -26,6 +26,7 @@ function AdminHomepage(){
           <div className="col-md-4">
             <HomeCard 
                 name="Clinic Information"
+                page_link='admin/clinic'
                 icon="fa-hospital-o"
                 />
           </div>

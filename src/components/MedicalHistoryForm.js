@@ -1,7 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
+<<<<<<< HEAD
 import PrescribeMedicationForm from './PrescribeMedicationForm.js';
 
 function MedicalHistoryForm({ patient_id }) {
+=======
+import { useParams } from 'react-router-dom';
+import PrescribeMedicationForm from './PrescribeMedicationForm.js';
+
+function MedicalHistoryForm() {
+  const { patient_id } = useParams();
+  console.log(patient_id);
+
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
   const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
   const patientMedicalHistoryRef = useRef();
   
@@ -20,7 +30,11 @@ function MedicalHistoryForm({ patient_id }) {
 
         setPatientMedicalHistory({
           ...data.message,
+<<<<<<< HEAD
           'patient_id':patient_id
+=======
+          'patient_id': patient_id
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
         });
       });
     });
@@ -97,7 +111,10 @@ function MedicalHistoryForm({ patient_id }) {
             <input type="text" className="form-control" id="FamilyHistory" defaultValue={patientMedicalHistory.family_history}/>
           </div>
         </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
 
         <div className="row">
           <div className="col">
@@ -106,7 +123,11 @@ function MedicalHistoryForm({ patient_id }) {
         </div>
       </form>
       
+<<<<<<< HEAD
       <PrescribeMedicationForm />
+=======
+      <PrescribeMedicationForm patient_id={patient_id} doctor_id={localStorage.getItem('UserId')} />
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
     </>
   );
 }

@@ -38,9 +38,14 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
+<<<<<<< HEAD
 async function getClinicAppointments(res, db, req) {
   try {
     const clinicId = req.headers['clinic-id'];
+=======
+async function getClinicAppointments(res, db, clinicId) {
+  try {
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
     console.log('Clinic ID:', clinicId); // Log clinic ID
     
     // Fetch clinic details from Clinic table
@@ -94,7 +99,15 @@ async function getClinicAppointments(res, db, req) {
   }
 }
 
+async function availableAppointments(req, res, db) {
+  try {
+    const body = await PostData(req);
+    const { clinic_id, doctor_id, date } = JSON.parse(body);
+    
+    console.log(`getting available appointments for doctor ${doctor_id} at clinic ${clinic_id} on date ${date}`);
+    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
 
+<<<<<<< HEAD
 const getClinicOfReceptionist = (res, db, userId) => {
   const query = `SELECT primary_clinic FROM Employee WHERE employee_id = '${userId}'`;
   console.log('Hello There User Id:', userId);
@@ -124,6 +137,8 @@ async function availableAppointments(req, res, db) {
     console.log(`getting available appointments for doctor ${doctor_id} at clinic ${clinic_id} on date ${date}`);
     const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
 
+=======
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
     const baseTimes = [
       "09:00",
       "10:00",
@@ -135,10 +150,15 @@ async function availableAppointments(req, res, db) {
       "16:00",
       "17:00"];
     let availableTimes = baseTimes;
+<<<<<<< HEAD
 
     timesToRemove.forEach(time => {
       const index = baseTimes.indexOf(time.time_taken);
+=======
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
 
+    timesToRemove.forEach(time => {
+      const index = baseTimes.indexOf(time.time_taken);
 
       if (index !== -1) {
         baseTimes.splice(index, 1);
@@ -181,9 +201,12 @@ async function availableAppointments(req, res, db) {
   }
 }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
 async function scheduledAppointments(clinic_id, doctor_id, date, db) {
   return await new Promise((resolve, reject) => {
     const query = `SELECT TIME_FORMAT(appointment_time, '%h:%i') AS time_taken FROM Appointment WHERE appointment_status='scheduled' AND appointment_time>=CURTIME() AND appointment_date=? AND clinic_id=? AND doctor_id=?`
@@ -198,6 +221,10 @@ async function scheduledAppointments(clinic_id, doctor_id, date, db) {
   });
 }
 
+<<<<<<< HEAD
 module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist };  
 
+=======
+module.exports = { createAppointment, getClinicAppointments, availableAppointments };
+>>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
 

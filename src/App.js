@@ -24,6 +24,8 @@ import Reports from './pages/employee/Reports';
 import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
 import AdminLoadReports from './pages/employee/LoadReport';
 
+import AdminClinic from './pages/employee/AdminClinic';
+
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
@@ -56,11 +58,10 @@ function App() {
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
-        <Route path='/doctor/patient_medical_history' element={<PatientMedicalHistoryPage />} />
+        <Route path='/doctor/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
-
 
         <Route path='/admin' element={<AdminHomepage />}/>
  
@@ -71,6 +72,9 @@ function App() {
 
         <Route path='/admin/report_form' element={<Reports />}/>
         <Route path='/admin/report' element={<AdminLoadReports />} />
+
+        <Route path='/admin/clinic' element={<AdminClinic />} />
+
       </Routes>
     </Router>
   );
