@@ -21,7 +21,7 @@ import AdminHomepage from './pages/employee/AdminHomepage';
 import Reports from './pages/employee/Reports';
 import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
 import AdminLoadReports from './pages/employee/LoadReport';
-
+import AdminClinic from './pages/employee/AdminClinic';
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
@@ -67,6 +67,8 @@ function App() {
 
         <Route path='/admin/report_form' element={<Reports />}/>
         <Route path='/admin/report' element={<AdminLoadReports />} />
+
+        <Route path='/admin/clinic' element={<AdminClinic />} />
       </Routes>
     </Router>
   );

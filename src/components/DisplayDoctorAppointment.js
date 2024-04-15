@@ -48,17 +48,16 @@ function DisplayDoctorAppointment(){
               console.log(data.message);
               appointmentRef.current = data.message;
               setAppointment(appointmentRef.current);
-              /*
-              appointmentRef.current = appointments.map(appointment => ({
+              
+              appointmentRef.current = data.message.map(appointment => ({
                 ...appointment,
-                appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
+                appointment_date: appointment.appointment_date.split('T')[0],
                 
               }));
-              */
+              
               setAppointment(appointmentRef.current);
 
-              //appointmentRef.current = data.message;
-              //setAppointment(formatAppointment);
+            
             });
           });
           
@@ -69,8 +68,6 @@ function DisplayDoctorAppointment(){
     }, [appointmentRef, doctorRef, location.state.employee_id]);
     console.log(doctor);
     console.log(appointments);
-
-
 
     return(<>
     <div className="DoctorInfo">

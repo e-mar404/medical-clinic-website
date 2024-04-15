@@ -13,11 +13,12 @@ function generateReportFor(res, db, reportType) {
   });
 }
 
-function getNewUsersReport(res, db, start_date, end_date) {
+function getNewUsersReport(res, db, start_date, end_date, clinic_id) {
   const start = start_date;
   const end = end_date; 
   db.query(`SELECT P.first_name, P.last_name, P.email_address, P.created
   FROM Patient AS P
+  JOIN Employee AS E ON E.employee_id = P.primary_doctor_id AND E.primary_clinic = '${clinic_id}'
   WHERE P.created BETWEEN '${start}' AND '${end}'`, (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
