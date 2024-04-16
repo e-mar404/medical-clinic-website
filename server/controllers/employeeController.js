@@ -175,11 +175,11 @@ async function loginEmployee(req, res, db) {
 async function employeeTransfer(req, res, db){
   try {
     const body = await PostData(req);
-    body = { email, clinic }.JSON.parse(body);
+    body = { email_address, clinic_id }.JSON.parse(body);
     
-    console.log(`Transfer Employee with email ${email} to clinic id: ${clinic}`);
-    db.query(`UPDATE Employee SET clinic_id = clinic WHERE email_address = '${email}';`, 
-    [email, clinic], (err, db_res) => {
+    console.log(`Transfer Employee with email ${email_address} to clinic id: ${clinic_id}`);
+    db.query(`UPDATE Employee SET clinic_id = ${clinic_id} WHERE E.email_address = '${email_address}';`, 
+    [email_address, clinic_id], (err, db_res) => {
       if(err){
         throw (err);
       }

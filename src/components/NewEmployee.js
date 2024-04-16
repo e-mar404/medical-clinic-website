@@ -4,7 +4,7 @@ import './LoginModal.css';
 function NewEmployee() {
 
   const [specialistValue, setSpecialistValue] = useState(false);
-  //const adminID = localStorage.getItem('UserEmail'); //NEED TO FETCH THE CLINIC ID
+  const adminID = localStorage.getItem('UserEmail'); //NEED TO FETCH THE CLINIC ID
   const [formData, setFormData] = useState({
     email: null, 
     phone_number: '',
@@ -52,7 +52,7 @@ function NewEmployee() {
       headers: { 'Content-Type': 'application/json'},
     };
 
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/admin1@medc.org`, request).then((response) => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/${adminID}`, request).then((response) => {
       response.json().then((data) => {
       if(response.status !== 200){
         alert("fix admin fetch clinic");

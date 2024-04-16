@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist } = require('./controllers/appointmentController');
-const { getClinics } = require('./controllers/clinicController');
+const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
@@ -236,6 +236,12 @@ const server = http.createServer((req, res) => {
           getClinicEmployees(res, db, adminClinic);
           break;
 
+        case /getClinicInfo/.test(req.url):
+          const adminClinicID = req.url.split('/')[2];
+          getClinicName(res, db, adminClinicID);
+          //res.writeHead(500, headers);
+          //res.end(JSON.stringify({ message: 'Route for clinic' }));
+          break;
 
         default:
             res.writeHead(404, headers);

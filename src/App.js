@@ -68,7 +68,7 @@ function App() {
  
         <Route path='/admin/employeelist/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/employeelist/viewappointment/:doctor_id' element ={<ViewDoctorAppointments />} />
-        <Route path='/admin/employeelist/transfer' element ={<TransferDoctor />} />
+        <Route path='/admin/employeelist/transfer/:doctor_id' element ={<TransferDoctor />} />
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
         <Route path='/admin/report_form' element={<Reports />}/>
