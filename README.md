@@ -58,7 +58,7 @@
 - [ ] schedule appointment [Emilio]
 - needs to check for occupied times
 - [x] profile [John]
-- [ ] appointment history
+- [x] appointment history [John]
 - [X] not signed in navbar [Logo    log in]
 - [X] signed in navbar [appointments    history    profile(contact info, sign out)] **only added sign out**
 
