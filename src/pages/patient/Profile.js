@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
 // instead of giving each nav button its own page, i'm gonna just make it re-render the page with the correct form
 const displayForm = (element) => {
 
@@ -286,8 +285,6 @@ function PatientProfile() {
 
       </div>
 
-
-      <Footer />
     </>
   );
 }

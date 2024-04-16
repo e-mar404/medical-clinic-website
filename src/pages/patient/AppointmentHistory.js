@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
 
 var FetchedAppointmentHistory = false; // Condition to ensure the fetch is ran only once
 
@@ -38,7 +37,6 @@ function AppointmentHistory() {
                         
                             let newRow = document.createElement("tr");
                             newRow.innerHTML = `
-                                <th scope="row">${Appointment.appointment_id}</th>
                                 <td>${Appointment.appointment_date.slice(0, 10)}</td>
                                 <td>${Appointment.appointment_status}</td>
                                 <td>${Appointment.clinic_name}</td>
@@ -69,7 +67,6 @@ function AppointmentHistory() {
                         <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">Id</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Clinic</th>
@@ -85,7 +82,6 @@ function AppointmentHistory() {
                 </div>
             </div>
 
-            <Footer />
         </>
     );
 }
