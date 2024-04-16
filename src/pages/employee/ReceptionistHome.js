@@ -1,7 +1,7 @@
 import Navbar from '../../components/Navbar';
 import HomeCard from '../../components/HomeCard';
 
-function DoctorHomepage() {
+function ReceptionistHome() {
   return (
     <>
       <Navbar />
@@ -11,7 +11,7 @@ function DoctorHomepage() {
           <div className="col-md-4">
             <HomeCard 
               name="Appointment Calendar" 
-              page_link={`/doctor/appointment_calendar/${localStorage.getItem('UserId')}`} 
+              page_link="/receptionist/clinicAppointments" 
               icon="fa-calendar"/>
           </div>
 
@@ -25,7 +25,7 @@ function DoctorHomepage() {
           <div className="col-md-4">
             <HomeCard 
               name="Update Patient Medical History (temp)" 
-              page_link="/doctor/patient_medical_history/1" 
+              page_link="/doctor/patient_medical_history" 
               icon="fa-address-card"/>
           </div>
         </div>
@@ -34,5 +34,5 @@ function DoctorHomepage() {
   );
 }
 
-export default DoctorHomepage;
+export default ReceptionistHome;
 

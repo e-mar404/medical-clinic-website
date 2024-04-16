@@ -1,52 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './DisplayClinicAppointments.css'
+import { Link } from "react-router-dom"
 
 function DisplayClinicAppointment() {
   const [allAppointments, setAllAppointments] = useState([]);
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [filter, setFilter] = useState('today');
-
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const clinicId = 1; // Specify the clinicId
-        const requestOptions = {
-          method: 'GET',
-          headers: { 
-            'Content-Type': 'application/json',
-          }
-        };
-        const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments/${clinicId}`;
-    
-        console.log('Request headers:', requestOptions.headers); // Log request headers
-    
-        const response = await fetch(url, requestOptions);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+  const [clinicId, setClinicId] = useState(null);
+  
+  // Function to fetch clinicId from backend
+  const fetchClinicId = async (userId) => {
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
         }
-        const data = await response.json();
-
-        const modifiedAppointments = data.map(appointment => ({
-          ...appointment,
-          appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
-          appointment_time: formatTime(appointment.appointment_time), // Format time
-          clinicId: clinicId
-        }));
-
-        setAllAppointments(modifiedAppointments);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/getClinicOfReceptionist/${userId}`;
+  
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
-    
-    fetchAppointments();
-  }, []);
-
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
-    const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
-    setTodayAppointments(todayAppointments);
-  }, [allAppointments]);
+      const data = await response.json();
+      setClinicId(data.clinicId); // Update clinicId state with the fetched value
+    } catch (error) {
+      console.error("Error fetching clinicId:", error);
+    }
+  };
+  
+  const fetchAppointments = async () => {
+    console.log(clinicId);
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Clinic-Id': clinicId // Pass clinicId in a custom header
+        }
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments`;
+  
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+  
+      // Modify date and time format, add clinicId to each appointment object
+      const modifiedAppointments = data.map(appointment => ({
+        ...appointment,
+        appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
+        appointment_time: formatTime(appointment.appointment_time), // Format time
+        clinicId: clinicId,
+        clinic_name: appointment.clinic_name
+      }));
+  
+      setAllAppointments(modifiedAppointments);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
 
   // Function to format time
   const formatTime = (timeString) => {
@@ -61,6 +76,10 @@ function DisplayClinicAppointment() {
     setFilter(event.target.value);
   };
 
+  const handleCheckboxChange = (appointmentId) => {
+    // Handle checkbox change logic here
+  };
+
   let filteredAppointments = [];
   if (filter === 'today') {
     filteredAppointments = todayAppointments;
@@ -70,10 +89,30 @@ function DisplayClinicAppointment() {
     filteredAppointments = allAppointments.filter(appointment => new Date(appointment.appointment_date) > new Date());
   }
 
+  const clinicIdRef = useRef(clinicId); 
+  const allAppointmentsRef = useRef(allAppointments);
+  const fetchAppointmentsRef = useRef(fetchAppointments);
+  const fetchClinicIdRef = useRef(fetchClinicId);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('UserId');
+    if (userId) {
+      fetchClinicIdRef.current(userId);
+    }
+
+    if (clinicIdRef.current !== null) {
+      fetchAppointmentsRef.current();
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
+    const todayAppointments = allAppointmentsRef.current.filter(appointment => appointment.appointment_date === today);
+    setTodayAppointments(todayAppointments);
+  }, [clinicIdRef, allAppointmentsRef, fetchAppointmentsRef, fetchClinicIdRef]);
+
   return (
     <>
-     <div className="ClinicInfo">
-       <h1 className="clinic-appointments-h1">MyClinic Appointments</h1>
+      <div className="ClinicInfo">
+        <h1 className="clinic-appointments-h1">{allAppointments.length > 0 ? `${allAppointments[0].clinic_name} Appointments` : 'Clinic Appointments'}</h1>
         <div className="clinic-appointment-filter-container">
           <label className="clinic-appointment-filter-label" htmlFor="filter">Appointment Filter:</label>
           <select className="clinic-appointment-filter-select" id="filter" onChange={handleFilterChange} value={filter}>
@@ -82,11 +121,13 @@ function DisplayClinicAppointment() {
             <option value="upcoming">Upcoming Appointments</option>
           </select>
         </div>
+        <Link to="/receptionist/makeAppointment"> 
+          <button className="make-appointment-button">Make Appointment</button>
+        </Link>
       </div>
 
       <hr style={{ width: "101em", color: "black" }} />
 
-    
       <div className="container">
         <table className="table table-striped" style={{ width: "100em" }}>
           <thead>
@@ -97,7 +138,7 @@ function DisplayClinicAppointment() {
               <th>Doctor Last Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
-              <th>Clinic ID</th> {/* Add Clinic ID column */}
+              <th>Show</th> {/* Changed Clinic ID column to Show */}
             </tr>
           </thead>
           <tbody>
@@ -109,7 +150,12 @@ function DisplayClinicAppointment() {
                 <td>{appointment.doctor.last_name}</td>
                 <td>{appointment.appointment_date}</td>
                 <td>{appointment.appointment_time}</td>
-                <td>{appointment.clinicId}</td> {/* Display Clinic ID */}
+                <td>
+                  <input 
+                    type="checkbox" 
+                    onChange={() => handleCheckboxChange(appointment.id)} 
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
