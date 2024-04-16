@@ -1,6 +1,5 @@
 import Navbar from '../../components/Navbar';
 import HomeCard from '../../components/HomeCard';
-import Footer from '../../components/Footer';
 
 function PatientHome() {
   return(
@@ -31,7 +30,6 @@ function PatientHome() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
