@@ -136,6 +136,8 @@ async function availableAppointments(req, res, db) {
     
     let availableTimes = baseTimes;
 
+    console.log('future times taken');
+
     timesToRemove.forEach(time => {
       console.log(time.time_taken);
 
