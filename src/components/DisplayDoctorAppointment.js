@@ -30,8 +30,8 @@ function DisplayDoctorAppointment(){
               setDoctor(doctorRef.current);
             });
           });
-          
         }
+        
         const fetchAppointments = async () => {
           const requestOptions = {
             method: 'GET',
@@ -48,20 +48,7 @@ function DisplayDoctorAppointment(){
               console.log(data.message);
               appointmentRef.current = data.message;
               setAppointment(appointmentRef.current);
-<<<<<<< HEAD
-              /*
-              appointmentRef.current = appointments.map(appointment => ({
-                ...appointment,
-                appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
                 
-              }));
-              */
-              setAppointment(appointmentRef.current);
-
-              //appointmentRef.current = data.message;
-              //setAppointment(formatAppointment);
-=======
-              
               appointmentRef.current = data.message.map(appointment => ({
                 ...appointment,
                 appointment_date: appointment.appointment_date.split('T')[0],
@@ -70,8 +57,6 @@ function DisplayDoctorAppointment(){
               
               setAppointment(appointmentRef.current);
 
-            
->>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
             });
           });
           
@@ -83,11 +68,6 @@ function DisplayDoctorAppointment(){
     console.log(doctor);
     console.log(appointments);
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
     return(<>
     <div className="DoctorInfo">
       <h1>{`${doctor[0].first_name} ${doctor[0].last_name}`}</h1>
