@@ -10,6 +10,7 @@ import AppointmentHistory from './pages/patient/AppointmentHistory';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
 import ReceptionistHome from './pages/employee/ReceptionistHome';
 import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
+import ReceptionistBilling from './pages/employee/ReceptionistBilling';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
