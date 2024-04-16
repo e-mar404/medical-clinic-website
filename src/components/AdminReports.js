@@ -34,15 +34,12 @@ function AdminReports(){
             endDate: formData.endDate.toISOString().slice(0, 10),
         };
         console.log(formatDate);
-
         
+        // get the clinic id before i send in the info and add that to query 
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         };
-
-        console.log(`checking the reportId ${formatDate.reportId}`);
-    
         let clinic_id;
         fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/admin1@medc.org`, requestOptions).then((response) => {
             response.json().then((data) => {
@@ -54,7 +51,6 @@ function AdminReports(){
             console.log(clinic_id);
         
         console.log(`checking the reportId ${formatDate.reportId} and clinic id ${clinic_id}`);
-                
         if(formData.reportId === '1'){
             console.log(`in the if statement of reportId ${formatDate.reportId}`);
         
@@ -67,7 +63,7 @@ function AdminReports(){
                         }
                         console.log(data.message);
                         setUserAccounts(data.message);
-                        
+
                         const fixDate = data.message.map(account => ({
                             ...account,
                             created: account.created.split('T')[0],
@@ -75,6 +71,7 @@ function AdminReports(){
                           }));
                           
                         setUserAccounts(fixDate);
+                        
                         setTable(true);
                     });
                 });
@@ -92,6 +89,7 @@ function AdminReports(){
                         }
                         console.log(data.message);
                         setAppointments(data.message);
+                        
                         setTable(true);
                     });
                 });
@@ -104,6 +102,7 @@ function AdminReports(){
             alert('Please choose valid report');
             return;
         }
+        });
         });
     };
     
@@ -224,4 +223,3 @@ function AdminReports(){
 }
 
 export default AdminReports; 
-

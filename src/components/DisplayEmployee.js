@@ -3,67 +3,55 @@ import { useNavigate } from 'react-router-dom';
 import './DisplayEmployee.css';
 
 function DisplayEmployee(){
-    const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
-    //const [type, setType] = useState([{"type": "all"}]);
-    const employeesRef = useRef(employees);
+  const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
+  const employeesRef = useRef(employees);
 
-    useEffect(() => {
-      const request = {
-        method:'GET',
-        headers: { 'Content-Type': 'application/json'},
-      };
-  
-      const fetchDoctors = async () => {
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/bytype/medical`, requestOptions).then((response) => {
-          response.json().then((data) => {
-            
-            if (response.status !== 200) {
-              alert(data.error);
-              return;
-            }
-        };
-  
-        const clinic = data.message[0].primary_clinic;
-        const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        };
-  
+  useEffect(() => {
+    const requestOptions = {
+      method:'GET',
+      headers: { 'Content-Type': 'application/json'}
+    };
+
+    const fetchDoctors = async () => {
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/bytype/medical`, requestOptions).then((response) => {
+        response.json().then((data) => {
+
+          if (response.status !== 200) {
+            alert(data.error);
+            return;
+          }
+
+          const clinic = data.message[0].primary_clinic;
+
           fetch(`${process.env.REACT_APP_BACKEND_HOST}/getClinicEmployees/${clinic}`, requestOptions).then((response) => {
             response.json().then((data) => {
-              
+
               if (response.status !== 200) {
                 alert(data.error);
                 return;
-    
+
               }
-    
+
               employeesRef.current = data.message;
               setEmployee(data.message);
             });
           });
-    
         });
       });
-      }, [employeesRef]);
-
-    const nav = useNavigate();
-    function handleTransfer(employee_id){
-      nav('transfer', {state: {employee_id}});
-    }
-  
-    function handleClick(employee_id){
-      nav(`viewappointment/${employee_id}`, {});
     }
 
-    const nav = useNavigate();
-    function handleTransfer(employee_id){
-      nav('transfer', {state: {employee_id}});
-    }
-  
-    function handleClick(employee_id){
-      nav('viewappointment', {state:  {employee_id}});
-    }
+    fetchDoctors()
+  }, [employeesRef]);
+
+
+  const nav = useNavigate();
+  function handleTransfer(employee_id){
+    nav('transfer', {state: {employee_id}});
+  }
+
+  function handleClick(employee_id){
+    nav('viewappointment', {state:  {employee_id}});
+  }
 
     return(
         <div className="container">
