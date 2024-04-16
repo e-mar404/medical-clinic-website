@@ -120,8 +120,9 @@ async function availableAppointments(req, res, db) {
     const { clinic_id, doctor_id, date } = JSON.parse(body);
     
     console.log(`getting available appointments for doctor ${doctor_id} at clinic ${clinic_id} on date ${date}`);
-    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
 
+    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
+  
     const baseTimes = [
       "09:00",
       "10:00",
@@ -136,6 +137,8 @@ async function availableAppointments(req, res, db) {
     let availableTimes = baseTimes;
 
     timesToRemove.forEach(time => {
+      console.log(time.time_taken);
+
       const index = baseTimes.indexOf(time.time_taken);
 
       if (index !== -1) {
@@ -181,12 +184,14 @@ async function availableAppointments(req, res, db) {
 
 async function scheduledAppointments(clinic_id, doctor_id, date, db) {
   return await new Promise((resolve, reject) => {
-    const query = `SELECT TIME_FORMAT(appointment_time, '%h:%i') AS time_taken FROM Appointment WHERE appointment_status='scheduled' AND appointment_time>=CURTIME() AND appointment_date=? AND clinic_id=? AND doctor_id=?`
+    const query = `SELECT TIME_FORMAT(appointment_time, '%H:%i') AS time_taken FROM Appointment WHERE appointment_status='scheduled' AND appointment_time>=CURTIME() AND appointment_date=? AND clinic_id=? AND doctor_id=?`
 
     db.query(query, [date, clinic_id, doctor_id], (err, db_res) => {
       if (err) { 
         reject('something went wrong when getting available appointments');
       }
+  
+      console.log(db_res);
 
       resolve(db_res);
     });
