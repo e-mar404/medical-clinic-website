@@ -4,44 +4,56 @@ import './DisplayEmployee.css';
 
 function DisplayEmployee(){
   const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
-  const employeesRef = useRef(employees);
 
-  useEffect(() => {
+  const admin_id = localStorage.getItem("UserEmail");
+  const [admin_clinic, setAdminClinic] = useState([{"primary_clinic": 0}]);
+
+  const fetchAdminClinic = () => { // ok we should have our admin's clinic
     const requestOptions = {
       method:'GET',
       headers: { 'Content-Type': 'application/json'}
     };
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/${admin_id}`, requestOptions).then((response) => {
+      response.json().then((data) => {
 
-    const fetchDoctors = async () => {
-      fetch(`${process.env.REACT_APP_BACKEND_HOST}/employee/bytype/medical`, requestOptions).then((response) => {
-        response.json().then((data) => {
+        if (response.status !== 200) {
+          alert(data.error);
+          return;
+        }
+        
+        const clinic = (data.message[0].primary_clinic);
+        setAdminClinic(data.message[0].primary_clinic);
+      
+        console.log(`admin for clinic: ${clinic}`);
 
-          if (response.status !== 200) {
-            alert(data.error);
-            return;
-          }
-
-          const clinic = data.message[0].primary_clinic;
-
-          fetch(`${process.env.REACT_APP_BACKEND_HOST}/getClinicEmployees/${clinic}`, requestOptions).then((response) => {
-            response.json().then((data) => {
-
-              if (response.status !== 200) {
-                alert(data.error);
-                return;
-
-              }
-
-              employeesRef.current = data.message;
-              setEmployee(data.message);
+        const requestOptions = {
+          method:'GET',
+          headers: { 'Content-Type': 'application/json'}
+        };
+        
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/getClinicEmployees/${clinic}`, requestOptions).then((response) => {
+          response.json().then((data) => {
+            //console.log(`clinic id is currently set to ${admin_clinic}`);
+            if (response.status !== 200) {
+              alert(data.error);
+              return;
+            }
+            //console.log(data.message);
+            setEmployee(data.message);
             });
           });
         });
       });
     }
+  
+  
+  const fetchAdminClinicRef = useRef(fetchAdminClinic);
 
-    fetchDoctors()
-  }, [employeesRef]);
+  useEffect(() => {
+    fetchAdminClinicRef.current();
+  }, [fetchAdminClinicRef]); 
+ 
+
 
 
   const nav = useNavigate();
@@ -50,9 +62,8 @@ function DisplayEmployee(){
   }
 
   function handleClick(employee_id){
-    nav('viewappointment', {state:  {employee_id}});
+     nav(`viewappointment/${employee_id}`, {});
   }
-
     return(
         <div className="container">
               <table className="table table-stripped" style={{ width: 118 + 'em'}}>
@@ -96,5 +107,5 @@ function DisplayEmployee(){
     );
 }
 
-//need a list for the the other actions
 export default DisplayEmployee;
+
