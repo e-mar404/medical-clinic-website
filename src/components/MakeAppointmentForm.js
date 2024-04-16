@@ -6,7 +6,7 @@ import './MakeAppointmentForm.css';
 
 const MakeAppointmentForm = ({ patientEmail }) => {
   patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
-  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Srelect clinic'}]);
+  const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Select clinic'}]);
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
   const [availableTimes, setAvailableTimes] = useState(['Select a date']);
   const [formData, setFormData] = useState({
