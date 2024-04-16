@@ -5,7 +5,9 @@ function PatientMedicalHistoryPage(){
     return(
       <>
         <Navbar />
+
         <MedicalHistoryForm />
+
       </>
     );
 }

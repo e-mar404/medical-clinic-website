@@ -30,8 +30,8 @@ function DisplayDoctorAppointment(){
               setDoctor(doctorRef.current);
             });
           });
-          
         }
+        
         const fetchAppointments = async () => {
           const requestOptions = {
             method: 'GET',
@@ -48,7 +48,7 @@ function DisplayDoctorAppointment(){
               console.log(data.message);
               appointmentRef.current = data.message;
               setAppointment(appointmentRef.current);
-              
+                
               appointmentRef.current = data.message.map(appointment => ({
                 ...appointment,
                 appointment_date: appointment.appointment_date.split('T')[0],
@@ -57,7 +57,6 @@ function DisplayDoctorAppointment(){
               
               setAppointment(appointmentRef.current);
 
-            
             });
           });
           

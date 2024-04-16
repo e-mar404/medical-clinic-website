@@ -8,6 +8,8 @@ import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
 import AppointmentHistory from './pages/patient/AppointmentHistory';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
+import ReceptionistHome from './pages/employee/ReceptionistHome';
+import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
@@ -22,7 +24,9 @@ import AdminHomepage from './pages/employee/AdminHomepage';
 import Reports from './pages/employee/Reports';
 import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
 import AdminLoadReports from './pages/employee/LoadReport';
+
 import AdminClinic from './pages/employee/AdminClinic';
+
 
 function App() {
   if (localStorage.getItem('LoggedIn') == null) {
@@ -45,19 +49,19 @@ function App() {
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
         <Route path="/patient/appointment_history" element={<AppointmentHistory />} />
-
         <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
+    
+    ``  <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
+        <Route path='/receptionist' element={<ReceptionistHome />} />
+        <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
         <Route path='/doctor/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
-        <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
-
-        <Route path='/receptionist' element ={<ViewClinicAppointments />} />
 
         <Route path='/admin' element={<AdminHomepage />}/>
  
@@ -70,6 +74,7 @@ function App() {
         <Route path='/admin/report' element={<AdminLoadReports />} />
 
         <Route path='/admin/clinic' element={<AdminClinic />} />
+
       </Routes>
     </Router>
   );
