@@ -32,9 +32,6 @@ async function prescribeMedicationToPatient(req, res, db) {
   }
 }
 
-<<<<<<< HEAD
-module.exports = { prescribeMedicationToPatient };
-=======
 function getMedicationsForPatient(res, db, patient_id) {
   const query = 'SELECT FLOOR(RAND()*(20-1+1)+1) AS id, medication_name FROM Medication WHERE patient_id=? AND active=true';
   
@@ -86,4 +83,3 @@ async function removeMedicationForPatient(req, res, db) {
 }
 
 module.exports = { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient };
->>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
