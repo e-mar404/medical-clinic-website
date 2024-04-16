@@ -125,9 +125,12 @@ const server = http.createServer((req, res) => {
 
       case 'GET': 
         switch (true){
+          case /patientBilling/.test(req.url):
+            patientCharges(req, res, db);
+            break;
+            
           case /reports/.test(req.url): 
             const reportType = req.url.split('/')[2];
-
             generateReportFor(res, db, reportType);
             break;
 
