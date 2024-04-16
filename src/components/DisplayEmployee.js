@@ -6,7 +6,7 @@ function DisplayEmployee(){
   const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
 
   const admin_id = localStorage.getItem("UserEmail");
-  const [admin_clinic, setAdminClinic] = useState([{"primary_clinic": 0}]);
+  //const [admin_clinic, setAdminClinic] = useState([{"primary_clinic": 0}]);
 
   const fetchAdminClinic = () => { // ok we should have our admin's clinic
     const requestOptions = {
@@ -22,7 +22,7 @@ function DisplayEmployee(){
         }
         
         const clinic = (data.message[0].primary_clinic);
-        setAdminClinic(data.message[0].primary_clinic);
+        //setAdminClinic(data.message[0].primary_clinic);
       
         console.log(`admin for clinic: ${clinic}`);
 
