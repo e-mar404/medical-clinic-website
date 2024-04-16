@@ -4,7 +4,7 @@ async function createPatientAccount(req, res, db) {
   try {
 
     const body = await PostData(req);
-    const { email, phone_number, address, password, first_name, last_name, date_of_birth } = JSON.parse(body); 
+    const { email, phone_number, address, password, first_name, last_name, date_of_birth } = JSON.parse(body);
 
     console.log(`creating patient account with email: ${email}`);
 
@@ -23,10 +23,10 @@ async function createPatientAccount(req, res, db) {
 
     res.writeHead(400, headers);
     res.end(JSON.stringify({ error: err }));
-  } 
+  }
 }
 
-async function createPatientContact(email, phone_number, address, res, db){
+async function createPatientContact(email, phone_number, address, res, db) {
   return new Promise((resolve, reject) => {
     db.query('INSERT INTO ContactInformation(email_address, phone_number, address) VALUES (?, ?, ?)',
       [email, phone_number, address], (err, db_res) => {
@@ -39,9 +39,9 @@ async function createPatientContact(email, phone_number, address, res, db){
   });
 }
 
-async function createPatient(email, first_name, last_name, date_of_birth, db){
+async function createPatient(email, first_name, last_name, date_of_birth, db) {
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth) VALUES (?, ?, ?, DATE ?)', 
+    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth) VALUES (?, ?, ?, DATE ?)',
       [email, first_name, last_name, date_of_birth], async (err, db_res) => {
         if (err) {
           reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
@@ -54,7 +54,7 @@ async function createPatient(email, first_name, last_name, date_of_birth, db){
 
 async function createPatientLogin(email, password, patient_id, db) {
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Patient_Login(email_address, password, patient_id) VALUES(?, ?, ?)', 
+    db.query('INSERT INTO Patient_Login(email_address, password, patient_id) VALUES(?, ?, ?)',
       [email, password, patient_id], (err, db_res) => {
         if (err) {
           reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
@@ -76,8 +76,8 @@ async function loginPatient(req, res, db) {
 
     console.log(`logging in patient with email: ${email}`);
 
-    db.query(`SELECT L.patient_id, P.first_name, P.last_name FROM Patient_Login L JOIN Patient P on L.email_address = P.email_address WHERE L.email_address='${email}' AND L.password='${password}';`, 
-      [email, password], 
+    db.query(`SELECT L.patient_id, P.first_name, P.last_name FROM Patient_Login L JOIN Patient P on L.email_address = P.email_address WHERE L.email_address='${email}' AND L.password='${password}';`,
+      [email, password],
       (err, db_res) => {
         if (err) {
           console.log(err);
@@ -90,7 +90,7 @@ async function loginPatient(req, res, db) {
             res.end(JSON.stringify({ message: "No user found with provided credentials" }));
           } else {
             res.writeHead(200, headers);
-            res.end(JSON.stringify({ message: db_res}));
+            res.end(JSON.stringify({ message: db_res }));
             console.log("success");
           }
         }
@@ -99,7 +99,7 @@ async function loginPatient(req, res, db) {
     console.log(`patientController.js: ${err}`);
     res.writeHead(400, headers);
     res.end(JSON.stringify({ error: err }));
-  } 
+  }
 }
 
 function getPatientProfile(res, db, patient_id) {
@@ -130,7 +130,7 @@ function getPatientProfile(res, db, patient_id) {
   });
 }
 
-async function getPatientId(db, email){
+async function getPatientId(db, email) {
   return new Promise((resolve, reject) => {
     db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
       if (err) {
@@ -140,7 +140,7 @@ async function getPatientId(db, email){
         return
       }
 
-      if (db_res.length === 0){
+      if (db_res.length === 0) {
         reject('Patient with that email was not found');
         return;
       }
@@ -154,27 +154,27 @@ async function postPatientProfile(req, res, db) {
   try {
     const body = await PostData(req);
 
-    const { 
+    const {
       patient_id, email_address, phone_number, address,
       name_on_card, card_number, cvv, expiration_date,
       contact_name, contact_relationship, contact_number,
       policy_number, group_number
     } = JSON.parse(body);
-    
-    console.log (patient_id, email_address, phone_number, address,
+
+    console.log(patient_id, email_address, phone_number, address,
       name_on_card, card_number, cvv, expiration_date,
       contact_name, contact_relationship, contact_number,
       policy_number, group_number);
-      db.query(`
+    db.query(`
       UPDATE ContactInformation SET phone_number = '${phone_number}', address = '${address}' WHERE email_address = '${email_address}';
   `, (err, result1) => {
       if (err) {
-          // Handle error for the first query
-          res.writeHead(400, headers);
-          res.end(JSON.stringify({ message: err }));
+        // Handle error for the first query
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ message: err }));
       } else {
-          // Execute the second query
-          db.query(`
+        // Execute the second query
+        db.query(`
               INSERT INTO Patient_FinancialInformation (patient_id, name_on_card, card_number, cvv, expiration_date)
               VALUES (${patient_id}, '${name_on_card}', '${card_number}', '${cvv}', '${expiration_date}')
               ON DUPLICATE KEY UPDATE
@@ -183,13 +183,13 @@ async function postPatientProfile(req, res, db) {
                   cvv = VALUES(cvv),
                   expiration_date = VALUES(expiration_date);
           `, (err, result2) => {
-              if (err) {
-                  // Handle error for the second query
-                  res.writeHead(400, headers);
-                  res.end(JSON.stringify({ message: err }));
-              } else {
-                  // Execute the third query
-                  db.query(`
+          if (err) {
+            // Handle error for the second query
+            res.writeHead(400, headers);
+            res.end(JSON.stringify({ message: err }));
+          } else {
+            // Execute the third query
+            db.query(`
                       INSERT INTO Patient_EmergencyContacts (patient_id, contact_name, contact_relationship, contact_number)
                       VALUES (${patient_id}, '${contact_name}', '${contact_relationship}', '${contact_number}')
                       ON DUPLICATE KEY UPDATE
@@ -197,41 +197,41 @@ async function postPatientProfile(req, res, db) {
                           contact_relationship = VALUES(contact_relationship),
                           contact_number = VALUES(contact_number);
                   `, (err, result3) => {
-                      if (err) {
-                          // Handle error for the third query
-                          res.writeHead(400, headers);
-                          res.end(JSON.stringify({ message: err }));
-                      } else {
-                          // Execute the fourth query
-                          db.query(`
+              if (err) {
+                // Handle error for the third query
+                res.writeHead(400, headers);
+                res.end(JSON.stringify({ message: err }));
+              } else {
+                // Execute the fourth query
+                db.query(`
                               INSERT INTO Patient_InsuranceInformation (patient_id, policy_number, group_number)
                               VALUES (${patient_id}, '${policy_number}', '${group_number}')
                               ON DUPLICATE KEY UPDATE
                                   policy_number = VALUES(policy_number),
                                   group_number = VALUES(group_number);
                           `, (err, result4) => {
-                              if (err) {
-                                  // Handle error for the fourth query
-                                  res.writeHead(400, headers);
-                                  res.end(JSON.stringify({ message: err }));
-                              } else {
-                                  // All queries executed successfully
-                                  res.writeHead(200, headers);
-                                  res.end(JSON.stringify({ message: "All queries executed successfully" }));
-                              }
-                          });
-                      }
-                  });
+                  if (err) {
+                    // Handle error for the fourth query
+                    res.writeHead(400, headers);
+                    res.end(JSON.stringify({ message: err }));
+                  } else {
+                    // All queries executed successfully
+                    res.writeHead(200, headers);
+                    res.end(JSON.stringify({ message: "All queries executed successfully" }));
+                  }
+                });
               }
-          });
+            });
+          }
+        });
       }
-  });
-  
+    });
+
   } catch (error) {
     console.log(`patientController.js: ${error}`);
     res.writeHead(400, headers);
     res.end(JSON.stringify({ 'message': error }));
-  } 
+  }
 }
 
 function getPatientMedicalHistory(res, db, patient_id) {
@@ -247,8 +247,8 @@ function getPatientMedicalHistory(res, db, patient_id) {
     }
 
     console.log('success getting medical history');
-    
-    const msg = (db_res.length > 0) ? db_res[0] : {conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed'};
+
+    const msg = (db_res.length > 0) ? db_res[0] : { conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed' };
 
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
@@ -269,7 +269,7 @@ async function updatePatientMedicalHistory(req, res, db) {
     }
 
     console.log('updating medical history for patient');
-    
+
     const msg = await new Promise((resolve, reject) => {
       db.query('UPDATE Patient_MedicalHistory SET conditions=?, allergies=?, family_history=? WHERE patient_id=?', [conditions, allergies, family_history, patient_id], (err, db_res) => {
         if (err) {
@@ -283,10 +283,10 @@ async function updatePatientMedicalHistory(req, res, db) {
     });
 
     console.log(msg);
-     
+
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  } catch(err) {
+  } catch (err) {
 
     res.writeHead(400, headers);
     res.end(JSON.stringify({ error: err }));
@@ -322,11 +322,36 @@ async function createPatientMedicalHistory(patient_id, conditions, allergies, fa
 
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  } catch(err) {
+  } catch (err) {
 
     res.writeHead(400, headers);
     res.end(JSON.stringify({ error: err }));
   }
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory };
+function getPatientAppointmentHistory(res, db, patient_id) {
+  db.query(
+    `
+      SELECT
+      A.appointment_id, A.appointment_date, A.appointment_status, A.clinic_id, A.doctor_id, A.appointment_time, A.confirmation,
+          E.first_name, E.last_name,
+          C.clinic_name
+      FROM Appointment A
+      JOIN employee E ON A.doctor_id = E.employee_id
+      JOIN clinic C on A.clinic_id = C.clinic_id
+      WHERE A.patient_id = ${patient_id}
+      ORDER BY A.appointment_date DESC;    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user appointments' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory };

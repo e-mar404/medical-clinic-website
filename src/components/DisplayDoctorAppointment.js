@@ -20,51 +20,6 @@ function DisplayDoctorAppointment(){
           alert(data.error);
           return;
         }
-<<<<<<< HEAD
-        const fetchAppointments = async () => {
-          const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-          };
-          const employee_id = location.state.employee_id;
-          console.log(`getting appointments for ${employee_id}` );
-          fetch(`${process.env.REACT_APP_BACKEND_HOST}/viewappointment/${employee_id}`, requestOptions).then((response) => {
-            response.json().then((data) => {
-              if (response.status !== 200) {
-                alert(data.error);
-                return;
-              }
-              console.log(data.message);
-              appointmentRef.current = data.message;
-              setAppointment(appointmentRef.current);
-              
-              appointmentRef.current = data.message.map(appointment => ({
-                ...appointment,
-                appointment_date: appointment.appointment_date.split('T')[0],
-                
-              }));
-              
-              setAppointment(appointmentRef.current);
-
-            
-            });
-          });
-          
-        }
-        fetchDoctorInfo();
-        fetchAppointments();
-
-    }, [appointmentRef, doctorRef, location.state.employee_id]);
-    console.log(doctor);
-    console.log(appointments);
-
-    return(<>
-    <div className="DoctorInfo">
-      <h1>{`${doctor[0].first_name} ${doctor[0].last_name}`}</h1>
-      <div>
-        <p>{ `${doctor[0].title}` }</p>
-        <p>{ `${doctor[0].email_address}` }</p>
-=======
 
         setDoctor(data.message);
       });
@@ -152,7 +107,6 @@ function DisplayDoctorAppointment(){
             ))}
           </tbody>
         </table>
->>>>>>> c0976a5 (update doctor appointment view)
       </div>
     </>
     );

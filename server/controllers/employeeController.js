@@ -306,4 +306,3 @@ function getClinicEmployees(res, db, clinicId){
 }
 
 module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic, getClinicEmployees };
-

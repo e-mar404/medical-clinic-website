@@ -1,11 +1,13 @@
 const http = require('http');
 const mysql = require('mysql2');
+
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments, availableAppointments } = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist } = require('./controllers/appointmentController');
 const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
+
 const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
@@ -19,6 +21,7 @@ const {
   getDoctorInformation,
   getAdminClinic,
   getClinicEmployees
+
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
@@ -141,6 +144,11 @@ const server = http.createServer((req, res) => {
             getMedicationsForPatient(res, db, patient_id);
             break;
 
+          case /\/patient\/appointment_history/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientAppointmentHistory(res, db, patient_id);
+            break;
+
           case /\/employee\/bytype/.test(req.url): 
             const type = req.url.split('/')[3];
 
@@ -169,7 +177,6 @@ const server = http.createServer((req, res) => {
 
           case /clinicAppointments/.test(req.url):
             clinic_id = req.url.split('/')[2];
-
             getClinicAppointments(res, db, clinic_id);
             break;
 
@@ -200,7 +207,6 @@ const server = http.createServer((req, res) => {
             const start_date = req.url.split('/')[2];
             const end_date =  req.url.split('/')[3];
             const clinic_id = req.url.split('/')[4];
-
             getNewUsersReport(res, db, start_date, end_date, clinic_id);
             break;
 
@@ -220,11 +226,19 @@ const server = http.createServer((req, res) => {
           const adminEmail = req.url.split('/')[2];
           getAdminClinic(res, db, adminEmail);
           break;
+
+        case /\/getClinicOfReceptionist\/\d+/.test(req.url):
+          const userId = req.url.split('/')[2];
+      
+          getClinicOfReceptionist(res, db, userId);
+          break;      
+
         
         case /getClinicEmployees/.test(req.url):
           const adminClinic = req.url.split('/')[2];
           getClinicEmployees(res, db, adminClinic);
           break;
+
 
         default:
             res.writeHead(404, headers);
