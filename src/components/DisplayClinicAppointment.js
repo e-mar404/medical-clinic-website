@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './DisplayClinicAppointments.css'
 import { Link } from "react-router-dom"
 
@@ -7,19 +7,6 @@ function DisplayClinicAppointment() {
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [filter, setFilter] = useState('today');
   const [clinicId, setClinicId] = useState(null);
-
-  useEffect(() => {
-    const userId = localStorage.getItem('UserId');
-    if (userId) {
-      fetchClinicId(userId);
-    }
-  }, []);
-  
-  useEffect(() => {
-    if (clinicId !== null) {
-      fetchAppointments();
-    }
-  }, [clinicId]);
   
   // Function to fetch clinicId from backend
   const fetchClinicId = async (userId) => {
@@ -62,7 +49,6 @@ function DisplayClinicAppointment() {
       const data = await response.json();
   
       // Modify date and time format, add clinicId to each appointment object
-      const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
       const modifiedAppointments = data.map(appointment => ({
         ...appointment,
         appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
@@ -76,12 +62,6 @@ function DisplayClinicAppointment() {
       console.error("Error fetching appointments:", error);
     }
   };
-  
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
-    const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
-    setTodayAppointments(todayAppointments);
-  }, [allAppointments]);
 
   // Function to format time
   const formatTime = (timeString) => {
@@ -108,6 +88,26 @@ function DisplayClinicAppointment() {
   } else if (filter === 'upcoming') {
     filteredAppointments = allAppointments.filter(appointment => new Date(appointment.appointment_date) > new Date());
   }
+
+  const clinicIdRef = useRef(clinicId); 
+  const allAppointmentsRef = useRef(allAppointments);
+  const fetchAppointmentsRef = useRef(fetchAppointments);
+  const fetchClinicIdRef = useRef(fetchClinicId);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('UserId');
+    if (userId) {
+      fetchClinicIdRef.current(userId);
+    }
+
+    if (clinicIdRef.current !== null) {
+      fetchAppointmentsRef.current();
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
+    const todayAppointments = allAppointmentsRef.current.filter(appointment => appointment.appointment_date === today);
+    setTodayAppointments(todayAppointments);
+  }, [clinicIdRef, allAppointmentsRef, fetchAppointmentsRef, fetchClinicIdRef]);
 
   return (
     <>
