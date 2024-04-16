@@ -90,6 +90,17 @@ function Navbar() {
         </ul>
       )
     }
+    else if (localStorage.getItem("UserType") === 'Receptionist') {
+        // Receptionist navigation links
+        return (
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <a className="nav-link" aria-current="page" href="/receptionist">Home</a>
+            </li>
+            {/* Add other receptionist-specific navigation links here */}
+          </ul>
+        )
+    }
     else {
       return (
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -129,10 +140,10 @@ function Navbar() {
               <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span><span> ({localStorage.getItem("UserType")})</span>
             </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item disabled" href="/">Profile Information</a></li>
+              <li><a className="dropdown-item" href="/patient/profile">Profile Information</a></li>
               <li><a className="dropdown-item disabled" href="/">Medical History</a></li>
               <div className="dropdown-divider"></div>
-              <li><a className="dropdown-item disabled" href="/">Schedule Appointment</a></li>
+              <li><a className="dropdown-item" href="/make_appointment">Schedule Appointment</a></li>
             </ul>
           </li>
           {SignOutButton()}
