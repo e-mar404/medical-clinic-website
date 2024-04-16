@@ -58,7 +58,7 @@ function DisplayEmployee(){
 
   const nav = useNavigate();
   function handleTransfer(employee_id){
-    nav('transfer', {state: {employee_id}});
+    nav(`transfer/${employee_id}`, {});
   }
 
   function handleClick(employee_id){
