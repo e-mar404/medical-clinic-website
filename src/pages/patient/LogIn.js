@@ -1,6 +1,5 @@
 import Navbar from '../../components/Navbar';
 import PatientLoginModal from '../../components/PatientLoginModal';
-import Footer from '../../components/Footer';
 
 function PatientLogIn() {
   return (
@@ -9,7 +8,6 @@ function PatientLogIn() {
 
       <PatientLoginModal />    
 
-      <Footer />
     </>
   );
 }

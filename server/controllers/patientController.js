@@ -337,8 +337,8 @@ function getPatientAppointmentHistory(res, db, patient_id) {
           E.first_name, E.last_name,
           C.clinic_name
       FROM Appointment A
-      JOIN employee E ON A.doctor_id = E.employee_id
-      JOIN clinic C on A.clinic_id = C.clinic_id
+      JOIN Employee E ON A.doctor_id = E.employee_id
+      JOIN Clinic C on A.clinic_id = C.clinic_id
       WHERE A.patient_id = ${patient_id}
       ORDER BY A.appointment_date DESC;    
     `, (err, db_res) => {
