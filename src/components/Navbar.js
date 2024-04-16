@@ -77,25 +77,6 @@ function Navbar() {
           <li className="nav-item">
             <a className="nav-link" aria-current="page" href="/">Home</a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Appointments</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Locations</a>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle disabled" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Services
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item" href="/">Cancer</a></li>
-              <li><a className="dropdown-item" href="/">Children's Services</a></li>
-              <li><a className="dropdown-item" href="/">Heart & Vascular</a></li>
-              <li><a className="dropdown-item" href="/">Neuroscience</a></li>
-              <li><a className="dropdown-item" href="/">Surgical Services</a></li>
-              <li><a className="dropdown-item" href="/">Transplant</a></li>
-            </ul>
-          </li>
         </ul>
       )
 
