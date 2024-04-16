@@ -1,50 +1,83 @@
 import React, { useState, useEffect } from "react";
 import './DisplayClinicAppointments.css'
+import { Link } from "react-router-dom"
 
 function DisplayClinicAppointment() {
   const [allAppointments, setAllAppointments] = useState([]);
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [filter, setFilter] = useState('today');
-
+  const [clinicId, setClinicId] = useState(null);
+  
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const clinicId = 1; // Specify the clinicId
-        const requestOptions = {
-          method: 'GET',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Clinic-Id': clinicId // Pass clinicId in a custom header
-          }
-        };
-        const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments`;
-    
-        console.log('Request headers:', requestOptions.headers); // Log request headers
-    
-        const response = await fetch(url, requestOptions);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        // Modify date and time format, add clinicId to each appointment object
-        const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
-        const modifiedAppointments = data.map(appointment => ({
-          ...appointment,
-          appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
-          appointment_time: formatTime(appointment.appointment_time), // Format time
-          clinicId: clinicId
-        }));
-
-        setAllAppointments(modifiedAppointments);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-      }
-    };
-    
-    fetchAppointments();
+    const userId = localStorage.getItem('UserId');
+    if (userId) {
+      fetchClinicId(userId);
+    }
   }, []);
-
+  
+  useEffect(() => {
+    if (clinicId !== null) {
+      fetchAppointments();
+    }
+  }, [clinicId]);
+  
+  // Function to fetch clinicId from backend
+  const fetchClinicId = async (userId) => {
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+        }
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/getClinicOfReceptionist/${userId}`;
+        
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setClinicId(data.clinicId); // Update clinicId state with the fetched value
+    } catch (error) {
+      console.error("Error fetching clinicId:", error);
+    }
+  };
+  
+  const fetchAppointments = async () => {
+    
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Clinic-Id': clinicId // Pass clinicId in a custom header
+        }
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments`;
+  
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      
+      // Modify date and time format, add clinicId to each appointment object
+      const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
+      const modifiedAppointments = data.map(appointment => ({
+        ...appointment,
+        appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
+        appointment_time: formatTime(appointment.appointment_time), // Format time
+        clinicId: clinicId,
+        clinic_name: appointment.clinic_name,
+        status: appointment.status,
+      }));
+        
+      setAllAppointments(modifiedAppointments);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
+  
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
     const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
@@ -53,7 +86,7 @@ function DisplayClinicAppointment() {
 
   // Function to format time
   const formatTime = (timeString) => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
     const amOrPm = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
     const formattedMinutes = minutes.toString().padStart(2, '0'); // Pad with leading zero if necessary
@@ -62,6 +95,38 @@ function DisplayClinicAppointment() {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
+  };
+
+  const handleStatusChange = async (appointmentId, newStatus) => {
+    try {
+      // Update the local state first
+      const updatedAppointments = allAppointments.map(appointment => {
+        if (appointment.appointment_id === appointmentId) {
+          return { ...appointment, status: newStatus };
+        }
+        return appointment;
+      });
+      setAllAppointments(updatedAppointments);
+  
+      // Make a POST request to your endpoint
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appointment_id: appointmentId, status: newStatus })
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/appointmentStatus`;
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Handle the response if needed
+      const data = await response.json();
+      console.log("Appointment status updated successfully:", data);
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      // If there's an error, you might want to revert the local state change
+      // or handle it in another way based on your requirements
+    }
   };
 
   let filteredAppointments = [];
@@ -75,8 +140,8 @@ function DisplayClinicAppointment() {
 
   return (
     <>
-     <div className="ClinicInfo">
-       <h1 className="clinic-appointments-h1">MyClinic Appointments</h1>
+      <div className="ClinicInfo">
+        <h1 className="clinic-appointments-h1">{allAppointments.length > 0 ? `${allAppointments[0].clinic_name} Appointments` : 'Clinic Appointments'}</h1>
         <div className="clinic-appointment-filter-container">
           <label className="clinic-appointment-filter-label" htmlFor="filter">Appointment Filter:</label>
           <select className="clinic-appointment-filter-select" id="filter" onChange={handleFilterChange} value={filter}>
@@ -85,11 +150,13 @@ function DisplayClinicAppointment() {
             <option value="upcoming">Upcoming Appointments</option>
           </select>
         </div>
+        <Link to="/receptionist/makeAppointment"> 
+          <button className="make-appointment-button">Make Appointment</button>
+        </Link>
       </div>
 
       <hr style={{ width: "101em", color: "black" }} />
 
-    
       <div className="container">
         <table className="table table-striped" style={{ width: "100em" }}>
           <thead>
@@ -100,7 +167,7 @@ function DisplayClinicAppointment() {
               <th>Doctor Last Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
-              <th>Clinic ID</th> {/* Add Clinic ID column */}
+              <th>Status</th> 
             </tr>
           </thead>
           <tbody>
@@ -112,7 +179,17 @@ function DisplayClinicAppointment() {
                 <td>{appointment.doctor.last_name}</td>
                 <td>{appointment.appointment_date}</td>
                 <td>{appointment.appointment_time}</td>
-                <td>{appointment.clinicId}</td> {/* Display Clinic ID */}
+                <td>
+                <select 
+                  onChange={(e) => handleStatusChange(appointment.appointment_id, e.target.value)} 
+                  value={appointment.status}
+                 >
+                  <option value="scheduled">scheduled</option>
+                  <option value="no show">no show</option>
+                  <option value="cancelled">cancelled</option>
+                  <option value="confirm">confirm</option>
+                </select>
+                </td>
               </tr>
             ))}
           </tbody>
