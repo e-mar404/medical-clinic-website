@@ -287,9 +287,6 @@ function getAdminClinic(res, db, adminEmail){
   }
 }
 
-<<<<<<< HEAD
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic };
-=======
 function getClinicEmployees(res, db, clinicId){
   try{
     db.query(`SELECT 
@@ -309,5 +306,3 @@ function getClinicEmployees(res, db, clinicId){
 }
 
 module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic, getClinicEmployees };
->>>>>>> 17a7d0deb42d02923f62764929a60344d2cddfd7
-
