@@ -53,9 +53,11 @@ function App() {
         <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
     
-    ``  <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
+        <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
         <Route path='/receptionist' element={<ReceptionistHome />} />
         <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
+        <Route path='/receptionist/Billing' element={<ReceptionistBilling />} />
+        
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='doctor/appointment_calendar/:doctor_id' element={<ViewDoctorAppointments />} />
