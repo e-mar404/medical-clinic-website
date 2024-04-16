@@ -7,7 +7,6 @@ const { getClinics } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
-
 const { createReferral } = require('./controllers/referralController');
 const {
   getEmployeesByType,
@@ -192,29 +191,27 @@ const server = http.createServer((req, res) => {
           case /viewappointment/.test(req.url): // should get employee id and then call function that returns all appointments
             const empId = req.url.split('/')[2];
             getAppointments(res, db, empId);
-            //res.writeHead(404, headers);
-            //res.end(JSON.stringify({ message: 'Route for appointment' }));
             break;
 
           case /get_doctor/.test(req.url):
             const doctorID = req.url.split('/')[2];
             getDoctorInformation(res, db, doctorID);
-            //res.writeHead(404, headers);
-            //res.end(JSON.stringify({ message: 'Route for doctor info' }));
             break;
 
          case /accounts_created/.test(req.url):
             const start_date = req.url.split('/')[2];
             const end_date =  req.url.split('/')[3];
-            const clinic_id = req.url.split('/')[4];
+            clinic_id = req.url.split('/')[4];
+
             getNewUsersReport(res, db, start_date, end_date, clinic_id);
             break;
 
         case /doctor_total/.test(req.url):
             const startDate = req.url.split('/')[2];
             const endDate =  req.url.split('/')[3];
-            const clinicId = req.url.split('/')[4];
-            generateDoctorTotal(res, db, startDate, endDate, clinicId);
+            clinic_id = req.url.split('/')[4];
+
+            generateDoctorTotal(res, db, startDate, endDate, clinic_id);
             break;
 
         case /get_report/.test(req.url):
