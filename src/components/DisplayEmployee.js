@@ -53,7 +53,7 @@ function DisplayEmployee(){
     }
   
     function handleClick(employee_id){
-      nav('viewappointment', {state:  {employee_id}});
+      nav(`viewappointment/${employee_id}`, {});
     }
 
     const nav = useNavigate();

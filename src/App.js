@@ -57,6 +57,7 @@ function App() {
         <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
 
         <Route path='/doctor' element={<DoctorHomepage />} />
+        <Route path='doctor/appointment_calendar/:doctor_id' element={<ViewDoctorAppointments />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
         <Route path='/doctor/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
@@ -66,7 +67,7 @@ function App() {
         <Route path='/admin' element={<AdminHomepage />}/>
  
         <Route path='/admin/employeelist/newemployee' element ={<NewEmployeeForm />} />
-        <Route path='/admin/employeelist/viewappointment' element ={<ViewDoctorAppointments />} />
+        <Route path='/admin/employeelist/viewappointment/:doctor_id' element ={<ViewDoctorAppointments />} />
         <Route path='/admin/employeelist/transfer' element ={<TransferDoctor />} />
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
