@@ -93,14 +93,6 @@ async function getClinicAppointments(res, db, clinicId) {
   }
 }
 
-async function availableAppointments(req, res, db) {
-  try {
-    const body = await PostData(req);
-    const { clinic_id, doctor_id, date } = JSON.parse(body);
-    
-    console.log(`getting available appointments for doctor ${doctor_id} at clinic ${clinic_id} on date ${date}`);
-    const timesToRemove = await scheduledAppointments(clinic_id, doctor_id, date, db);
-
 const getClinicOfReceptionist = (res, db, userId) => {
   const query = `SELECT primary_clinic FROM Employee WHERE employee_id = '${userId}'`;
   console.log('Hello There User Id:', userId);
@@ -142,9 +134,6 @@ async function availableAppointments(req, res, db) {
       "17:00"];
     
     let availableTimes = baseTimes;
-
-    timesToRemove.forEach(time => {
-      const index = baseTimes.indexOf(time.time_taken);
 
     timesToRemove.forEach(time => {
       const index = baseTimes.indexOf(time.time_taken);
