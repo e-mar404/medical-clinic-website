@@ -23,16 +23,15 @@ function ReceptionistHome() {
           </div>
 
           <div className="col-md-4">
-            <HomeCard 
-              name="Update Patient Medical History (temp)" 
-              page_link="/doctor/patient_medical_history" 
-              icon="fa-address-card"/>
+          <HomeCard 
+            name="Patient Billing" 
+            page_link="/receptionist/Billing"
+            icon="fa-file-invoice-dollar"/>
           </div>
-        </div>
+          </div>
       </div>
     </>
   );
 }
 
 export default ReceptionistHome;
-
