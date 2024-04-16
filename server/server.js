@@ -98,6 +98,10 @@ const server = http.createServer((req, res) => {
             createAppointment(req, res, db);
             break;
 
+          case '/appointmentStatus':
+            updateAppointmentStatus(req, res, db);
+            break;
+
           case '/available_appointments':
             availableAppointments(req, res, db);
             break;
