@@ -13,7 +13,6 @@ import ReceptionistHome from './pages/employee/ReceptionistHome';
 import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
 import ReceptionistBilling from './pages/employee/ReceptionistBilling';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
-import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
 import AdminEmployeeList from './pages/employee/AdminEmployeeList';
 import NewEmployeeForm from './pages/employee/NewEmployeeForm';
@@ -22,11 +21,9 @@ import ViewClinicAppointments from './pages/employee/ViewClinicAppointments';
 import MakeAppointment from './pages/appointment/MakeAppointment'; 
 import TransferDoctor from './pages/employee/TransferDoctor';
 import AdminHomepage from './pages/employee/AdminHomepage';
-
 import Reports from './pages/employee/Reports';
 import PatientMedicalHistoryPage from './pages/employee/PatientMedicalHistoryPage';
 import AdminLoadReports from './pages/employee/LoadReport';
-
 import AdminClinic from './pages/employee/AdminClinic';
 
 
@@ -53,7 +50,6 @@ function App() {
         <Route path="/patient/profile" element={<PatientProfile />} />
         <Route path="/patient/appointment_history" element={<AppointmentHistory />} />
 
-        <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
     
         <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
