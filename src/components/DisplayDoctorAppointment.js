@@ -43,18 +43,14 @@ function DisplayDoctorAppointment(){
 
         console.log(`Appointments: ${data.message}`);
 
-        setAppointments(data.message);
+        const fixDate = data.message.map((app) => ({
+          ...app,
+          appointment_date: app.appointment_date.split('T')[0],
+        }));
         
-        /*
-          appointmentRef.current = appointments.map(appointment => ({
-            ...appointment,
-            appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
 
-          }));
-        */
-
-          //appointmentRef.current = data.message;
-        //setAppointment(formatAppointment);
+        setAppointments(fixDate);
+        
       });
     });
   }
@@ -83,8 +79,8 @@ function DisplayDoctorAppointment(){
       
       <h2>Appointments</h2>
     
-      <div className="container">
-        <table className="table table-stripped" style={{ width: 100+ 'em'}}>
+      <div className="container-fluid">
+        <table className="table table-stripped">
           <thead>
             <tr>
               <th>Patient F Name</th>
@@ -101,7 +97,7 @@ function DisplayDoctorAppointment(){
                 <td>{`${app.first_name}`}</td>
                 <td>{`${app.last_name}`}</td>
                 <td>{`${app.appointment_date}`}</td>
-                <td>{`${app.appointment_time}`}</td>
+                <td>{`${app.time}`}</td>
                 <td>{`${app.clinic_name}`}</td>
               </tr>
             ))}

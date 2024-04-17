@@ -111,6 +111,8 @@ function AdminReports(){
         
         return(
             <>
+            <div className="container-fluid">
+            
                 <table className="table table-stripped">
                     <thead>
                         <tr>
@@ -132,6 +134,7 @@ function AdminReports(){
                         }
                     </tbody>
                 </table>
+                </div>
             </>
         );
     }
