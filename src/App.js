@@ -7,6 +7,7 @@ import PatientSignup from './pages/patient/Signup';
 import PatientProfile from './pages/patient/Profile';
 import PatientHome from './pages/patient/PatientHome';
 import AppointmentHistory from './pages/patient/AppointmentHistory';
+import ViewCharges from './pages/patient/ViewCharges';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
 import NurseHomepage from './pages/employee/NurseHomepage';
 import ReceptionistHome from './pages/employee/ReceptionistHome';
@@ -49,6 +50,7 @@ function App() {
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
         <Route path="/patient/appointment_history" element={<AppointmentHistory />} />
+        <Route path="/patient/view_charges" element={<ViewCharges />} />
 
         <Route path='/employee/login' element={<EmployeeLogIn />} />
     
