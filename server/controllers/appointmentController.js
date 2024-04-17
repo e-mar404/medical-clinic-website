@@ -38,16 +38,16 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-async function getClinicAppointments(res, db, clinicId) {
+async function getClinicAppointments(res, db, clinic_id) {
   try {
-    console.log('Clinic ID:', clinicId); // Log clinic ID
+    console.log('Clinic ID:', clinic_id); // Log clinic ID
     
     // Fetch clinic details from Clinic table
     const clinicQuery = 'SELECT clinic_name FROM Clinic WHERE clinic_id = ?';
-    const [clinicResult] = await db.promise().query(clinicQuery, [clinicId]);
+    const [clinicResult] = await db.promise().query(clinicQuery, [clinic_id]);
     const clinicName = clinicResult[0].clinic_name;
 
-    db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time FROM Appointment WHERE clinic_id = ?', [clinicId], async (err, results) => {
+    db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time, appointment_status, appointment_id FROM Appointment WHERE clinic_id = ?', [clinic_id], async (err, results) => {
       if (err) {
         console.error(err);
         res.writeHead(500, headers);
@@ -56,7 +56,7 @@ async function getClinicAppointments(res, db, clinicId) {
         console.log('Fetched appointments:', results); // Log fetched appointments
 
         const appointmentsWithDetails = await Promise.all(results.map(async appointment => {
-          const { doctor_id, patient_id, appointment_date, appointment_time } = appointment;
+          const { doctor_id, patient_id, appointment_date, appointment_time, appointment_status, appointment_id} = appointment;
 
           const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
@@ -76,7 +76,9 @@ async function getClinicAppointments(res, db, clinicId) {
               last_name: patientResult[0].last_name
             },
             appointment_date,
-            appointment_time
+            appointment_time,
+            status: appointment_status,
+            appointment_id,
           };
         }));
 
@@ -150,16 +152,18 @@ async function availableAppointments(req, res, db) {
 
     const curDate = new Date();
     const appointmentDate = new Date(date.replace('-', '/'));
+    const timeOptions = { timeZone: 'CST', timeZoneName: 'short', hour12: false };
 
-    const sameDateAppointment = (appointmentDate.getDate() === curDate.getDate());
+    console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString('en-US', timeOptions)}, curDate: ${curDate.toLocaleDateString('en-US', timeOptions)}`);
+
+    const sameDateAppointment = (appointmentDate.toLocaleDateString('en-US', timeOptions) === curDate.toLocaleDateString('en-US', timeOptions));
 
     if (sameDateAppointment) {
       console.log('this is a same day appointment, making sure to return only future times');
 
+      const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
+
       availableTimes = baseTimes.reduce((acc, time, _index)  => {
-        const timeOptions = { timeZone: 'America/Chicago', hour12: false };
-        const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
-        
         console.log(`comparing curTime:${curTime} < time: ${time} = ${curTime < time}`);
 
         if (curTime < time) {
@@ -200,4 +204,47 @@ async function scheduledAppointments(clinic_id, doctor_id, date, db) {
   });
 }
 
-module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist };  
+
+const updateAppointmentStatus = (req, res, db) => {
+  let body = '';
+
+  // Read request body
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+
+  // Parse request body
+  req.on('end', () => {
+    try {
+      const { appointment_id, status } = JSON.parse(body);
+
+      // Call function in appointmentController to update status
+      updateAppointmentStatusInDB(res, db, appointment_id, status);
+    } catch (error) {
+      console.error('Error parsing request body:', error);
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ message: 'Invalid request body' }));
+    }
+  });
+};
+
+// Function to update appointment status in the database
+const updateAppointmentStatusInDB = (res, db, appointment_id, status) => {
+  // Perform SQL update operation to update appointment status
+  const sql = `UPDATE Appointment SET appointment_status = ? WHERE appointment_id = ?`;
+  const values = [status, appointment_id];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error updating appointment status:', err);
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ message: 'Internal server error' }));
+    } else {
+      console.log('Appointment status updated successfully');
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ message: 'Appointment status updated successfully' }));
+    }
+  });
+};
+
+module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus };  

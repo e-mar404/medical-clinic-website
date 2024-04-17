@@ -354,4 +354,64 @@ function getPatientAppointmentHistory(res, db, patient_id) {
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory };
+function getPrimaryDoctorForPatient(res, db, patient_id) {
+  console.log('getting primary doctor');
+
+  const query = 'SELECT P.primary_doctor_id as employee_id, D.first_name, D.last_name FROM Patient AS P, Employee AS D WHERE patient_id=? AND D.employee_id=P.primary_doctor_id';
+
+  db.query(query, [patient_id], (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user appointments' }));
+      return;
+    }
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+
+  console.log('successfully got primary doctor');
+}
+
+async function updatePrimaryDoctor(req, res, db) {
+  try {
+    const body = await PostData(req);
+    const { patient_id, primary_doctor_id } = JSON.parse(body);
+
+    const msg = await new Promise((resolve, reject) => {
+      const query = 'UPDATE Patient SET primary_doctor_id=? WHERE patient_id=?';
+
+      db.query(query, [primary_doctor_id, patient_id], (err, db_res) => {
+        if (err) {
+          console.log(`error updating primary doctor: ${err}`);
+
+          reject('Could not update primary doctor for patient');
+        }
+
+        resolve('Successfully updated primary doctor');
+      });
+
+    });
+  
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+  } catch(err) {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
+}
+
+module.exports = { 
+  createPatientAccount,
+  loginPatient,
+  getPatientId,
+  getPatientProfile,
+  postPatientProfile,
+  getPatientMedicalHistory,
+  updatePatientMedicalHistory,
+  getPatientAppointmentHistory,
+  getPrimaryDoctorForPatient,
+  updatePrimaryDoctor
+};

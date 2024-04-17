@@ -7,21 +7,24 @@ async function getEmployeesByType(res, db, type) {
 
     switch (type) {
       case 'all':
-        condition='true';
+        condition = 'true';
         break;
 
       case 'medical':
-        condition=`employee_type='Medical'`;
+        condition = `employee_type='Medical'`;
+        break;
+
+      case 'primary_doctor':
+        condition = `employee_role='Doctor' AND specialist=false`;
         break;
 
       case 'staff':
-        condition=`employee_type='Staff'`;
+        condition = `employee_type='Staff'`;
         break;
 
       default:
         throw new TypeError('invalid role');
     }
-
 
     db.query(`SELECT 
       employee_id, email_address, employee_role, first_name, last_name

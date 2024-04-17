@@ -6,7 +6,7 @@ async function createReferral(req, res, db) {
     const { doctor_id, patient_id, expiration_date } = JSON.parse(body);
 
     const msg = await new Promise((resolve, reject) => {
-      db.query('INSERT INTO Referral(patient_id, doctor_id, expiration_date) VALUES(?, ?, DATE ?)', [doctor_id, patient_id, expiration_date], (err, _db_res) => {
+      db.query('INSERT INTO Referral(patient_id, doctor_id, expiration_date) VALUES(?, ?, DATE ?)', [patient_id, doctor_id, expiration_date], (err, _db_res) => {
         if (err) {
           reject(err.sqlMessage);
         }

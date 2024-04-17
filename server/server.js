@@ -2,12 +2,13 @@ const http = require('http');
 const mysql = require('mysql2');
 
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist } = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
+const { patientCharges } = require('./controllers/billingController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -90,12 +91,20 @@ const server = http.createServer((req, res) => {
             removeMedicationForPatient(req, res, db);
             break;
 
+          case '/update_primary_doctor':
+            updatePrimaryDoctor(req, res, db);
+            break;
+
           case '/create_referral':
             createReferral(req, res, db);
             break;
 
           case '/make_appointment': 
             createAppointment(req, res, db);
+            break;
+
+          case '/appointmentStatus':
+            updateAppointmentStatus(req, res, db);
             break;
 
           case '/available_appointments':
@@ -120,9 +129,12 @@ const server = http.createServer((req, res) => {
 
       case 'GET': 
         switch (true){
+          case /patientBilling/.test(req.url):
+            patientCharges(req, res, db);
+            break;
+            
           case /reports/.test(req.url): 
             const reportType = req.url.split('/')[2];
-
             generateReportFor(res, db, reportType);
             break;
 
@@ -142,6 +154,12 @@ const server = http.createServer((req, res) => {
 
             getMedicationsForPatient(res, db, patient_id);
             break;
+
+          case /\/primary_doctor_for_patient/.test(req.url):
+            patient_id = req.url.split('/')[2];
+
+            getPrimaryDoctorForPatient(res, db, patient_id);
+            break
 
           case /\/patient\/appointment_history/.test(req.url):
             patient_id = req.url.split('/')[3];
@@ -174,15 +192,15 @@ const server = http.createServer((req, res) => {
             getEmployeesByClinic(res, db, clinic_id, role);
             break;
 
-          case /clinicAppointments/.test(req.url):
-            clinic_id = req.url.split('/')[2];
-            getClinicAppointments(res, db, clinic_id);
-            break;
+          case /\/clinicAppointments\/\d+/.test(req.url):
+              console.log('hell from clinic appointment servver');
+              const clinicId = req.url.split('/')[2];
+              getClinicAppointments(res, db, clinicId);
+              break;      
 
           case /get_clinics/.test(req.url):
             getClinics(res, db);
             break; 
-
 
           case /\/admin\/employeelist/.test(req.url): //might not be needed
             getEmployeesByType(res, req, type);
