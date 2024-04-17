@@ -4,6 +4,69 @@ import Navbar from '../../components/Navbar';
 var FetchedCards = false; // Condition to ensure the fetch is ran only once
 
 function PatientFinancial() {
+    const [cardNumber, setCardNumber] = useState('');
+    const [nameOnCard, setNameOnCard] = useState('');
+    const [expirationDate, setExpirationDate] = useState('');
+    const [cvv, setCVV] = useState('');
+
+    const handleCardNumberChange = (e) => {
+        setCardNumber(e.target.value);
+    };
+
+    const handleNameOnCardChange = (e) => {
+        setNameOnCard(e.target.value);
+    };
+
+    const handleExpirationDateChange = (e) => {
+        setExpirationDate(e.target.value);
+    };
+
+    const handleCVVChange = (e) => {
+        setCVV(e.target.value);
+    };
+
+    const postFunction = (e) => {
+        let vCardNumber = cardNumber;
+        let action = "insert";
+        if (e !== "AddButton") {
+            action = "delete";
+            vCardNumber = e.target.id;
+        }
+        const postMethod = {
+            method: 'POST',
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'application/json',
+                'Connection': 'keep-alive'
+            },
+            body: JSON.stringify({
+                'patient_id': localStorage.getItem("UserId"),
+                'card_number': vCardNumber,
+                'name_on_card': nameOnCard,
+                'expiration_date': expirationDate,
+                'cvv': cvv,
+                'action': action
+            })
+        };
+
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/financial`, postMethod).then((response) => {
+            response.json().then((data) => {
+                if (response.status === 200) {
+                    if (action === "insert") {
+                        alert("Successfully added card!");
+                    }
+                    else {
+                        alert("Successfully deleted card!");
+                    }
+                    window.location.reload();
+                }
+                else {
+                    alert("something broke");
+                }
+            });
+        });
+    }
+
     useEffect(() => {
         const getMethod = {
             method: 'GET',
@@ -54,13 +117,16 @@ function PatientFinancial() {
                                 </div>
                             </div>
                             <div class="col-1">
-                                <button type="button" style="margin-top: 32px;" id="RemoveButton">❌</button>
+                                <button type="button" style="margin-top: 32px;" class="RemoveButton" id="${newCard.id}">❌</button>
                             </div>
                             `;
 
                             cardHolder.appendChild(newCard);
                             console.log(data.message);
                         })
+                        document.querySelectorAll(".RemoveButton").forEach(button => {
+                            button.addEventListener("click", postFunction);
+                        });                        
                     });
                 });
             }
@@ -68,58 +134,6 @@ function PatientFinancial() {
 
         fetchFinancial();
     }, []);
-
-
-    const [cardNumber, setCardNumber] = useState('');
-    const [nameOnCard, setNameOnCard] = useState('');
-    const [expirationDate, setExpirationDate] = useState('');
-    const [cvv, setCVV] = useState('');
-
-    const handleCardNumberChange = (e) => {
-        setCardNumber(e.target.value);
-    };
-
-    const handleNameOnCardChange = (e) => {
-        setNameOnCard(e.target.value);
-    };
-
-    const handleExpirationDateChange = (e) => {
-        setExpirationDate(e.target.value);
-    };
-
-    const handleCVVChange = (e) => {
-        setCVV(e.target.value);
-    };
-
-    const saveFunction = (e) => {
-        const postMethod = {
-            method: 'POST',
-            redirect: 'follow',
-            headers: {
-                'Content-Type': 'application/json',
-                'Connection': 'keep-alive'
-            },
-            body: JSON.stringify({
-                'patient_id': localStorage.getItem("UserId"),
-                'card_number': cardNumber,
-                'name_on_card': nameOnCard,
-                'expiration_date': expirationDate,
-                "cvv": cvv,
-            })
-        };
-
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/financial`, postMethod).then((response) => {
-            response.json().then((data) => {
-                if (response.status === 200) {
-                    alert("Saved patient card!");
-                    window.location.reload();
-                }
-                else {
-                    alert("something broke");
-                }
-            });
-        });
-    }
 
     return (
         <>
@@ -204,7 +218,7 @@ function PatientFinancial() {
                                         style={{ marginTop: '28px' }}
                                         className="btn btn-primary btn float-end"
                                         id="AddButton"
-                                        onClick={saveFunction}
+                                        onClick={(event) => postFunction(event.target.id)}
                                     >
                                         Add
                                     </button>
