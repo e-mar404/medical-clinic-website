@@ -40,7 +40,6 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
 
 async function getClinicAppointments(res, db, clinic_id) {
   try {
-    
 
     console.log('Clinic ID:', clinic_id); // Log clinic ID
     
@@ -154,16 +153,18 @@ async function availableAppointments(req, res, db) {
 
     const curDate = new Date();
     const appointmentDate = new Date(date.replace('-', '/'));
+    const timeOptions = { timeZone: 'CST', timeZoneName: 'short', hour12: false };
 
-    const sameDateAppointment = (appointmentDate.getDate() === curDate.getDate());
+    console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString('en-US', timeOptions)}, curDate: ${curDate.toLocaleDateString('en-US', timeOptions)}`);
+
+    const sameDateAppointment = (appointmentDate.toLocaleDateString('en-US', timeOptions) === curDate.toLocaleDateString('en-US', timeOptions));
 
     if (sameDateAppointment) {
       console.log('this is a same day appointment, making sure to return only future times');
 
+      const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
+
       availableTimes = baseTimes.reduce((acc, time, _index)  => {
-        const timeOptions = { timeZone: 'America/Chicago', hour12: false };
-        const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
-        
         console.log(`comparing curTime:${curTime} < time: ${time} = ${curTime < time}`);
 
         if (curTime < time) {

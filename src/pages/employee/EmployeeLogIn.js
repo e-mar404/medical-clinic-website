@@ -7,7 +7,6 @@ function EmployeeLogIn() {
       <Navbar />
       
       <EmployeeLoginModal />
-
     </>
   );
 }

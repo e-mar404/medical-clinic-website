@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar';
 const ReceptionistBilling = () => {
 
     const [charges, setCharges] = useState([]);
+
     const [filteredCharges, setFilteredCharges] = useState([]);
     const [searchFirstName, setSearchFirstName] = useState('');
     const [searchLastName, setSearchLastName] = useState('');

@@ -80,22 +80,22 @@ function DisplayEmployee(){
                     <td>{`${employee.first_name}`}</td>
                     <td>{`${employee.last_name}`}</td>
                     <td>{`${employee.employee_role}`}</td>
+                    
+                       
                     <td>
+                    { employee.employee_role === 'Doctor' && 
                     <div className="nav-item dropdown">
+                    
                       <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         More options
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        { employee.employee_role === 'Doctor' &&
-                        <span>
+                      
                         <li><button className="dropdown-item" onClick={() => handleClick(employee.employee_id)} href='/'>View Appointments</button></li>
                         <li><button className="dropdown-item" onClick={() => handleTransfer(employee.employee_id)} href='/'>Transfer</button></li>
-                        </span>}
-
-                        <li><hr className="dropdown-divider" /></li>
-                        <li><a className="dropdown-item" href="/admin/employeelist/newemployee">Terminate</a></li>
+                    
                       </ul>
-                      </div>
+                      </div>}
                     </td>
                   </tr>
 

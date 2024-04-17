@@ -104,6 +104,7 @@ function DisplayClinicAppointment() {
     setTodayAppointments(todayAppointments);
   }, [allAppointments]);
 
+
   const handleStatusChange = async (appointmentId, newStatus) => {
     try {
       // Update the local state first

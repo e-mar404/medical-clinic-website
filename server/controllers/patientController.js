@@ -107,22 +107,35 @@ function getPatientProfile(res, db, patient_id) {
     `
     SELECT
       P.patient_id, P.email_address, P.first_name, P.last_name, P.date_of_birth, P.gender, P.primary_doctor_id,
-      CI.phone_number, CI.address,
-      FI.name_on_card, FI.card_number, FI.cvv, FI.expiration_date,
-      EC.contact_name, EC.contact_number, EC.contact_relationship,
-      II.policy_number, II.group_number
+      CI.address, CI.phone_number,
+      E.first_name AS doctor_first_name, E.last_name AS doctor_last_name
     FROM Patient P
     LEFT JOIN ContactInformation CI ON P.email_address = CI.email_address
-    LEFT JOIN Patient_FinancialInformation FI ON P.patient_id = FI.patient_id
-    LEFT JOIN Patient_EmergencyContacts EC ON P.patient_id = EC.patient_id
-    LEFT JOIN Patient_InsuranceInformation II ON P.patient_id = II.patient_id
+    LEFT JOIN Employee E on P.primary_doctor_id = E.employee_id
     WHERE P.patient_id = ${patient_id};    
-  `, (err, db_res) => {
+    `, (err, db_res) => {
     if (err) {
       console.log(err);
 
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: 'Error when getting user profile' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+function getPatientFinancial(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_FinancialInformation WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user financials' }));
       return;
     }
     res.writeHead(200, headers);
@@ -150,80 +163,26 @@ async function getPatientId(db, email) {
   });
 }
 
+
 async function postPatientProfile(req, res, db) {
   try {
     const body = await PostData(req);
 
     const {
-      patient_id, email_address, phone_number, address,
-      name_on_card, card_number, cvv, expiration_date,
-      contact_name, contact_relationship, contact_number,
-      policy_number, group_number
+      patient_id, email_address, phone_number, address
     } = JSON.parse(body);
 
-    console.log(patient_id, email_address, phone_number, address,
-      name_on_card, card_number, cvv, expiration_date,
-      contact_name, contact_relationship, contact_number,
-      policy_number, group_number);
+    console.log(patient_id, email_address, phone_number, address);
     db.query(`
       UPDATE ContactInformation SET phone_number = '${phone_number}', address = '${address}' WHERE email_address = '${email_address}';
-  `, (err, result1) => {
+  `, (err, result) => {
       if (err) {
-        // Handle error for the first query
         res.writeHead(400, headers);
         res.end(JSON.stringify({ message: err }));
-      } else {
-        // Execute the second query
-        db.query(`
-              INSERT INTO Patient_FinancialInformation (patient_id, name_on_card, card_number, cvv, expiration_date)
-              VALUES (${patient_id}, '${name_on_card}', '${card_number}', '${cvv}', '${expiration_date}')
-              ON DUPLICATE KEY UPDATE
-                  name_on_card = VALUES(name_on_card),
-                  card_number = VALUES(card_number),
-                  cvv = VALUES(cvv),
-                  expiration_date = VALUES(expiration_date);
-          `, (err, result2) => {
-          if (err) {
-            // Handle error for the second query
-            res.writeHead(400, headers);
-            res.end(JSON.stringify({ message: err }));
-          } else {
-            // Execute the third query
-            db.query(`
-                      INSERT INTO Patient_EmergencyContacts (patient_id, contact_name, contact_relationship, contact_number)
-                      VALUES (${patient_id}, '${contact_name}', '${contact_relationship}', '${contact_number}')
-                      ON DUPLICATE KEY UPDATE
-                          contact_name = VALUES(contact_name),
-                          contact_relationship = VALUES(contact_relationship),
-                          contact_number = VALUES(contact_number);
-                  `, (err, result3) => {
-              if (err) {
-                // Handle error for the third query
-                res.writeHead(400, headers);
-                res.end(JSON.stringify({ message: err }));
-              } else {
-                // Execute the fourth query
-                db.query(`
-                              INSERT INTO Patient_InsuranceInformation (patient_id, policy_number, group_number)
-                              VALUES (${patient_id}, '${policy_number}', '${group_number}')
-                              ON DUPLICATE KEY UPDATE
-                                  policy_number = VALUES(policy_number),
-                                  group_number = VALUES(group_number);
-                          `, (err, result4) => {
-                  if (err) {
-                    // Handle error for the fourth query
-                    res.writeHead(400, headers);
-                    res.end(JSON.stringify({ message: err }));
-                  } else {
-                    // All queries executed successfully
-                    res.writeHead(200, headers);
-                    res.end(JSON.stringify({ message: "All queries executed successfully" }));
-                  }
-                });
-              }
-            });
-          }
-        });
+      }
+      else {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: "Patient profile saved!" }));
       }
     });
 
@@ -233,6 +192,7 @@ async function postPatientProfile(req, res, db) {
     res.end(JSON.stringify({ 'message': error }));
   }
 }
+
 
 function getPatientMedicalHistory(res, db, patient_id) {
   console.log(`getting medical history for patient: ${patient_id}`);
@@ -354,4 +314,65 @@ function getPatientAppointmentHistory(res, db, patient_id) {
   });
 }
 
-module.exports = { createPatientAccount, loginPatient, getPatientId, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory };
+function getPrimaryDoctorForPatient(res, db, patient_id) {
+  console.log('getting primary doctor');
+
+  const query = 'SELECT P.primary_doctor_id as employee_id, D.first_name, D.last_name FROM Patient AS P, Employee AS D WHERE patient_id=? AND D.employee_id=P.primary_doctor_id';
+
+  db.query(query, [patient_id], (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user appointments' }));
+      return;
+    }
+
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+
+  console.log('successfully got primary doctor');
+}
+
+async function updatePrimaryDoctor(req, res, db) {
+  try {
+    const body = await PostData(req);
+    const { patient_id, primary_doctor_id } = JSON.parse(body);
+
+    const msg = await new Promise((resolve, reject) => {
+      const query = 'UPDATE Patient SET primary_doctor_id=? WHERE patient_id=?';
+
+      db.query(query, [primary_doctor_id, patient_id], (err, db_res) => {
+        if (err) {
+          console.log(`error updating primary doctor: ${err}`);
+
+          reject('Could not update primary doctor for patient');
+        }
+
+        resolve('Successfully updated primary doctor');
+      });
+
+    });
+  
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: msg }));
+  } catch(err) {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
+}
+
+module.exports = { 
+  createPatientAccount,
+  loginPatient,
+  getPatientId,
+  getPatientProfile,
+  postPatientProfile,
+  getPatientFinancial,
+  getPatientMedicalHistory,
+  updatePatientMedicalHistory,
+  getPatientAppointmentHistory,
+  getPrimaryDoctorForPatient,
+  updatePrimaryDoctor
+};

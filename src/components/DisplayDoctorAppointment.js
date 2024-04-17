@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 function DisplayDoctorAppointment(){
   const [doctor, setDoctor] = useState([{"first_name": "test", "last_name": "test", "email_address": "test@email.com", "title":"doctor"}]);
-  const [appointments, setAppointments] = useState([{"first_name":"patient_t", "last_name":"patient_last", "appointment_date":"", "appointment_time":"", "clinic_name":"clinic"}]);
+  const [appointments, setAppointments] = useState([{"patient_id": 0, "first_name":"patient_t", "last_name":"patient_last", "appointment_date":"", "appointment_time":"", "clinic_name":"clinic"}]);
   const { doctor_id } = useParams();
 
   const fetchDoctorInfo = () => {
@@ -41,20 +41,17 @@ function DisplayDoctorAppointment(){
           return;
         }
 
+        console.log(data.message);
         console.log(`Appointments: ${data.message}`);
 
-        setAppointments(data.message);
+        const fixDate = data.message.map((app) => ({
+          ...app,
+          appointment_date: app.appointment_date.split('T')[0],
+        }));
         
-        /*
-          appointmentRef.current = appointments.map(appointment => ({
-            ...appointment,
-            appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
 
-          }));
-        */
-
-          //appointmentRef.current = data.message;
-        //setAppointment(formatAppointment);
+        setAppointments(fixDate);
+        
       });
     });
   }
@@ -83,25 +80,29 @@ function DisplayDoctorAppointment(){
       
       <h2>Appointments</h2>
     
-      <div className="container">
-        <table className="table table-stripped" style={{ width: 100+ 'em'}}>
+      <div className="container-fluid">
+        <table className="table table-stripped">
           <thead>
             <tr>
-              <th>Patient F Name</th>
-              <th>Patient L Name</th>
+              <th>Patient Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
-              <th>Clinic Address</th>
+              <th>Clinic Name</th>
             </tr>
           </thead>
                 
           <tbody>
             {appointments.map((app, index) => (
               <tr key={index}>
-                <td>{`${app.first_name}`}</td>
-                <td>{`${app.last_name}`}</td>
+                <td>
+                  <a href={
+                    (localStorage.getItem('UserType') === 'Doctor') ? `/doctor/patient_medical_history/${app.patient_id}` : `/doctor/appointment_calendar/${doctor_id}`
+                  }>
+                    {app.first_name} {app.last_name}
+                  </a>
+                </td>
                 <td>{`${app.appointment_date}`}</td>
-                <td>{`${app.appointment_time}`}</td>
+                <td>{`${app.time}`}</td>
                 <td>{`${app.clinic_name}`}</td>
               </tr>
             ))}
