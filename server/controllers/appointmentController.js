@@ -151,6 +151,7 @@ async function availableAppointments(req, res, db) {
     const curDate = new Date();
     const appointmentDate = new Date(date.replace('-', '/'));
 
+    console.log(curDate, appointmentDate);
     console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString()}, curDate: ${curDate.toLocaleDateString()}`);
 
     const sameDateAppointment = (appointmentDate.toLocaleDateString() === curDate.toLocaleDateString());
