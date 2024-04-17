@@ -54,9 +54,46 @@ function PatientFinancial() {
                     </div>
                 </div>
 
-                <form id="FinancialForm">
+                <div id="FinancialCards">
 
-                </form>
+                    <div className="row mt-3">
+                        <span className="h4 m-0">Patient Financial</span>
+                        
+                        <div className="row mt-3">
+                            <div className="col-4">
+                                <div className="mr-3 ml-3">
+                                    <label>Card Number</label>
+                                    <input type="text" className="form-control mt-1" id="CardNumber" value={``} readOnly />
+                                </div>
+                            </div>
+                            <div className="col-3">
+                                <div className="mr-3 ml-3">
+                                    <label>Name on Card</label>
+                                    <input type="text" className="form-control mt-1" id="NameOnCard" value={``} readOnly />
+                                </div>
+                            </div>
+                            <div className="col-3">
+                                <div className="mr-3 ml-3">
+                                    <label>Expiration Date (mm/yy)</label>
+                                    <input type="text" className="form-control mt-1" id="ExpirationDate" value={``} readOnly />
+                                </div>
+                            </div>
+                            <div className="col-1">
+                                <div className="mr-3 ml-3">
+                                    <label>CVV</label>
+                                    <input type="text" className="form-control mt-1" id="CVV" value={``} readOnly />
+                                </div>
+                            </div>
+                            <div className="col-1">
+                            <button type="button" className="float-end" id="RemoveButton">❌</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    
+                </div>
+
 
                 <div className="row mt-3">
                     <div className="col-12">
@@ -65,6 +102,7 @@ function PatientFinancial() {
                 </div>
 
             </div>
+
 
         </>
     );
