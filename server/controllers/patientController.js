@@ -126,6 +126,23 @@ function getPatientProfile(res, db, patient_id) {
   });
 }
 
+function getPatientFinancial(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_FinancialInformation WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user financials' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 async function getPatientId(db, email) {
   return new Promise((resolve, reject) => {
     db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
@@ -352,6 +369,7 @@ module.exports = {
   getPatientId,
   getPatientProfile,
   postPatientProfile,
+  getPatientFinancial,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,

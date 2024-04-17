@@ -5,7 +5,7 @@ const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('.
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
 const { patientCharges } = require('./controllers/billingController');
@@ -141,6 +141,11 @@ const server = http.createServer((req, res) => {
           case /\/patient\/profile/.test(req.url):
             patient_id = req.url.split('/')[3];
             getPatientProfile(res, db, patient_id);
+            break;
+
+            case /\/patient\/financial/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientFinancial(res, db, patient_id);
             break;
 
           case /\/history_for_patient/.test(req.url):

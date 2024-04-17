@@ -5,6 +5,7 @@ import Homepage from './pages/Homepage';
 import PatientLogIn from './pages/patient/LogIn';
 import PatientSignup from './pages/patient/Signup';
 import PatientProfile from './pages/patient/Profile';
+import PatientFinancial from './pages/patient/Financial';
 import PatientHome from './pages/patient/PatientHome';
 import AppointmentHistory from './pages/patient/AppointmentHistory';
 import ViewCharges from './pages/patient/ViewCharges';
@@ -49,6 +50,7 @@ function App() {
         <Route path="/patient/login" element={<PatientLogIn />} />
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
+        <Route path="/patient/financial" element={<PatientFinancial />} />
         <Route path="/patient/appointment_history" element={<AppointmentHistory />} />
         <Route path="/patient/view_charges" element={<ViewCharges />} />
 
