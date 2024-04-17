@@ -10,6 +10,7 @@ function DisplayClinicAppointment() {
   
   // Function to fetch clinicId from backend
   const fetchClinicId = async (userId) => {
+    console.log('fetchClinicId is called');
     try {
       const requestOptions = {
         method: 'GET',
@@ -30,19 +31,14 @@ function DisplayClinicAppointment() {
     }
   };
   
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (clinicId) => {
+    console.log('fetchAppointments is called');
     console.log(clinicId);
     try {
-      const requestOptions = {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Clinic-Id': clinicId // Pass clinicId in a custom header
-        }
-      };
-      const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments`;
+      // Construct the URL with clinicId as a query parameter
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments/${clinicId}`;
   
-      const response = await fetch(url, requestOptions);
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -54,7 +50,8 @@ function DisplayClinicAppointment() {
         appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
         appointment_time: formatTime(appointment.appointment_time), // Format time
         clinicId: clinicId,
-        clinic_name: appointment.clinic_name
+        clinic_name: appointment.clinic_name,
+        status: appointment.status,
       }));
   
       setAllAppointments(modifiedAppointments);
@@ -62,7 +59,7 @@ function DisplayClinicAppointment() {
       console.error("Error fetching appointments:", error);
     }
   };
-
+  
   // Function to format time
   const formatTime = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
@@ -76,9 +73,6 @@ function DisplayClinicAppointment() {
     setFilter(event.target.value);
   };
 
-  const handleCheckboxChange = (appointmentId) => {
-    // Handle checkbox change logic here
-  };
 
   let filteredAppointments = [];
   if (filter === 'today') {
@@ -89,8 +83,6 @@ function DisplayClinicAppointment() {
     filteredAppointments = allAppointments.filter(appointment => new Date(appointment.appointment_date) > new Date());
   }
 
-  const clinicIdRef = useRef(clinicId); 
-  const allAppointmentsRef = useRef(allAppointments);
   const fetchAppointmentsRef = useRef(fetchAppointments);
   const fetchClinicIdRef = useRef(fetchClinicId);
 
@@ -99,15 +91,51 @@ function DisplayClinicAppointment() {
     if (userId) {
       fetchClinicIdRef.current(userId);
     }
-
-    if (clinicIdRef.current !== null) {
-      fetchAppointmentsRef.current();
+  
+    if (clinicId !== null) {
+      fetchAppointmentsRef.current(clinicId);
     }
+  
+  }, [clinicId]);
 
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
-    const todayAppointments = allAppointmentsRef.current.filter(appointment => appointment.appointment_date === today);
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0]; 
+    const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
     setTodayAppointments(todayAppointments);
-  }, [clinicIdRef, allAppointmentsRef, fetchAppointmentsRef, fetchClinicIdRef]);
+  }, [allAppointments]);
+
+  const handleStatusChange = async (appointmentId, newStatus) => {
+    try {
+      // Update the local state first
+      const updatedAppointments = allAppointments.map(appointment => {
+        if (appointment.appointment_id === appointmentId) {
+          return { ...appointment, status: newStatus };
+        }
+        return appointment;
+      });
+      setAllAppointments(updatedAppointments);
+  
+      // Make a POST request to your endpoint
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appointment_id: appointmentId, status: newStatus })
+      };
+      const url = `${process.env.REACT_APP_BACKEND_HOST}/appointmentStatus`;
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Handle the response if needed
+      const data = await response.json();
+      console.log("Appointment status updated successfully:", data);
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      // If there's an error, you might want to revert the local state change
+      // or handle it in another way based on your requirements
+    }
+  };
+  
 
   return (
     <>
@@ -138,7 +166,7 @@ function DisplayClinicAppointment() {
               <th>Doctor Last Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
-              <th>Show</th> {/* Changed Clinic ID column to Show */}
+              <th>Status</th> 
             </tr>
           </thead>
           <tbody>
@@ -151,10 +179,16 @@ function DisplayClinicAppointment() {
                 <td>{appointment.appointment_date}</td>
                 <td>{appointment.appointment_time}</td>
                 <td>
-                  <input 
-                    type="checkbox" 
-                    onChange={() => handleCheckboxChange(appointment.id)} 
-                  />
+                <select 
+                  onChange={(e) => handleStatusChange(appointment.appointment_id, e.target.value)} 
+                  value={appointment.status}
+                  disabled={appointment.status === 'no show'} 
+                >
+                  <option value="scheduled">scheduled</option>
+                  {appointment.status === 'no show' && <option value="no show">no show</option>} 
+                  <option value="cancelled">cancelled</option>
+                  <option value="confirm">confirm</option>
+                </select>
                 </td>
               </tr>
             ))}
@@ -164,5 +198,6 @@ function DisplayClinicAppointment() {
     </>
   );
 }
+
 
 export default DisplayClinicAppointment;

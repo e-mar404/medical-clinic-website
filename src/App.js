@@ -11,6 +11,7 @@ import DoctorHomepage from './pages/employee/DoctorHomepage';
 import ReceptionistHome from './pages/employee/ReceptionistHome';
 import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
 import ReceptionistBilling from './pages/employee/ReceptionistBilling';
+import ReceptionistReferral from './pages/employee/ReceptionistReferral';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
@@ -57,6 +58,7 @@ function App() {
         <Route path='/receptionist' element={<ReceptionistHome />} />
         <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
         <Route path='/receptionist/Billing' element={<ReceptionistBilling />} />
+        <Route path='/receptionist/referral' element={<ReceptionistReferral />} /> 
         
 
         <Route path='/doctor' element={<DoctorHomepage />} />
