@@ -104,6 +104,7 @@ function Navbar() {
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a className="dropdown-item" href="/patient/appointment_history">Appointment History</a></li>
               <li><a className="dropdown-item" href="/patient/profile">Profile Information</a></li>
+              <li><a className="dropdown-item" href="/patient/view_charges">View Charges</a></li>
               <div className="dropdown-divider"></div>
               <li><a className="dropdown-item" href="/make_appointment">Schedule Appointment</a></li>
             </ul>
