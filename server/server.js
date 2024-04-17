@@ -5,7 +5,7 @@ const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('.
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
 const { patientCharges } = require('./controllers/billingController');
@@ -73,6 +73,10 @@ const server = http.createServer((req, res) => {
 
           case '/patient/profile':
             postPatientProfile(req, res, db);
+            break;
+
+          case '/patient/financial':
+            postPatientFinancial(req, res, db);
             break;
 
           case '/employee/login':
