@@ -150,17 +150,17 @@ async function availableAppointments(req, res, db) {
 
     const curDate = new Date();
     const appointmentDate = new Date(date.replace('-', '/'));
+    const timeOptions = { timeZone: 'America/Chicago', hour12: false };
 
     console.log(curDate, appointmentDate);
     console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString()}, curDate: ${curDate.toLocaleDateString()}`);
 
-    const sameDateAppointment = (appointmentDate.toLocaleDateString() === curDate.toLocaleDateString());
+    const sameDateAppointment = (appointmentDate.toLocaleDateString('en-US', timeOptions) === curDate.toLocaleDateString('en-US', timeOptions));
 
     if (sameDateAppointment) {
       console.log('this is a same day appointment, making sure to return only future times');
 
       availableTimes = baseTimes.reduce((acc, time, _index)  => {
-        const timeOptions = { timeZone: 'America/Chicago', hour12: false };
         const curTime = curDate.toLocaleTimeString('en-US', timeOptions).slice(0,5);
         
         console.log(`comparing curTime:${curTime} < time: ${time} = ${curTime < time}`);
