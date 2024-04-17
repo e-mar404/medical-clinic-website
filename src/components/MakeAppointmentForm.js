@@ -17,6 +17,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     patientEmail: patientEmail,
   });
   const clinicsRef = useRef(clinics);
+  const timeOptions = { timeZone: 'America/Chicago', hour12: false };
 
   const getDateString = (date) => {
     return `${date.getFullYear()}-0${date.getMonth()+1}-${date.getDate()}`;
@@ -115,13 +116,15 @@ const MakeAppointmentForm = ({ patientEmail }) => {
 
       return updatedData;
     });
-
   };
 
   const handleDateChange = (date) => {
+    const time = date.toLocaleTimeString('en-US', timeOptions).slice(0,5);
+
     setFormData(prevData => {
       const updatedData = { 
         ...prevData, 
+        'time': time, 
         'date': date
       }
 
@@ -130,7 +133,15 @@ const MakeAppointmentForm = ({ patientEmail }) => {
       return updatedData;
     });
   };
-  
+ 
+  const filterAppointmentTimes = (time) => {
+    const curDate = new Date();
+    const selectedDate = new Date(time);
+
+
+    return curDate.getTime() < selectedDate.getTime();
+  }
+
   const nav = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -218,6 +229,9 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               onChange={handleDateChange}
               dateFormat="yyyy-MM-dd"
               minDate={subDays(new Date(), 0)}
+              timeIntervals={5}
+              showTimeSelect
+              filterTime={filterAppointmentTimes}
               showIcon
               toggleCalendarOnIconClick
               required
