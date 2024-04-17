@@ -21,8 +21,46 @@ function PatientFinancial() {
                             alert(data.error);
                             return;
                         }
+                        let cardHolder = document.querySelector("#cardHolder");
 
-                        console.log(data.message);
+                        data.message.forEach(card => {
+                            let newCard = document.createElement('div');
+                            newCard.id = `${card.card_number}`;
+                            newCard.classList.add('row', 'mt-3');
+                            newCard.innerHTML =
+                            `
+                            <div class="col-4">
+                                <div class="mr-3 ml-3">
+                                    <label>Card Number</label>
+                                    <input type="text" class="form-control mt-1" id="CardNumber" value='${card.card_number}' readOnly />
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mr-3 ml-3">
+                                    <label>Name on Card</label>
+                                    <input type="text" class="form-control mt-1" id="NameOnCard" value='${card.name_on_card}' readOnly />
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mr-3 ml-3">
+                                    <label>Expiration Date (mm/yy)</label>
+                                    <input type="text" class="form-control mt-1" id="ExpirationDate" value='${card.expiration_date}' readOnly />
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <div class="mr-3 ml-3">
+                                    <label>CVV</label>
+                                    <input type="text" class="form-control mt-1" id="CVV" value='${card.cvv}' readOnly />
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="float-end" id="RemoveButton">❌</button>
+                            </div>
+                            `;
+
+                            cardHolder.appendChild(newCard);
+                            console.log(data.message);
+                        })
                     });
                 });
             }
@@ -56,9 +94,9 @@ function PatientFinancial() {
 
                 <div id="FinancialCards">
 
-                    <div className="row mt-3">
+                    <div className="row mt-3" id="cardHolder">
                         <span className="h4 m-0">Patient Financial</span>
-                        
+
                         <div className="row mt-3">
                             <div className="col-4">
                                 <div className="mr-3 ml-3">
@@ -85,13 +123,13 @@ function PatientFinancial() {
                                 </div>
                             </div>
                             <div className="col-1">
-                            <button type="button" className="float-end" id="RemoveButton">❌</button>
+                                <button type="button" className="float-end" id="RemoveButton">❌</button>
                             </div>
                         </div>
-                        
+
                     </div>
 
-                    
+
                 </div>
 
 
