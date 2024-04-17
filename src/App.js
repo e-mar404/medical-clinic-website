@@ -62,6 +62,7 @@ function App() {
         <Route path='/receptionist/Billing' element={<ReceptionistBilling />} />
         
         <Route path='/nurse' element={<NurseHomepage />} />
+        <Route path='/nurse/clinic_appointments' element={<ViewClinicAppointments />} />
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/appointment_calendar/:doctor_id' element={<ViewDoctorAppointments />} />
