@@ -38,16 +38,16 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
   });
 }
 
-async function getClinicAppointments(res, db, clinicId) {
+async function getClinicAppointments(res, db, clinic_id) {
   try {
-    console.log('Clinic ID:', clinicId); // Log clinic ID
+    console.log('Clinic ID:', clinic_id); // Log clinic ID
     
     // Fetch clinic details from Clinic table
     const clinicQuery = 'SELECT clinic_name FROM Clinic WHERE clinic_id = ?';
-    const [clinicResult] = await db.promise().query(clinicQuery, [clinicId]);
+    const [clinicResult] = await db.promise().query(clinicQuery, [clinic_id]);
     const clinicName = clinicResult[0].clinic_name;
 
-    db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time FROM Appointment WHERE clinic_id = ?', [clinicId], async (err, results) => {
+    db.query('SELECT doctor_id, patient_id, appointment_date, appointment_time, appointment_status, appointment_id FROM Appointment WHERE clinic_id = ?', [clinic_id], async (err, results) => {
       if (err) {
         console.error(err);
         res.writeHead(500, headers);
@@ -56,7 +56,7 @@ async function getClinicAppointments(res, db, clinicId) {
         console.log('Fetched appointments:', results); // Log fetched appointments
 
         const appointmentsWithDetails = await Promise.all(results.map(async appointment => {
-          const { doctor_id, patient_id, appointment_date, appointment_time } = appointment;
+          const { doctor_id, patient_id, appointment_date, appointment_time, appointment_status, appointment_id} = appointment;
 
           const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
@@ -76,7 +76,9 @@ async function getClinicAppointments(res, db, clinicId) {
               last_name: patientResult[0].last_name
             },
             appointment_date,
-            appointment_time
+            appointment_time,
+            status: appointment_status,
+            appointment_id,
           };
         }));
 
