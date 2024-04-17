@@ -63,26 +63,28 @@ export default function SetPrimaryDoctor({ patient_id }) {
           return;
         }
 
-        setDoctors(data.message);
+        alert(data.message);
       });
     });
   }
-
-  const fetchDoctorsRef= useRef(fetchDoctors);
-  const fetchPrimaryDoctorRef= useRef(fetchPrimaryDoctor);
-
-  useEffect(() => {
-    fetchPrimaryDoctorRef.current();
-    fetchDoctorsRef.current();
-  }, [fetchPrimaryDoctorRef, fetchDoctorsRef]);
- 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
     console.log(`new primary doctor ${newPrimaryDoctor}`);
 
     updatePrimaryDoctor();
+    window.location.reload();
   };
+  
+  const fetchDoctorsRef= useRef(fetchDoctors);
+  const fetchPrimaryDoctorRef= useRef(fetchPrimaryDoctor);
+
+  useEffect(() => {
+    console.log('use effect called');
+    fetchPrimaryDoctorRef.current();
+    fetchDoctorsRef.current();
+  }, [fetchPrimaryDoctorRef, fetchDoctorsRef]);
 
   return (
     <>
@@ -92,12 +94,13 @@ export default function SetPrimaryDoctor({ patient_id }) {
         <label className="d-flex">Set new primary doctor:</label>
         <select
           name="doctor_id"
+          defaultValue={-1}
           onChange={handleInputChange}
           required
           >
-          <option key={0} name='default' value={-1} disabled>New primary doctor</option>
+          <option key={0} name='default' value={-1} disabled>Change primary doctor</option>
             {doctors.map((doctor) => (
-                <option key={doctor.employee_id} name='doctor' value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
+              <option key={doctor.employee_id} name='doctor' value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
             ))}
         </select>
 
