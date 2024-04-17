@@ -83,8 +83,6 @@ function DisplayClinicAppointment() {
     filteredAppointments = allAppointments.filter(appointment => new Date(appointment.appointment_date) > new Date());
   }
 
-  const clinicIdRef = useRef(clinicId); 
-  const allAppointmentsRef = useRef(allAppointments);
   const fetchAppointmentsRef = useRef(fetchAppointments);
   const fetchClinicIdRef = useRef(fetchClinicId);
 
@@ -94,14 +92,18 @@ function DisplayClinicAppointment() {
       fetchClinicIdRef.current(userId);
     }
   
-    if (clinicIdRef.current !== null) {
-      fetchAppointmentsRef.current(clinicIdRef.current);
+    if (clinicId !== null) {
+      fetchAppointmentsRef.current(clinicId);
     }
   
-    const today = new Date().toISOString().split('T')[0];
-    const todayAppointments = allAppointmentsRef.current.filter(appointment => appointment.appointment_date === today);
+  }, [clinicId]);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0]; 
+    const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
     setTodayAppointments(todayAppointments);
-  }, [fetchClinicIdRef, fetchAppointmentsRef, clinicIdRef, allAppointmentsRef]);
+  }, [allAppointments]);
+
 
   const handleStatusChange = async (appointmentId, newStatus) => {
     try {
@@ -181,9 +183,10 @@ function DisplayClinicAppointment() {
                 <select 
                   onChange={(e) => handleStatusChange(appointment.appointment_id, e.target.value)} 
                   value={appointment.status}
-                 >
+                  disabled={appointment.status === 'no show'} 
+                >
                   <option value="scheduled">scheduled</option>
-                  <option value="no show">no show</option>
+                  {appointment.status === 'no show' && <option value="no show">no show</option>} 
                   <option value="cancelled">cancelled</option>
                   <option value="confirm">confirm</option>
                 </select>

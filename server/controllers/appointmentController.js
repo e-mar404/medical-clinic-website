@@ -40,6 +40,7 @@ async function scheduleAppoinment(db, clinicId, doctorId, patientId, date, time)
 
 async function getClinicAppointments(res, db, clinic_id) {
   try {
+
     console.log('Clinic ID:', clinic_id); // Log clinic ID
     
     // Fetch clinic details from Clinic table

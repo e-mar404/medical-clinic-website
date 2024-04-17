@@ -18,7 +18,7 @@ function ReceptionistHome() {
           <div className="col-md-4">
             <HomeCard 
               name="Referrals"
-              page_link="/doctor/referral" 
+              page_link="/receptionist/referral" 
               icon="fa-user-md"/>
           </div>
 

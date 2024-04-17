@@ -7,8 +7,8 @@ const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
-const { createReferral } = require('./controllers/referralController');
-const { patientCharges } = require('./controllers/billingController');
+const { createReferral, getReferralDataForReceptionist } = require('./controllers/referralController');
+const { patientCharges, StoreBillPayment } = require('./controllers/billingController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -119,6 +119,11 @@ const server = http.createServer((req, res) => {
             employeeTransfer(req, res, db);
             break;
 
+          case '/ReceptionistPayBill': 
+            StoreBillPayment(req, res, db); 
+            break;
+        
+          
           default:
             res.writeHead(404, headers);
             res.end(JSON.stringify({ message: 'Route not found' }));
@@ -129,6 +134,12 @@ const server = http.createServer((req, res) => {
 
       case 'GET': 
         switch (true){
+
+          case /referralReceptionist/.test(req.url):
+            console.log('hello from server ');
+            getReferralDataForReceptionist(res, db);
+            break;
+
           case /patientBilling/.test(req.url):
             patientCharges(req, res, db);
             break;
@@ -197,7 +208,8 @@ const server = http.createServer((req, res) => {
             getEmployeesByClinic(res, db, clinic_id, role);
             break;
 
-          case /\/clinicAppointments\/\d+/.test(req.url):
+
+            case /\/clinicAppointments\/\d+/.test(req.url):
               console.log('hell from clinic appointment servver');
               const clinicId = req.url.split('/')[2];
               getClinicAppointments(res, db, clinicId);
