@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navbar from '../../components/Navbar';
 
 var FetchedCards = false; // Condition to ensure the fetch is ran only once
@@ -76,6 +76,8 @@ function PatientFinancial() {
         });
     }
 
+    const postFunctionRef = useRef(postFunction);
+    
     useEffect(() => {
         const getMethod = {
             method: 'GET',
@@ -134,7 +136,7 @@ function PatientFinancial() {
                             console.log(data.message);
                         })
                         document.querySelectorAll(".RemoveButton").forEach(button => {
-                            button.addEventListener("click", postFunction);
+                            button.addEventListener("click", postFunctionRef.current);
                         });                        
                     });
                 });
@@ -142,7 +144,7 @@ function PatientFinancial() {
         }
 
         fetchFinancial();
-    }, []);
+    }, [postFunctionRef]);
 
     return (
         <>
