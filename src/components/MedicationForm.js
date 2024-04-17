@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function PrescribeMedicationForm({ patient_id, doctor_id }) {
+function MedicationForm({ patient_id, doctor_id }) {
   const [medications, setMedications] = useState([]);
   const [message, setMessage] = useState('');
-  const canPresribe = localStorage.getItem('UserType') === 'Doctor';
+  const isDoctor = localStorage.getItem('UserType') === 'Doctor';
 
   const prescribeMedication = (medication) => {
     console.log(medication);
@@ -156,7 +156,7 @@ function PrescribeMedicationForm({ patient_id, doctor_id }) {
                 />
             </div>
       
-          {canPresribe && <div className="col-md-1 d-flex align-items-end">
+          {isDoctor && <div className="col-md-1 d-flex align-items-end">
             <button
               type="button"
               className="btn btn-danger"
@@ -168,7 +168,7 @@ function PrescribeMedicationForm({ patient_id, doctor_id }) {
           </div>
         ))}
       
-        {canPresribe && <div className="row md-3">
+        {isDoctor && <div className="row md-3">
           <div className="col-md-1 d-grid gap-2 d-md-flex">
             <button type="button" className="btn btn-sm btn-primary" onClick={addMedication}>Add Medication</button>
           </div>
@@ -183,4 +183,4 @@ function PrescribeMedicationForm({ patient_id, doctor_id }) {
   );
 }
 
-export default PrescribeMedicationForm;
+export default MedicationForm;
