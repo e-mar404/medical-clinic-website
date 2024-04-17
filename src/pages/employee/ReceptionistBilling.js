@@ -3,7 +3,8 @@ import Navbar from '../../components/Navbar';
 
 const ReceptionistBilling = () => {
     const [charges, setCharges] = useState([]);
-    const [paymentAmount, setPaymentAmount] = useState('');
+    // if not being used pls remove 
+    // const [paymentAmount, setPaymentAmount] = useState('');
 
     useEffect(() => {
         const fetchBillingData = async () => {
