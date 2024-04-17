@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import MedicationForm from './MedicationForm.js';
+import SetPrimaryDoctor from './SetPrimaryDoctor.js';
 
 function MedicalHistoryForm() {
   const { patient_id } = useParams();
-  console.log(patient_id);
 
   const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
   const patientMedicalHistoryRef = useRef();
@@ -40,7 +40,6 @@ function MedicalHistoryForm() {
 
     fetch(`${process.env.REACT_APP_BACKEND_HOST}/update_patient_medical_history`, requestOptions).then((response) => {
       response.json().then((data) => {
-        console.log(data);
 
         if (response.status !== 200) {
           alert(data.error);
@@ -63,8 +62,6 @@ function MedicalHistoryForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(patientMedicalHistory);
 
     updatePatientMedicalHistory();
   };
@@ -110,6 +107,8 @@ function MedicalHistoryForm() {
       </form>
       
       <MedicationForm patient_id={patient_id} doctor_id={localStorage.getItem('UserId')} />
+      
+      <SetPrimaryDoctor patient_id={patient_id} /> 
     </>
   );
 }

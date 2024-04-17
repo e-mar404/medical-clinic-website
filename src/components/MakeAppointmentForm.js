@@ -186,7 +186,9 @@ const MakeAppointmentForm = ({ patientEmail }) => {
         }
 
         alert(data.message);
-        nav('/', {});
+        
+        const path = (localStorage.getItem('UserType') === 'Patient') ? '/patient' : '/receptionist';
+        nav(path, {});
       });
     });
   };
