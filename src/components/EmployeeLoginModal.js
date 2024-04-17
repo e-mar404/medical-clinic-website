@@ -39,8 +39,13 @@ function EmployeeLoginModal() {
             return;
           }
 
-          if (['Doctor', 'Nurse'].includes(role)){
+          if (role === 'Doctor'){
             nav('/doctor', {});
+            return;
+          }
+
+          if (role === 'Nurse') {
+            nav('/nurse', {});
             return;
           }
 

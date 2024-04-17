@@ -25,7 +25,7 @@ function Navbar() {
         </ul>
       )
     }
-    else if (localStorage.getItem("UserType") === 'Doctor' || localStorage.getItem("UserType") === 'Nurse') {
+    else if (localStorage.getItem("UserType") === 'Doctor') {
       return (
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
@@ -33,8 +33,15 @@ function Navbar() {
           </li>
         </ul>
       )
-    }
-    else if (localStorage.getItem("UserType") === 'Administrator') {
+    } else if (localStorage.getItem('UserType') === 'Nurse') {
+      return (
+        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <li className="nav-item">
+            <a className="nav-link" aria-current="page" href="/nurse">Nurse Home</a>
+          </li>
+        </ul>
+      )
+    } else if (localStorage.getItem("UserType") === 'Administrator') {
       return (
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import PrescribeMedicationForm from './PrescribeMedicationForm.js';
+import MedicationForm from './MedicationForm.js';
 
 function MedicalHistoryForm() {
   const { patient_id } = useParams();
@@ -109,7 +109,7 @@ function MedicalHistoryForm() {
         </div>
       </form>
       
-      <PrescribeMedicationForm patient_id={patient_id} doctor_id={localStorage.getItem('UserId')} />
+      <MedicationForm patient_id={patient_id} doctor_id={localStorage.getItem('UserId')} />
     </>
   );
 }
