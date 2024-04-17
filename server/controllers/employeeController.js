@@ -240,7 +240,7 @@ function getPatientsOf(res, db, doctor_id) {
 async function getAppointments(res, db, empId){
   try {
     // ADD THE QUERY FOR ALL APPOINTMENTS 
-    db.query(`SELECT DISTINCT P.first_name, P.last_name, A.appointment_date, A.appointment_time, C.clinic_name 
+    db.query(`SELECT DISTINCT P.first_name, P.last_name, A.appointment_date, TIME_FORMAT (A.appointment_time, '%h: %i %p') AS time, C.clinic_name 
     FROM Patient AS P, Employee AS E, Appointment AS A, Clinic AS C
     WHERE A.patient_id = P.patient_id AND A.doctor_id = '${empId}' AND A.clinic_id = C.clinic_id;`, (err, db_res) => {
         if (err) {
