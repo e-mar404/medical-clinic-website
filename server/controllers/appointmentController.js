@@ -151,7 +151,9 @@ async function availableAppointments(req, res, db) {
     const curDate = new Date();
     const appointmentDate = new Date(date.replace('-', '/'));
 
-    const sameDateAppointment = (appointmentDate.getDate() === curDate.getDate());
+    console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString()}, curDate: ${curDate.toLocaleDateString()}`);
+
+    const sameDateAppointment = (appointmentDate.toLocaleDateString() === curDate.toLocaleDateString());
 
     if (sameDateAppointment) {
       console.log('this is a same day appointment, making sure to return only future times');
