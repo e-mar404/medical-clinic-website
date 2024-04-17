@@ -182,10 +182,11 @@ const server = http.createServer((req, res) => {
             getEmployeesByClinic(res, db, clinic_id, role);
             break;
 
-          case /clinicAppointments/.test(req.url):
-            clinic_id = req.url.split('/')[2];
-            getClinicAppointments(res, db, clinic_id);
-            break;
+          case /\/clinicAppointments\/\d+/.test(req.url):
+              console.log('hell from clinic appointment servver');
+              const clinicId = req.url.split('/')[2];
+              getClinicAppointments(res, db, clinicId);
+              break;      
 
           case /get_clinics/.test(req.url):
             getClinics(res, db);
