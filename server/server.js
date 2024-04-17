@@ -2,12 +2,13 @@ const http = require('http');
 const mysql = require('mysql2');
 
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist } = require('./controllers/appointmentController');
-const { getClinics } = require('./controllers/clinicController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
+const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
 const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
+const { patientCharges } = require('./controllers/billingController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -98,6 +99,10 @@ const server = http.createServer((req, res) => {
             createAppointment(req, res, db);
             break;
 
+          case '/appointmentStatus':
+            updateAppointmentStatus(req, res, db);
+            break;
+
           case '/available_appointments':
             availableAppointments(req, res, db);
             break;
@@ -120,9 +125,12 @@ const server = http.createServer((req, res) => {
 
       case 'GET': 
         switch (true){
+          case /patientBilling/.test(req.url):
+            patientCharges(req, res, db);
+            break;
+            
           case /reports/.test(req.url): 
             const reportType = req.url.split('/')[2];
-
             generateReportFor(res, db, reportType);
             break;
 
@@ -236,6 +244,12 @@ const server = http.createServer((req, res) => {
           getClinicEmployees(res, db, adminClinic);
           break;
 
+        case /getClinicInfo/.test(req.url):
+          const adminClinicID = req.url.split('/')[2];
+          getClinicName(res, db, adminClinicID);
+          //res.writeHead(500, headers);
+          //res.end(JSON.stringify({ message: 'Route for clinic' }));
+          break;
 
         default:
             res.writeHead(404, headers);

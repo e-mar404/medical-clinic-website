@@ -200,4 +200,47 @@ async function scheduledAppointments(clinic_id, doctor_id, date, db) {
   });
 }
 
-module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist };  
+
+const updateAppointmentStatus = (req, res, db) => {
+  let body = '';
+
+  // Read request body
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+
+  // Parse request body
+  req.on('end', () => {
+    try {
+      const { appointment_id, status } = JSON.parse(body);
+
+      // Call function in appointmentController to update status
+      updateAppointmentStatusInDB(res, db, appointment_id, status);
+    } catch (error) {
+      console.error('Error parsing request body:', error);
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ message: 'Invalid request body' }));
+    }
+  });
+};
+
+// Function to update appointment status in the database
+const updateAppointmentStatusInDB = (res, db, appointment_id, status) => {
+  // Perform SQL update operation to update appointment status
+  const sql = `UPDATE Appointment SET appointment_status = ? WHERE appointment_id = ?`;
+  const values = [status, appointment_id];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error updating appointment status:', err);
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ message: 'Internal server error' }));
+    } else {
+      console.log('Appointment status updated successfully');
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ message: 'Appointment status updated successfully' }));
+    }
+  });
+};
+
+module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus };  

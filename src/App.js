@@ -10,6 +10,7 @@ import AppointmentHistory from './pages/patient/AppointmentHistory';
 import DoctorHomepage from './pages/employee/DoctorHomepage';
 import ReceptionistHome from './pages/employee/ReceptionistHome';
 import ReceptionitAppointment from './pages/employee/ReceptionistAppointment'
+import ReceptionistBilling from './pages/employee/ReceptionistBilling';
 import DoctorReferralsPage from './pages/employee/DoctorReferralsPage';
 import EmployeeHome from './pages/employee/EmployeeHome';
 import EmployeeLogIn from './pages/employee/EmployeeLogIn';
@@ -52,9 +53,11 @@ function App() {
         <Route path='/employee' element={<EmployeeHome />} />
         <Route path='/employee/login' element={<EmployeeLogIn />} />
     
-    ``  <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
+        <Route path='/receptionist/clinicAppointments' element ={<ViewClinicAppointments />} />
         <Route path='/receptionist' element={<ReceptionistHome />} />
         <Route path='/receptionist/makeAppointment' element={<ReceptionitAppointment />} />
+        <Route path='/receptionist/Billing' element={<ReceptionistBilling />} />
+        
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='doctor/appointment_calendar/:doctor_id' element={<ViewDoctorAppointments />} />
@@ -68,7 +71,7 @@ function App() {
  
         <Route path='/admin/employeelist/newemployee' element ={<NewEmployeeForm />} />
         <Route path='/admin/employeelist/viewappointment/:doctor_id' element ={<ViewDoctorAppointments />} />
-        <Route path='/admin/employeelist/transfer' element ={<TransferDoctor />} />
+        <Route path='/admin/employeelist/transfer/:doctor_id' element ={<TransferDoctor />} />
         <Route path="/make_appointment" element={<MakeAppointment />} /> 
 
         <Route path='/admin/report_form' element={<Reports />}/>

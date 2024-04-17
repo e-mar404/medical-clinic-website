@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker'; 
 import { subDays } from 'date-fns';
+import Navbar from "../../components/Navbar";
 import '../appointment/MakeAppointment.css';
 
 const MakeAppointmentForm = () => {
@@ -171,6 +172,7 @@ console.log('email:', email);
   
   return (
     <>
+      <Navbar />
       <div className="login-page">
         <form className="form" onSubmit={handleSubmit}>
             <label className="d-flex justify-content-center text-secondary">Clinic:</label>

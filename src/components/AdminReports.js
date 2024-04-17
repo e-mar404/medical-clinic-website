@@ -10,10 +10,11 @@ function AdminReports(){
         startDate: null,
         endDate: null,
     });
+    const admin_id = localStorage.getItem("UserEmail");
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log(name, value);
+        //console.log(name, value);
         if(name === 'reportId'){
             setTable(false);
         }
@@ -21,11 +22,11 @@ function AdminReports(){
                 ...formData,
                 [name]: value,
             })
-        console.log(formData);
+        //console.log(formData);
     };
 
     const handleSubmit = (e) => {
-        console.log('handleSubmit clicked');
+        //console.log('handleSubmit clicked');
         e.preventDefault();
 
         const formatDate ={
@@ -33,7 +34,7 @@ function AdminReports(){
             startDate: formData.startDate.toISOString().slice(0, 10),
             endDate: formData.endDate.toISOString().slice(0, 10),
         };
-        console.log(formatDate);
+        //console.log(formatDate);
         
         // get the clinic id before i send in the info and add that to query 
         const requestOptions = {
@@ -41,28 +42,28 @@ function AdminReports(){
             headers: { 'Content-Type': 'application/json' }
         };
         let clinic_id;
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/admin1@medc.org`, requestOptions).then((response) => {
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAdminClinic/${admin_id}`, requestOptions).then((response) => {
             response.json().then((data) => {
             if(response.status !== 200){
-              alert("fix admin fetch clinic");
+              alert(data.error);
               return;
             }
             clinic_id = data.message[0].primary_clinic;
-            console.log(clinic_id);
+            //console.log(clinic_id);
         
-        console.log(`checking the reportId ${formatDate.reportId} and clinic id ${clinic_id}`);
+        //console.log(`checking the reportId ${formatDate.reportId} and clinic id ${clinic_id}`);
         if(formData.reportId === '1'){
-            console.log(`in the if statement of reportId ${formatDate.reportId}`);
+            //console.log(`in the if statement of reportId ${formatDate.reportId}`);
         
-            console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
+            //console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/accounts_created/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
                     response.json().then((data) => {
                         if(response.status !== 200){
                             alert(data.error);
                             return;
                         }
-                        console.log(data.message);
-                        setUserAccounts(data.message);
+                        //console.log(data.message);
+                        //setUserAccounts(data.message);
 
                         const fixDate = data.message.map(account => ({
                             ...account,
@@ -77,10 +78,10 @@ function AdminReports(){
                 });
         }
         else if(formData.reportId === '2'){
-            console.log(`in the else statement of reportId ${formatDate.reportId}`);
-            console.log(`in the if else statement of reportId ${formatDate.reportId}`);
+            //console.log(`in the else statement of reportId ${formatDate.reportId}`);
+            //console.log(`in the if else statement of reportId ${formatDate.reportId}`);
         
-            console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
+            //console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/doctor_total/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
                     response.json().then((data) => {
                         if(response.status !== 200){
