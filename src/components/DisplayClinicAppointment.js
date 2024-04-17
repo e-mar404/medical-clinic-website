@@ -94,14 +94,14 @@ function DisplayClinicAppointment() {
       fetchClinicIdRef.current(userId);
     }
   
-    if (clinicId !== null) {
-      fetchAppointmentsRef.current(clinicId);
+    if (clinicIdRef.current !== null) {
+      fetchAppointmentsRef.current(clinicIdRef.current);
     }
   
     const today = new Date().toISOString().split('T')[0];
-    const todayAppointments = allAppointments.filter(appointment => appointment.appointment_date === today);
+    const todayAppointments = allAppointmentsRef.current.filter(appointment => appointment.appointment_date === today);
     setTodayAppointments(todayAppointments);
-  }, [clinicId]);
+  }, [fetchClinicIdRef, fetchAppointmentsRef, clinicIdRef, allAppointmentsRef]);
 
   const handleStatusChange = async (appointmentId, newStatus) => {
     try {
