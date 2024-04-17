@@ -20,26 +20,7 @@ function Navbar() {
       return (
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
-            <a className="nav-link" aria-current="page" href="/patient">Home</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Appointments</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Locations</a>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle disabled" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Services
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item" href="/">Cancer</a></li>
-              <li><a className="dropdown-item" href="/">Children's Services</a></li>
-              <li><a className="dropdown-item" href="/">Heart & Vascular</a></li>
-              <li><a className="dropdown-item" href="/">Neuroscience</a></li>
-              <li><a className="dropdown-item" href="/">Surgical Services</a></li>
-              <li><a className="dropdown-item" href="/">Transplant</a></li>
-            </ul>
+            <a className="nav-link" aria-current="page" href="/patient">Patient Home</a>
           </li>
         </ul>
       )
@@ -107,25 +88,6 @@ function Navbar() {
           <li className="nav-item">
             <a className="nav-link" aria-current="page" href="/">Home</a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Appointments</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="/">Locations</a>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle disabled" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Services
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item" href="/">Cancer</a></li>
-              <li><a className="dropdown-item" href="/">Children's Services</a></li>
-              <li><a className="dropdown-item" href="/">Heart & Vascular</a></li>
-              <li><a className="dropdown-item" href="/">Neuroscience</a></li>
-              <li><a className="dropdown-item" href="/">Surgical Services</a></li>
-              <li><a className="dropdown-item" href="/">Transplant</a></li>
-            </ul>
-          </li>
         </ul>
       )
 
@@ -140,8 +102,9 @@ function Navbar() {
               <span id="navFirstName">{localStorage.getItem("UserFirstName")}</span> <span id="navLastName">{localStorage.getItem("UserLastName")}</span><span> ({localStorage.getItem("UserType")})</span>
             </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a className="dropdown-item" href="/patient/appointment_history">Appointment History</a></li>
               <li><a className="dropdown-item" href="/patient/profile">Profile Information</a></li>
-              <li><a className="dropdown-item disabled" href="/">Medical History</a></li>
+              <li><a className="dropdown-item" href="/patient/view_charges">View Charges</a></li>
               <div className="dropdown-divider"></div>
               <li><a className="dropdown-item" href="/make_appointment">Schedule Appointment</a></li>
             </ul>
