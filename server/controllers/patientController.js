@@ -193,6 +193,51 @@ async function postPatientProfile(req, res, db) {
   }
 }
 
+async function postPatientFinancial(req, res, db) {
+  try {
+    const body = await PostData(req);
+
+    const {
+      patient_id, card_number, name_on_card, expiration_date, cvv, action
+    } = JSON.parse(body);
+
+    if (action === "insert") {
+      db.query(`
+      INSERT INTO Patient_FinancialInformation (patient_id, card_number, name_on_card, expiration_date, cvv)
+      VALUES (${patient_id}, '${card_number}', '${name_on_card}', '${expiration_date}', '${cvv}')`, (err, result) => {
+      if (err) {
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ message: err }));
+      }
+      else {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: "Patient credit card added!" }));
+      }
+    });
+    }
+    else {
+      console.log(patient_id, card_number, name_on_card, expiration_date, cvv, action);
+      db.query(`
+      DELETE FROM Patient_FinancialInformation
+      WHERE patient_id = ${patient_id} AND card_number = '${card_number}';
+      `, (err, result) => {
+      if (err) {
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ message: err }));
+      }
+      else {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: "Patient credit card deleted!" }));
+      }
+    });
+    }
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  }
+}
+
 
 function getPatientMedicalHistory(res, db, patient_id) {
   console.log(`getting medical history for patient: ${patient_id}`);
@@ -370,6 +415,7 @@ module.exports = {
   getPatientProfile,
   postPatientProfile,
   getPatientFinancial,
+  postPatientFinancial,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,

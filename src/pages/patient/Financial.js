@@ -1,9 +1,72 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
 
 var FetchedCards = false; // Condition to ensure the fetch is ran only once
 
 function PatientFinancial() {
+    const [cardNumber, setCardNumber] = useState('');
+    const [nameOnCard, setNameOnCard] = useState('');
+    const [expirationDate, setExpirationDate] = useState('');
+    const [cvv, setCVV] = useState('');
+
+    const handleCardNumberChange = (e) => {
+        setCardNumber(e.target.value);
+    };
+
+    const handleNameOnCardChange = (e) => {
+        setNameOnCard(e.target.value);
+    };
+
+    const handleExpirationDateChange = (e) => {
+        setExpirationDate(e.target.value);
+    };
+
+    const handleCVVChange = (e) => {
+        setCVV(e.target.value);
+    };
+
+    const postFunction = (e) => {
+        let vCardNumber = cardNumber;
+        let action = "insert";
+        if (e !== "AddButton") {
+            action = "delete";
+            vCardNumber = e.target.id;
+        }
+        const postMethod = {
+            method: 'POST',
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'application/json',
+                'Connection': 'keep-alive'
+            },
+            body: JSON.stringify({
+                'patient_id': localStorage.getItem("UserId"),
+                'card_number': vCardNumber,
+                'name_on_card': nameOnCard,
+                'expiration_date': expirationDate,
+                'cvv': cvv,
+                'action': action
+            })
+        };
+
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/patient/financial`, postMethod).then((response) => {
+            response.json().then((data) => {
+                if (response.status === 200) {
+                    if (action === "insert") {
+                        alert("Successfully added card!");
+                    }
+                    else {
+                        alert("Successfully deleted card!");
+                    }
+                    window.location.reload();
+                }
+                else {
+                    alert("something broke");
+                }
+            });
+        });
+    }
+
     useEffect(() => {
         const getMethod = {
             method: 'GET',
@@ -28,7 +91,7 @@ function PatientFinancial() {
                             newCard.id = `${card.card_number}`;
                             newCard.classList.add('row', 'mt-3');
                             newCard.innerHTML =
-                            `
+                                `
                             <div class="col-4">
                                 <div class="mr-3 ml-3">
                                     <label>Card Number</label>
@@ -54,13 +117,16 @@ function PatientFinancial() {
                                 </div>
                             </div>
                             <div class="col-1">
-                                <button type="button" class="float-end" id="RemoveButton">❌</button>
+                                <button type="button" style="margin-top: 32px;" class="RemoveButton" id="${newCard.id}">❌</button>
                             </div>
                             `;
 
                             cardHolder.appendChild(newCard);
                             console.log(data.message);
                         })
+                        document.querySelectorAll(".RemoveButton").forEach(button => {
+                            button.addEventListener("click", postFunction);
+                        });                        
                     });
                 });
             }
@@ -95,48 +161,77 @@ function PatientFinancial() {
                 <div id="FinancialCards">
 
                     <div className="row mt-3" id="cardHolder">
-                        <span className="h4 m-0">Patient Financial</span>
+                        <form>
+                            <div className="row mt-3">
+                                <div className="col-4">
+                                    <div className="mr-3 ml-3">
+                                        <label>Card Number</label>
+                                        <input
+                                            type="text"
+                                            className="form-control mt-1"
+                                            id="CardNumber"
+                                            value={cardNumber}
+                                            onChange={handleCardNumberChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-3">
+                                    <div className="mr-3 ml-3">
+                                        <label>Name on Card</label>
+                                        <input
+                                            type="text"
+                                            className="form-control mt-1"
+                                            id="NameOnCard"
+                                            value={nameOnCard}
+                                            onChange={handleNameOnCardChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-3">
+                                    <div className="mr-3 ml-3">
+                                        <label>Expiration Date (mm/yy)</label>
+                                        <input
+                                            type="text"
+                                            className="form-control mt-1"
+                                            id="ExpirationDate"
+                                            value={expirationDate}
+                                            onChange={handleExpirationDateChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-1">
+                                    <div className="mr-3 ml-3">
+                                        <label>CVV</label>
+                                        <input
+                                            type="text"
+                                            className="form-control mt-1"
+                                            id="CVV"
+                                            value={cvv}
+                                            onChange={handleCVVChange}
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="row mt-3">
-                            <div className="col-4">
-                                <div className="mr-3 ml-3">
-                                    <label>Card Number</label>
-                                    <input type="text" className="form-control mt-1" id="CardNumber" value={``} readOnly />
+                                <div className="col-1">
+                                    <button
+                                        type="button"
+                                        style={{ marginTop: '28px' }}
+                                        className="btn btn-primary btn float-end"
+                                        id="AddButton"
+                                        onClick={(event) => postFunction(event.target.id)}
+                                    >
+                                        Add
+                                    </button>
                                 </div>
                             </div>
-                            <div className="col-3">
-                                <div className="mr-3 ml-3">
-                                    <label>Name on Card</label>
-                                    <input type="text" className="form-control mt-1" id="NameOnCard" value={``} readOnly />
-                                </div>
-                            </div>
-                            <div className="col-3">
-                                <div className="mr-3 ml-3">
-                                    <label>Expiration Date (mm/yy)</label>
-                                    <input type="text" className="form-control mt-1" id="ExpirationDate" value={``} readOnly />
-                                </div>
-                            </div>
-                            <div className="col-1">
-                                <div className="mr-3 ml-3">
-                                    <label>CVV</label>
-                                    <input type="text" className="form-control mt-1" id="CVV" value={``} readOnly />
-                                </div>
-                            </div>
-                            <div className="col-1">
-                                <button type="button" className="float-end" id="RemoveButton">❌</button>
-                            </div>
+                        </form>
+                        <div className="row mt-4">
+                            <hr />
                         </div>
-
+                        <span className="h4 m-0">Saved Cards</span>
                     </div>
 
 
-                </div>
-
-
-                <div className="row mt-3">
-                    <div className="col-12">
-                        <button type="button" className="btn btn-primary btn float-end mt-3" id="AddButton">Add Card</button>
-                    </div>
                 </div>
 
             </div>
