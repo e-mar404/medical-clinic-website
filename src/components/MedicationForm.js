@@ -136,7 +136,7 @@ function MedicationForm({ patient_id, doctor_id }) {
 
   return (
     <>
-      <form id="ProfileForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}>
+      <form id="MedicationForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}>
         <h3>Prescribe Medications</h3>
         
         {message.includes('prescribed') && <p>{message}</p>}
