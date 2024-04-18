@@ -11,7 +11,7 @@ function NurseHomepage() {
           <div className="col-md-4">
             <HomeCard 
               name="Appointment Calendar" 
-              page_link={`/doctor/appointment_calendar/${localStorage.getItem('UserId')}`} 
+              page_link={'/nurse/clinic_appointments'} 
               icon="fa-calendar"/>
           </div>
           

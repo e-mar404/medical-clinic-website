@@ -200,5 +200,4 @@ function DisplayClinicAppointment() {
   );
 }
 
-
 export default DisplayClinicAppointment;
