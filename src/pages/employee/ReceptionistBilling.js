@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
+import BillingPDF from '../../components/BillingPDF';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const ReceptionistBilling = () => {
 
@@ -11,6 +13,8 @@ const ReceptionistBilling = () => {
     const [selectedAmount, setSelectedAmount] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [invoiceNumberFilter, setInvoiceNumberFilter] = useState('');
+    const [lastSuccessfulPayment, setLastSuccessfulPayment] = useState(null);
+
 
     useEffect(() => {
         // Filter the charges based on the search criteria, selected amount, date, and invoice number
@@ -104,6 +108,7 @@ const ReceptionistBilling = () => {
                     // Handle the response if needed
                     const data = await response.json();
                     console.log("Payment successfully processed:", data);
+                    setLastSuccessfulPayment(updatedCharges[index]); // Store the details of the last successful payment
                 } catch (error) {
                     console.error("Error processing payment:", error);
                 }
@@ -115,6 +120,7 @@ const ReceptionistBilling = () => {
         }
     }
 
+
     const handleFilterChange = (event) => {
         setSelectedAmount(event.target.value);
     };
@@ -124,30 +130,61 @@ const ReceptionistBilling = () => {
     const handleInvoiceNumberChange = (event) => {
         setInvoiceNumberFilter(event.target.value);
     };
+    console.log(lastSuccessfulPayment);
+    const handleGeneratePDF = () => {
+        // Generate the PDF content dynamically using @react-pdf/renderer
+        console.log('hello zair');
+        const pdfContent = (
+          <BillingPDF billingData={lastSuccessfulPayment ? [lastSuccessfulPayment] : []} />
+        );
+    
+        // Return a PDFDownloadLink component to trigger the download
+        return (
+          <PDFDownloadLink document={pdfContent} fileName="billing.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? 'Loading document...' : 'Download PDF'
+            }
+          </PDFDownloadLink>
+        );
+      };
+
+      const formatCurrency = (value) => {
+        // Convert value to a number
+        const numericValue = parseFloat(value);
+    
+        // Check if the numericValue is a valid number
+        if (!isNaN(numericValue)) {
+            // Format the number with two decimal places and add "$" sign
+            return `$${numericValue.toFixed(2)}`;
+        } else {
+            // If the value is not a valid number, return it as is
+            return value;
+        }
+    };
     
     return (
         <div style={{ textAlign: 'center' }}>
             <Navbar />
-         
-            <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <button>{handleGeneratePDF()}</button>
+            <div style={{ marginTop: '50px', marginBottom: '30px' }}> {/* Increased marginTop and marginBottom */}
             <input
                 type="text"
                 placeholder="Search by First Name"
                 value={searchFirstName}
                 onChange={(e) => setSearchFirstName(e.target.value)}
-                style={{ marginRight: '10px' }} // Add margin between input and select
+                style={{ marginRight: '50px' }} // Add margin between input and select
             />
             <input
                 type="text"
                 placeholder="Search by Last Name"
                 value={searchLastName}
                 onChange={(e) => setSearchLastName(e.target.value)}
-                style={{ marginRight: '10px' }} // Add margin between input and select
+                style={{ marginRight: '50px' }} // Add margin between input and select
             />
             <select
                 value={selectedAmount}
                 onChange={handleFilterChange}
-                style={{ marginRight: '10px' }} // Add margin between select and input
+                style={{ marginRight: '50px' }} // Add margin between select and input
             >
                 <option value="">Select Amount</option>
                 <option value="15">No-Show Charge</option>
@@ -158,14 +195,14 @@ const ReceptionistBilling = () => {
                 placeholder="Date (MM/DD/YYYY)"
                 value={selectedDate}
                 onChange={handleDateChange}
-                style={{ marginRight: '10px' }} // Add margin between input and select
+                style={{ marginRight: '50px' }} // Add margin between input and select
             />
             <input
                 type="text"
                 placeholder="Invoice Number"
                 value={invoiceNumberFilter}
                 onChange={handleInvoiceNumberChange}
-                style={{ marginRight: '10px' }} // Add margin between input and select
+                style={{ marginRight: '50px' }} // Add margin between input and select
             />
             </div>
             <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '80%', margin: 'auto' }}>
@@ -186,9 +223,9 @@ const ReceptionistBilling = () => {
                             <td style={{ border: '1px solid black' }}>{charge.invoice_num}</td>
                             <td style={{ border: '1px solid black' }}>{charge.patientFirstName}</td> {/* Display patient first name */}
                             <td style={{ border: '1px solid black' }}>{charge.patientLastName}</td> {/* Display patient last name */}
-                            <td style={{ border: '1px solid black' }}>{charge.amount}</td>
+                            <td style={{ border: '1px solid black' }}>{formatCurrency(charge.amount)}</td>
                             <td style={{ border: '1px solid black' }}>{charge.date_charged}</td>
-                            <td style={{ border: '1px solid black' }}>{charge.paid}</td>
+                            <td style={{ border: '1px solid black' }}>{formatCurrency(charge.paid)}</td>
                             <td style={{ border: '1px solid black' }}>
                                 <button onClick={() => handlePayment(index)}>Pay</button>
                             </td>
@@ -196,7 +233,7 @@ const ReceptionistBilling = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+        </div>        
     );
 };
 

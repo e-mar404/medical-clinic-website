@@ -133,7 +133,7 @@ function PatientFinancial() {
         }
 
         fetchFinancial();
-    }, []);
+    }, [postFunction]);
 
     return (
         <>
