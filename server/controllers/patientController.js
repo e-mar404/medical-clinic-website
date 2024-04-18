@@ -143,6 +143,23 @@ function getPatientFinancial(res, db, patient_id) {
   });
 }
 
+function getPatientEmergencyContacts(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_EmergencyContacts WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user emergency contacts' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 function getPatientInsurance(res, db, patient_id) {
   db.query(
     `
@@ -203,6 +220,52 @@ async function postPatientProfile(req, res, db) {
       }
     });
 
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  }
+}
+
+async function postPatientEmergencyContacts(req, res, db) {
+  try {
+    const body = await PostData(req);
+
+    const {
+      patient_id, contact_name, contact_number, contact_relationship, action
+    } = JSON.parse(body);
+
+    if (action === "insert") {
+      console.log(patient_id, contact_name, contact_number, contact_relationship, action);
+      db.query(`
+      INSERT INTO Patient_EmergencyContacts (patient_id, contact_name, contact_number, contact_relationship)
+      VALUES (${patient_id}, '${contact_name}', '${contact_number}', '${contact_relationship}');`, (err, result) => {
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient emergency contact added!" }));
+        }
+      });
+    }
+    else {
+      console.log(patient_id, contact_name, contact_number, contact_relationship, action);
+      db.query(`
+      DELETE FROM Patient_EmergencyContacts
+      WHERE patient_id = ${patient_id} AND contact_number = '${contact_number}';
+      `, (err, result) => {
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient emergency contact deleted!" }));
+        }
+      });
+    }
   } catch (error) {
     console.log(`patientController.js: ${error}`);
     res.writeHead(400, headers);
@@ -504,6 +567,8 @@ module.exports = {
   postPatientProfile,
   getPatientFinancial,
   postPatientFinancial,
+  getPatientEmergencyContacts,
+  postPatientEmergencyContacts,
   getPatientInsurance,
   postPatientInsurance,
   getPatientMedicalHistory,
