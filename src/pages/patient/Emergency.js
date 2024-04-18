@@ -64,7 +64,7 @@ function PatientEmergency() {
                   window.location.reload();
               }
               else {
-                  alert("something broke");
+                  alert("You cannot add a contact you already added!");
               }
           });
       });

@@ -30,8 +30,8 @@ function ViewCharges() {
                       <td>${Charge.date_charged.slice(0, 10)}</td>
                       <td>${Charge.charge_type}</td>
                       <td>${Charge.clinic_name}</td>
-                      <td>${Charge.amount}</td>
-                      <td>BLANK</td>
+                      <td>$${Charge.amount}</td>
+                      <td>${Charge.paid === 0 ? '❌' : '✅'}</td>
                     `;
                     Appointments.appendChild(newRow);
                 });
@@ -49,7 +49,8 @@ function ViewCharges() {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            <div className="h1 mx-auto text-center pt-5">Viewing Charges</div>
+          <div className="h1 mx-auto text-center pt-5">Viewing Charges</div>
+          <div className="h5 mx-auto text-center"><em>Please contact a receptionist to pay fees</em></div>
           </div>
         </div>
         <div className="row">
@@ -62,7 +63,7 @@ function ViewCharges() {
                   <th scope="col">Charge Type</th>
                   <th scope="col">Clinic Name</th>
                   <th scope="col">Amount Due</th>
-                  <th scope="col">Make a Payment</th>
+                  <th scope="col">Paid</th>
                 </tr>
               </thead>
               <tbody id="Charges">
