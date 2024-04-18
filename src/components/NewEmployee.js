@@ -4,6 +4,7 @@ import './LoginModal.css';
 function NewEmployee() {
 
   const [specialistValue, setSpecialistValue] = useState(false);
+  const [roleDoctor, setRoleDoctor] = useState(false);
   const adminID = localStorage.getItem('UserEmail'); //NEED TO FETCH THE CLINIC ID
   const [formData, setFormData] = useState({
     email: null, 
@@ -28,9 +29,17 @@ function NewEmployee() {
   const handleRoleChange = (e) => {
       //setRole(e.target.value);
       if(e.target.value === "Doctor" || e.target.value === "Nurse"){
+        if(e.target.value === "Doctor"){
+          setRoleDoctor(true);
+        }
+        else{
+        setRoleDoctor(false);
         formData.type= "Medical";
+        }
+
       }else{
         formData.type = "Staff";
+        setRoleDoctor(false);
       }
       handleInputChange(e);
   };
@@ -118,11 +127,13 @@ function NewEmployee() {
                 <option value="Receptionist">Receptionist</option>
                 <option value="Administrator">Administrator</option>
             </select>
+            { roleDoctor &&
               <select className="form-select" name="specialist" onChange={handleSpecialist} required> 
                   <option selected disabled>Specialist?</option>
                   <option value="true">Yes</option>
                   <option value="false">No</option>
               </select>
+            }
               <input type="text" name="title" placeholder="Title" onChange={handleInputChange} required/>
             <button className="submit-button" type="submit">Register</button>
          </form>
