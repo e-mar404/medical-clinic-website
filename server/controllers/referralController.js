@@ -3,10 +3,10 @@ const { headers, PostData } = require('../utils');
 async function createReferral(req, res, db) {
   try {
     const body = await PostData(req);
-    const { doctor_id, patient_id, expiration_date } = JSON.parse(body);
+    const { doctor_id, patient_id, reason_for_referral, expiration_date } = JSON.parse(body);
 
     const msg = await new Promise((resolve, reject) => {
-      db.query('INSERT INTO Referral(patient_id, doctor_id, expiration_date) VALUES(?, ?, DATE ?)', [patient_id, doctor_id, expiration_date], (err, _db_res) => {
+      db.query('INSERT INTO Referral(patient_id, doctor_id, reason_for_referral, expiration_date) VALUES(?, ?, ?, DATE ?)', [patient_id, doctor_id, reason_for_referral, expiration_date], (err, _db_res) => {
         if (err) {
           reject(err.sqlMessage);
         }
