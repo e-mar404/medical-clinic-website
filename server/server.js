@@ -5,10 +5,12 @@ const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('.
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer } = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor, updatePrimaryDoctorAfterTransfer } = require('./controllers/patientController');
+
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor, updatePrimaryDoctorAfterTransfer } = require('./controllers/patientController');
+
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
-const { createReferral } = require('./controllers/referralController');
-const { patientCharges } = require('./controllers/billingController');
+const { createReferral, getReferralDataForReceptionist } = require('./controllers/referralController');
+const { patientCharges, StoreBillPayment } = require('./controllers/billingController');
 const {
   getEmployeesByType,
   getEmployeesByClinic,
@@ -75,6 +77,18 @@ const server = http.createServer((req, res) => {
             postPatientProfile(req, res, db);
             break;
 
+          case '/patient/financial':
+            postPatientFinancial(req, res, db);
+            break;
+
+          case '/patient/emergency':
+            postPatientEmergencyContacts(req, res, db);
+            break;
+
+          case '/patient/insurance':
+            postPatientInsurance(req, res, db);
+            break;
+
           case '/employee/login':
             loginEmployee(req, res, db);
             break;
@@ -119,6 +133,11 @@ const server = http.createServer((req, res) => {
             employeeTransfer(req, res, db);
             break;
 
+          case '/ReceptionistPayBill': 
+            StoreBillPayment(req, res, db); 
+            break;
+        
+
           case '/update_all_patients':
             updatePrimaryDoctorAfterTransfer(req, res, db);
             break;
@@ -137,6 +156,12 @@ const server = http.createServer((req, res) => {
 
       case 'GET': 
         switch (true){
+
+          case /referralReceptionist/.test(req.url):
+            console.log('hello from server ');
+            getReferralDataForReceptionist(res, db);
+            break;
+
           case /patientBilling/.test(req.url):
             patientCharges(req, res, db);
             break;
@@ -149,6 +174,21 @@ const server = http.createServer((req, res) => {
           case /\/patient\/profile/.test(req.url):
             patient_id = req.url.split('/')[3];
             getPatientProfile(res, db, patient_id);
+            break;
+
+          case /\/patient\/financial/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientFinancial(res, db, patient_id);
+            break;
+
+          case /\/patient\/emergency/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientEmergencyContacts(res, db, patient_id);
+            break;
+
+          case /\/patient\/insurance/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientInsurance(res, db, patient_id);
             break;
 
           case /\/history_for_patient/.test(req.url):
@@ -200,7 +240,8 @@ const server = http.createServer((req, res) => {
             getEmployeesByClinic(res, db, clinic_id, role);
             break;
 
-          case /\/clinicAppointments\/\d+/.test(req.url):
+
+            case /\/clinicAppointments\/\d+/.test(req.url):
               console.log('hell from clinic appointment servver');
               const clinicId = req.url.split('/')[2];
               getClinicAppointments(res, db, clinicId);

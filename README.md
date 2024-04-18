@@ -6,6 +6,11 @@
 - show how they get charged if they get an appointment as a 'no show'
 - cancelling an appointment
 - show referral trigger code 
+
+```
+show create trigger mdb.Appointment_CheckForReferral;
+```
+
 - show rejection of making appointment without a valid referral
 - show successfull appointment creation with a valid referral
 - appointment history
@@ -29,6 +34,14 @@
 - login
 - making referral
 - view appointments
+- show no show appointment trigger
+
+```
+show Events from mdb;
+show create procedure mdb.check_for_no_show_appointments;
+show create trigger mdb.Appointment_ChargePatientForNoShow;
+```
+
 - update medical history for patient 
 - prescribe medication
 

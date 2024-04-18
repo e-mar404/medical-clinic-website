@@ -119,7 +119,7 @@ async function createEmployee(email, first_name, middle_name, last_name, employe
       specialistValue = 0;
     }
     db.query('INSERT INTO Employee(email_address, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [email, first_name, middle_name, last_name, employee_role, employee_type, specialist, title, primary_clinic], async (err, db_res) => {
+      [email, first_name, middle_name, last_name, employee_role, employee_type, specialistValue, title, primary_clinic], async (err, db_res) => {
         if(err) {
           reject (`createEmployee: ${err.sqlMessage}`);
         }
@@ -178,7 +178,9 @@ async function loginEmployee(req, res, db) {
 async function employeeTransfer(req, res, db){
   try {
     const body = await PostData(req);
+
     const { clinic_id, employee_id } = JSON.parse(body);
+
     
     console.log(`Transfer Employee with email ${employee_id} to clinic id: ${clinic_id}`);
   
@@ -241,7 +243,7 @@ function getPatientsOf(res, db, doctor_id) {
 async function getAppointments(res, db, empId){
   try {
     // ADD THE QUERY FOR ALL APPOINTMENTS 
-    db.query(`SELECT DISTINCT P.first_name, P.last_name, A.appointment_date, TIME_FORMAT (A.appointment_time, '%h: %i %p') AS time, C.clinic_name 
+    db.query(`SELECT DISTINCT P.patient_id, P.first_name, P.last_name, A.appointment_date, TIME_FORMAT (A.appointment_time, '%h: %i %p') AS time, C.clinic_name 
     FROM Patient AS P, Employee AS E, Appointment AS A, Clinic AS C
     WHERE A.patient_id = P.patient_id AND A.doctor_id = '${empId}' AND A.clinic_id = C.clinic_id;`, (err, db_res) => {
         if (err) {

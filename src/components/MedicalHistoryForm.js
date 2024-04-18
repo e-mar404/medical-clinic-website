@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MedicationForm from './MedicationForm.js';
 import SetPrimaryDoctor from './SetPrimaryDoctor.js';
@@ -6,8 +6,7 @@ import SetPrimaryDoctor from './SetPrimaryDoctor.js';
 function MedicalHistoryForm() {
   const { patient_id } = useParams();
 
-  const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
-  const patientMedicalHistoryRef = useRef();
+  const [patientMedicalHistory, setPatientMedicalHistory] = useState({'patient_name': '', 'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
   
   useEffect(() => {
     const requestOptions = {
@@ -29,7 +28,7 @@ function MedicalHistoryForm() {
       });
     });
 
-  }, [patientMedicalHistoryRef, patient_id]);
+  }, [patient_id]);
 
   const updatePatientMedicalHistory = () => {
     const requestOptions = {
@@ -37,6 +36,8 @@ function MedicalHistoryForm() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(patientMedicalHistory)
     };
+
+    console.log(requestOptions);
 
     fetch(`${process.env.REACT_APP_BACKEND_HOST}/update_patient_medical_history`, requestOptions).then((response) => {
       response.json().then((data) => {
@@ -54,9 +55,11 @@ function MedicalHistoryForm() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    console.log(name, value);
+
     setPatientMedicalHistory({
       ...patientMedicalHistory,
-      [name]: value,
+      [name]: value || '',
     });
   };
 
@@ -69,33 +72,54 @@ function MedicalHistoryForm() {
   return (
     <>
       <form id="ProfileForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}>
-        <span className="h4 m-0">Patient History for {patient_id}</span>
+        <span className="h4 m-0">Medical History</span>
 
         <div className="col">
           <div className="mr ml">
             <label>Name</label>
-            <input type="text" className="form-control" id="FullName" placeholder="Patient Name" readOnly />
+            <input type="text" className="form-control" id="FullName" placeholder={patientMedicalHistory.patient_name} readOnly />
           </div>
         </div>
 
         <div className="col">
           <div className="mr ml">
             <label>Conditions</label>
-            <input type="text" className="form-control" id="MedicalConditions" name="conditions" placeholder="Medical Conditions" defaultValue={patientMedicalHistory.conditions} onChange={handleInputChange}/>
+            <input 
+              type="text"
+              className="form-control"
+              id="MedicalConditions"
+              name="conditions"
+              placeholder="Medical Conditions"
+              defaultValue={patientMedicalHistory.conditions} 
+              onChange={handleInputChange}/>
           </div>
         </div>
 
         <div className="col">
           <div className="mr ml">
             <label>Allergies</label>
-            <input type="text" className="form-control" id="Allergies" defaultValue={patientMedicalHistory.allergies} />
+            <input 
+              type="text"
+              className="form-control"
+              id="MedicalConditions"
+              name="allergies"
+              placeholder="Allergies"
+              defaultValue={patientMedicalHistory.allergies} 
+              onChange={handleInputChange}/>
           </div>
         </div>
 
         <div className="col">
           <div className="mr ml">
             <label>Family History</label>
-            <input type="text" className="form-control" id="FamilyHistory" defaultValue={patientMedicalHistory.family_history}/>
+            <input 
+              type="text"
+              className="form-control"
+              id="MedicalConditions"
+              name="family_history"
+              placeholder="Family History"
+              defaultValue={patientMedicalHistory.family_history} 
+              onChange={handleInputChange}/>
           </div>
         </div>
 

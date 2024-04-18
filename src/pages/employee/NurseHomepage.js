@@ -11,18 +11,18 @@ function NurseHomepage() {
           <div className="col-md-4">
             <HomeCard 
               name="Appointment Calendar" 
-              page_link={`/doctor/appointment_calendar/${localStorage.getItem('UserId')}`} 
+              page_link={'/nurse/clinic_appointments'} 
               icon="fa-calendar"/>
           </div>
           
-          {/*This is only for styling while the update patient medical history is updated to go to the appointment calendars*/}
+          {/*This is only for styling*/}
           <div className="col-md-2"></div>
 
           <div className="col-md-4">
             <HomeCard 
-              name="Update Patient Medical History (temp)" 
-              page_link="/doctor/patient_medical_history/1" 
-              icon="fa-address-card"/>
+              name="Referrals"
+              page_link="/nurse/referral" 
+              icon="fa-user-md"/>
           </div>
         </div>
       </div>

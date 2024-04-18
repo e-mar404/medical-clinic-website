@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function SetPrimaryDoctor({ patient_id }) {
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
-  const [primaryDoctor, setPrimaryDoctor] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
+  const [primaryDoctor, setPrimaryDoctor] = useState([{'employee_id': 0, 'name': ''}]);
   const [newPrimaryDoctor, setNewPrimaryDoctor] = useState(0);
   
   const handleInputChange = (e) => {
@@ -41,8 +41,19 @@ export default function SetPrimaryDoctor({ patient_id }) {
           alert(data.error);
           return;
         }
+        
+        const msg = data.message;
 
-        setPrimaryDoctor(data.message);
+        console.log(msg);
+
+        const name = msg.includes('No primary doctor') ? msg : `Dr. ${msg[0].first_name} ${msg[0].last_name}`;
+        const employee_id = msg.includes('No primary doctor') ? msg : 0; 
+        console.log(name, employee_id);
+
+        setPrimaryDoctor({
+          'employee_id': employee_id,
+          'name': name
+        });
       });
     });
   };
@@ -63,41 +74,44 @@ export default function SetPrimaryDoctor({ patient_id }) {
           return;
         }
 
-        setDoctors(data.message);
+        alert(data.message);
       });
     });
   }
-
-  const fetchDoctorsRef= useRef(fetchDoctors);
-  const fetchPrimaryDoctorRef= useRef(fetchPrimaryDoctor);
-
-  useEffect(() => {
-    fetchPrimaryDoctorRef.current();
-    fetchDoctorsRef.current();
-  }, [fetchPrimaryDoctorRef, fetchDoctorsRef]);
- 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
     console.log(`new primary doctor ${newPrimaryDoctor}`);
 
     updatePrimaryDoctor();
+    window.location.reload();
   };
+  
+  const fetchDoctorsRef= useRef(fetchDoctors);
+  const fetchPrimaryDoctorRef= useRef(fetchPrimaryDoctor);
+
+  useEffect(() => {
+    console.log('use effect called');
+    fetchPrimaryDoctorRef.current();
+    fetchDoctorsRef.current();
+  }, [fetchPrimaryDoctorRef, fetchDoctorsRef]);
 
   return (
     <>
       <form id="MedicationForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}> 
-        <h3>Primary Doctor For Patient: Dr. {primaryDoctor[0].first_name} {primaryDoctor[0].last_name}</h3>
+        <h3>Primary Doctor For Patient: { primaryDoctor.name }</h3>
         
         <label className="d-flex">Set new primary doctor:</label>
         <select
           name="doctor_id"
+          defaultValue={-1}
           onChange={handleInputChange}
           required
           >
-          <option key={0} name='default' value={-1} disabled>New primary doctor</option>
+          <option key={0} name='default' value={-1} disabled>Change primary doctor</option>
             {doctors.map((doctor) => (
-                <option key={doctor.employee_id} name='doctor' value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
+              <option key={doctor.employee_id} name='doctor' value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
             ))}
         </select>
 
