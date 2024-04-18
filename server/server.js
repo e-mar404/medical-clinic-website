@@ -5,7 +5,7 @@ const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('.
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientInsurance, postPatientInsurance, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral, getReferralDataForReceptionist } = require('./controllers/referralController');
 const { patientCharges, StoreBillPayment } = require('./controllers/billingController');
@@ -76,6 +76,10 @@ const server = http.createServer((req, res) => {
 
           case '/patient/financial':
             postPatientFinancial(req, res, db);
+            break;
+
+          case '/patient/emergency':
+            postPatientEmergencyContacts(req, res, db);
             break;
 
           case '/patient/insurance':
@@ -164,6 +168,11 @@ const server = http.createServer((req, res) => {
           case /\/patient\/financial/.test(req.url):
             patient_id = req.url.split('/')[3];
             getPatientFinancial(res, db, patient_id);
+            break;
+
+          case /\/patient\/emergency/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientEmergencyContacts(res, db, patient_id);
             break;
 
           case /\/patient\/insurance/.test(req.url):
