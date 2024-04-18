@@ -98,7 +98,7 @@ function PatientEmergency() {
                           newCard.classList.add('row', 'mt-3');
                           newCard.innerHTML =
                           `
-                          <div class="col-4">
+                          <div class="col-5">
                               <div class="mr-3 ml-3">
                                   <label>Name</label>
                                   <input
@@ -183,7 +183,7 @@ function PatientEmergency() {
                   <div className="row mt-3" id="cardHolder">
                       <form>
                           <div className="row mt-3">
-                              <div className="col-4">
+                              <div className="col-5">
                                   <div className="mr-3 ml-3">
                                       <label>Name</label>
                                       <input
