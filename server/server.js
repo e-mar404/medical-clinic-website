@@ -1,7 +1,7 @@
 const http = require('http');
 const mysql = require('mysql2');
 
-const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
+const { generateReportFor, getNewUsersReport, generateDoctorTotal, generateClinicRevenue, getClinicInvoices, getNewUsersTotal, getTotalAppointments } = require('./controllers/reportController');
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer } = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
@@ -315,6 +315,36 @@ const server = http.createServer((req, res) => {
           const notDoctor = req.url.split('/')[3];
           getClinicGeneralDoctor(res, db, doctorClinicID, notDoctor);
           break;
+
+          case /getBillingReport/.test(req.url):
+            // needs the clinic_id, the billing info, the start date and end date
+            const billing_clinic = req.url.split('/')[2];
+            const billing_start_date = req.url.split('/')[3];
+            const billing_end_date =  req.url.split('/')[4];
+            generateClinicRevenue(res, db, billing_start_date, billing_end_date, billing_clinic);
+            break;
+          
+          case /getInvoicesReport/.test(req.url):
+            const invoice_clinic = req.url.split('/')[2];
+            const invoice_start_date = req.url.split('/')[3];
+            const invoice_end_date =  req.url.split('/')[4];
+            getClinicInvoices(res, db, invoice_start_date, invoice_end_date, invoice_clinic);
+            break;
+
+          case /new_account_total/.test(req.url):
+              const created_start_date = req.url.split('/')[2];
+              const created_end_date =  req.url.split('/')[3];
+              clinic_id = req.url.split('/')[4];
+              getNewUsersTotal(res, db, created_start_date, created_end_date, clinic_id);
+              break;
+
+          case /getTotalDoctor/.test(req.url):
+            const appointments_start_date = req.url.split('/')[2];
+            const appointments_end_date =  req.url.split('/')[3];
+            const appointments_clinic_id = req.url.split('/')[4];
+            getTotalAppointments(res, db, appointments_start_date, appointments_end_date, appointments_clinic_id);
+            break;
+
 
         default:
             res.writeHead(404, headers);

@@ -17,7 +17,10 @@ async function getClinics(res, db) {
 }
 
 async function getClinicName(res, db, adminClinicID) {
-  db.query(`SELECT DISTINCT C.clinic_name FROM Clinic AS C, EMPLOYEE AS A WHERE C.clinic_id = ${adminClinicID};`, (err, db_res) => {
+  db.query(` SELECT C.clinic_name
+          FROM CLINIC AS C
+          JOIN Employee AS E ON E.primary_clinic = C.clinic_id
+          WHERE E.email_address = '${adminClinicID}';`, (err, db_res) => {
     if (err) {
       res.writeHead(401, headers);
       res.end(JSON.stringify({ error: err }));
