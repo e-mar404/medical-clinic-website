@@ -95,7 +95,7 @@ function DisplayDoctorAppointment(){
               <tr key={index}>
                 <td>
                   <a href={
-                    (localStorage.getItem('UserType') === 'Doctor') ? `/doctor/patient_medical_history/${app.patient_id}` : `/doctor/appointment_calendar/${doctor_id}`
+                    (localStorage.getItem('UserType') === 'Doctor') ? `/medical/patient_medical_history/${app.patient_id}` : `/doctor/appointment_calendar/${doctor_id}`
                   }>
                     {app.first_name} {app.last_name}
                   </a>
