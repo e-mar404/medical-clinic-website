@@ -286,25 +286,57 @@ async function postPatientInsurance(req, res, db) {
   }
 }
 
-function getPatientMedicalHistory(res, db, patient_id) {
-  console.log(`getting medical history for patient: ${patient_id}`);
+async function getPatientName(db, patient_id) {
+  return await new Promise((resolve, reject) => {
+    const query = 'SELECT P.first_name, P.last_name FROM Patient AS P WHERE P.patient_id=?';
 
-  db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
-    if (err) {
-      console.log(err);
+    db.query(query, [patient_id], (err, db_res) => {
+      if (err) {
+        console.log(err);
 
-      res.writeHead(400, headers);
-      res.end(JSON.stringify({ error: 'Cant retrieve patients medical history' }));
-      return;
-    }
+        reject('Could not get patient information');
+      }
+
+      resolve(`${db_res[0].first_name} ${db_res[0].last_name}`);
+    });
+  });
+}
+
+async function getPatientMedicalHistory(res, db, patient_id) {
+  try {
+
+    console.log('getting patient info');
+
+    const patient_name = await getPatientName(db, patient_id);
+
+    console.log(`getting medical history for patient: ${patient_id}`);
+
+    const medicalHistory = await new Promise((resolve, reject) => {
+      db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
+        if (err) {
+          console.log(err);
+
+          reject(`Could not get patient's medical history`);
+        }
+
+        resolve((db_res.length > 0) ? db_res[0] : { conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed' });
+      });
+    });
 
     console.log('success getting medical history');
 
-    const msg = (db_res.length > 0) ? db_res[0] : { conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed' };
+    const msg = {
+      patient_name,
+      ...medicalHistory,
+    };
 
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  });
+  } catch(err) {
+
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
 }
 
 async function updatePatientMedicalHistory(req, res, db) {

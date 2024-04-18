@@ -6,7 +6,7 @@ import SetPrimaryDoctor from './SetPrimaryDoctor.js';
 function MedicalHistoryForm() {
   const { patient_id } = useParams();
 
-  const [patientMedicalHistory, setPatientMedicalHistory] = useState({'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
+  const [patientMedicalHistory, setPatientMedicalHistory] = useState({'patient_name': '', 'conditions': '', 'allergies': '', 'family_history': '', 'patient_id': patient_id });
   
   useEffect(() => {
     const requestOptions = {
@@ -72,12 +72,12 @@ function MedicalHistoryForm() {
   return (
     <>
       <form id="ProfileForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}>
-        <span className="h4 m-0">Patient History for {patient_id}</span>
+        <span className="h4 m-0">Medical History</span>
 
         <div className="col">
           <div className="mr ml">
             <label>Name</label>
-            <input type="text" className="form-control" id="FullName" placeholder="Patient Name" readOnly />
+            <input type="text" className="form-control" id="FullName" placeholder={patientMedicalHistory.patient_name} readOnly />
           </div>
         </div>
 
