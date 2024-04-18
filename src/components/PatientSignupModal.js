@@ -7,12 +7,13 @@ import './PatientSignupModal.css';
 function PatientSignupModal() {
 
   const [formData, setFormData] = useState({
-    email: null, 
+    email: null,
     phone_number: null,
     adddress: null,
     password: null,
     first_name: null,
     last_name: null,
+    gender: null,
     date_of_birth: null
   });
 
@@ -27,7 +28,7 @@ function PatientSignupModal() {
 
   const nav = useNavigate();
 
-  function registerPatient(e){
+  function registerPatient(e) {
     e.preventDefault();
 
     const requestOptions = {
@@ -45,7 +46,7 @@ function PatientSignupModal() {
           alert(data.error);
           return;
         }
-          
+
         alert("Successfully created account, you will now be signed in!");
 
         localStorage.setItem("LoggedIn", true);
@@ -66,25 +67,32 @@ function PatientSignupModal() {
         <div className="form">
           <form className="login-form" onSubmit={registerPatient}>
             <label className="d-flex text-secondary">Email</label>
-            <input type="email" name="email" placeholder="email" onChange={handleInputChange} required/>
+            <input type="email" name="email" placeholder="email" onChange={handleInputChange} required />
 
             <label className="d-flex text-secondary">Phone Number (123-456-7890)</label>
-            <input type="tel" name="phone_number" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" onChange={handleInputChange} required/>
+            <input type="tel" name="phone_number" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" onChange={handleInputChange} required />
 
             <label className="d-flex text-secondary">Address</label>
-            <input type="text" name="address" placeholder="address" onChange={handleInputChange} required/>
+            <input type="text" name="address" placeholder="address" onChange={handleInputChange} required />
 
             <label className="d-flex text-secondary">First Name</label>
-            <input type="text" name="first_name" placeholder="first name" onChange={handleInputChange} required/>
+            <input type="text" name="first_name" placeholder="first name" onChange={handleInputChange} required />
 
             <label className="d-flex text-secondary">Last Name</label>
-            <input type="text" name="last_name" placeholder="last name" onChange={handleInputChange} required/>
-    
+            <input type="text" name="last_name" placeholder="last name" onChange={handleInputChange} required />
+
+            <label className="d-flex text-secondary">Gender</label>
+            <select name="gender" onChange={handleInputChange} required>
+              <option value="">Select Gender</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+
             <label className="d-flex text-secondary">Date of Birth</label>
             <DatePicker className="w-100" selected={formData.date_of_birth} onChange={handleInputChange} maxDate={subDays(new Date(), 0)} dateFormat="yyyy-MM-dd" showIcon toggleCalendarOnIconClick required />
-            
+
             <label className="d-flex text-secondary">Password (min length: 8)</label>
-            <input type="password" name="password" placeholder="password" minLength="8" onChange={handleInputChange} required/>
+            <input type="password" name="password" placeholder="password" minLength="8" onChange={handleInputChange} required />
             <button type="submit" className="submit-button" >Register</button>
           </form>
         </div>

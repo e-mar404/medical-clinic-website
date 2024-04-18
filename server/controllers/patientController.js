@@ -4,13 +4,13 @@ async function createPatientAccount(req, res, db) {
   try {
 
     const body = await PostData(req);
-    const { email, phone_number, address, password, first_name, last_name, date_of_birth } = JSON.parse(body);
+    const { email, phone_number, address, password, first_name, last_name, date_of_birth, gender } = JSON.parse(body);
 
     console.log(`creating patient account with email: ${email}`);
 
     const email_address = await createPatientContact(email, phone_number, address, res, db);
 
-    const patient_id = await createPatient(email_address, first_name, last_name, date_of_birth, db);
+    const patient_id = await createPatient(email_address, first_name, last_name, date_of_birth, gender, db);
 
     const msg = await createPatientLogin(email_address, password, patient_id, db);
 
@@ -39,10 +39,10 @@ async function createPatientContact(email, phone_number, address, res, db) {
   });
 }
 
-async function createPatient(email, first_name, last_name, date_of_birth, db) {
+async function createPatient(email, first_name, last_name, date_of_birth, gender, db) {
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth) VALUES (?, ?, ?, DATE ?)',
-      [email, first_name, last_name, date_of_birth], async (err, db_res) => {
+    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth, gender) VALUES (?, ?, ?, DATE ?, ?)',
+      [email, first_name, last_name, date_of_birth, gender], async (err, db_res) => {
         if (err) {
           reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
         }
