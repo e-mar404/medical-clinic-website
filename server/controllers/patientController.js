@@ -165,8 +165,8 @@ function getPatientCharges(res, db, patient_id) {
   db.query(
     `
     SELECT 
-    Charges.patient_id, Charges.invoice_num, Charges.date_charged, Charges.clinic_id, Charges.amount, Charges.charge_type, 
-      Clinic.clinic_name
+    Charges.patient_id, Charges.invoice_num, Charges.date_charged, Charges.clinic_id, Charges.amount, Charges.charge_type, Charges.paid,
+    Clinic.clinic_name
     FROM Charges
     LEFT JOIN Clinic ON Charges.clinic_id = Clinic.clinic_id
     WHERE patient_id = ${patient_id}
