@@ -379,9 +379,11 @@ function getPrimaryDoctorForPatient(res, db, patient_id) {
       res.end(JSON.stringify({ error: 'Error when getting user appointments' }));
       return;
     }
+    
+    const msg = (db_res.length > 0) ? db_res : 'No primary doctor';
 
     res.writeHead(200, headers);
-    res.end(JSON.stringify({ message: db_res }));
+    res.end(JSON.stringify({ message: msg }));
   });
 
   console.log('successfully got primary doctor');
