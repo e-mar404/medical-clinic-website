@@ -21,7 +21,6 @@ const {
   getDoctorInformation,
   getAdminClinic,
   getClinicEmployees
-
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
