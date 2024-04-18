@@ -2,10 +2,10 @@ const http = require('http');
 const mysql = require('mysql2');
 
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer } = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientCharges, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor, updatePrimaryDoctorAfterTransfer } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral, getReferralDataForReceptionist } = require('./controllers/referralController');
 const { patientCharges, StoreBillPayment } = require('./controllers/billingController');
@@ -20,7 +20,8 @@ const {
   getAppointments,
   getDoctorInformation,
   getAdminClinic,
-  getClinicEmployees
+  getClinicEmployees,
+  getClinicGeneralDoctor
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
@@ -134,7 +135,15 @@ const server = http.createServer((req, res) => {
             StoreBillPayment(req, res, db); 
             break;
         
+
+          case '/update_all_patients':
+            updatePrimaryDoctorAfterTransfer(req, res, db);
+            break;
           
+          case '/cancel_appointments_transfer':
+            cancelAppointmentTransfer(req, res, db);
+            break;
+
           default:
             res.writeHead(404, headers);
             res.end(JSON.stringify({ message: 'Route not found' }));
@@ -201,6 +210,11 @@ const server = http.createServer((req, res) => {
           case /\/patient\/appointment_history/.test(req.url):
             patient_id = req.url.split('/')[3];
             getPatientAppointmentHistory(res, db, patient_id);
+            break;
+
+          case /\/patient\/view_charges/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientCharges(res, db, patient_id);
             break;
 
           case /\/employee\/bytype/.test(req.url): 
@@ -297,6 +311,12 @@ const server = http.createServer((req, res) => {
           getClinicName(res, db, adminClinicID);
           //res.writeHead(500, headers);
           //res.end(JSON.stringify({ message: 'Route for clinic' }));
+          break;
+
+        case /getClinicDoctor/.test(req.url):
+          const doctorClinicID = req.url.split('/')[2];
+          const notDoctor = req.url.split('/')[3];
+          getClinicGeneralDoctor(res, db, doctorClinicID, notDoctor);
           break;
 
         default:

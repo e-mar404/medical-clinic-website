@@ -160,6 +160,29 @@ function getPatientEmergencyContacts(res, db, patient_id) {
   });
 }
 
+function getPatientCharges(res, db, patient_id) {
+  console.log(patient_id);
+  db.query(
+    `
+    SELECT 
+    Charges.patient_id, Charges.invoice_num, Charges.date_charged, Charges.clinic_id, Charges.amount, Charges.charge_type, 
+      Clinic.clinic_name
+    FROM Charges
+    LEFT JOIN Clinic ON Charges.clinic_id = Clinic.clinic_id
+    WHERE patient_id = ${patient_id}
+    ORDER BY Charges.date_charged;
+  `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user charges' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 function getPatientInsurance(res, db, patient_id) {
   db.query(
     `
@@ -559,7 +582,32 @@ async function updatePrimaryDoctor(req, res, db) {
   }
 }
 
-module.exports = {
+async function updatePrimaryDoctorAfterTransfer(req, res, db){
+  try {
+    const body = await PostData(req);
+    const { new_doctor, old_doctor } = JSON.parse(body);
+    //let old_d = old_doctor;
+    //let new_d = new_doctor
+    const query = 'UPDATE Patient SET primary_doctor_id =? WHERE primary_doctor_id = ?';
+    console.log(`Transfer Patients with old ${new_doctor} to new ${old_doctor}`);
+  
+    db.query(query, [new_doctor, old_doctor], (err, db_res) => {
+      if(err){
+        console.log(`${new_doctor}, ${old_doctor}`);
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    }); 
+    
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { 
   createPatientAccount,
   loginPatient,
   getPatientId,
@@ -571,9 +619,11 @@ module.exports = {
   postPatientEmergencyContacts,
   getPatientInsurance,
   postPatientInsurance,
+  getPatientCharges,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,
   getPrimaryDoctorForPatient,
-  updatePrimaryDoctor
+  updatePrimaryDoctor, 
+  updatePrimaryDoctorAfterTransfer
 };
