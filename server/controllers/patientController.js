@@ -279,7 +279,7 @@ async function getPatientMedicalHistory(res, db, patient_id) {
 
     const msg = {
       patient_name,
-      ...medicalHistory
+      ...medicalHistory,
     };
 
     res.writeHead(200, headers);
