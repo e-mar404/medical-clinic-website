@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navbar from '../../components/Navbar';
 
 var FetchedCards = false; // Condition to ensure the fetch is ran only once
@@ -32,6 +32,15 @@ function PatientFinancial() {
             action = "delete";
             vCardNumber = e.target.id;
         }
+
+        if (action === "insert") {
+            if (document.querySelector("#CardNumber").value.trim() === "" || document.querySelector("#NameOnCard").value.trim() === "" || document.querySelector("#ExpirationDate").value.trim() === "" || document.querySelector("#CVV").value.trim() === "") {
+                alert('Please fill out all required fields!');
+                return;
+            }
+
+        }
+
         const postMethod = {
             method: 'POST',
             redirect: 'follow',
@@ -67,6 +76,8 @@ function PatientFinancial() {
         });
     }
 
+    const postFunctionRef = useRef(postFunction);
+    
     useEffect(() => {
         const getMethod = {
             method: 'GET',
@@ -95,25 +106,25 @@ function PatientFinancial() {
                             <div class="col-4">
                                 <div class="mr-3 ml-3">
                                     <label>Card Number</label>
-                                    <input type="text" class="form-control mt-1" id="CardNumber" value='${card.card_number}' readOnly />
+                                    <input type="text" class="form-control mt-1" value='${card.card_number}' readOnly />
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div class="mr-3 ml-3">
                                     <label>Name on Card</label>
-                                    <input type="text" class="form-control mt-1" id="NameOnCard" value='${card.name_on_card}' readOnly />
+                                    <input type="text" class="form-control mt-1" value='${card.name_on_card}' readOnly />
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div class="mr-3 ml-3">
                                     <label>Expiration Date (mm/yy)</label>
-                                    <input type="text" class="form-control mt-1" id="ExpirationDate" value='${card.expiration_date}' readOnly />
+                                    <input type="text" class="form-control mt-1" value='${card.expiration_date}' readOnly />
                                 </div>
                             </div>
                             <div class="col-1">
                                 <div class="mr-3 ml-3">
                                     <label>CVV</label>
-                                    <input type="text" class="form-control mt-1" id="CVV" value='${card.cvv}' readOnly />
+                                    <input type="text" class="form-control mt-1" value='${card.cvv}' readOnly />
                                 </div>
                             </div>
                             <div class="col-1">
@@ -125,7 +136,7 @@ function PatientFinancial() {
                             console.log(data.message);
                         })
                         document.querySelectorAll(".RemoveButton").forEach(button => {
-                            button.addEventListener("click", postFunction);
+                            button.addEventListener("click", postFunctionRef.current);
                         });                        
                     });
                 });
@@ -133,7 +144,8 @@ function PatientFinancial() {
         }
 
         fetchFinancial();
-    }, [postFunction]);
+    }, [postFunctionRef]);
+
 
     return (
         <>

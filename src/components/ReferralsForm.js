@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { subDays } from 'date-fns';
 import DatePicker from 'react-datepicker'; 
 
 function ReferralsForm() {
-  const [specialists, setSpecialists] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
-  const [patients, setPatients] = useState([{"patient_id": 0, "patient_fname": "", "patient_lname": ""}]);
+  const [specialists, setSpecialists] = useState([{'employee_id': 0, 'first_name': '', 'last_name': '', 'title': ''}]);
+  const [patients, setPatients] = useState([{'patient_id': 0, 'patient_fname': '', 'patient_lname': ''}]);
 
   const specialistsRef = useRef();
   const patientsRef = useRef();
@@ -47,7 +48,6 @@ function ReferralsForm() {
       });
     }
 
-
     fetchSpecialists();
     fetchPatients();
 
@@ -55,9 +55,10 @@ function ReferralsForm() {
   }, [specialistsRef, patientsRef]); 
 
   const [formData, setFormData] = useState({
-    "doctor_id": -1,
-    "patient_id": -1,
-    "expiration_date": null 
+    'doctor_id': -1,
+    'patient_id': -1,
+    'reason_for_referral': '',
+    'expiration_date': null 
   });
 
   const handleInputChange = (e) => {
@@ -87,6 +88,7 @@ function ReferralsForm() {
     const referralData = {
       doctor_id: formData.doctor_id,
       patient_id: formData.patient_id,
+      reason_for_referral: formData.reason_for_referral,
       expiration_date: formData.expiration_date.toISOString().slice(0, 10)
     };
 
@@ -126,7 +128,7 @@ function ReferralsForm() {
           >
           <option key={0} value={-1} disabled>Select a specialist</option>
           {specialists.map(specialist => (
-            <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name}</option>
+            <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name} ({specialist.title})</option>
           ))}
         </select>
 
@@ -143,12 +145,20 @@ function ReferralsForm() {
           ))}
         </select>
 
+        <label className="d-flex justify-content-center text-secondary">Reason for referral:</label>
+        <input
+          name="reason_for_referral"
+          value={formData.reason_for_referral}
+          onChange={handleInputChange}
+          required />
+
         <label className="d-flex text-secondary">Referral valid through:</label>
         <DatePicker 
           name="date"
           selected={formData.expiration_date}
           onChange={expiration_date => setFormData({ ...formData, expiration_date })}
           dateFormat="yyyy-MM-dd"
+          minDate={subDays(new Date(), 1)}
           showIcon
           toggleCalendarOnIconClick
           required />     

@@ -62,7 +62,7 @@ async function getClinicAppointments(res, db, clinic_id) {
           const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
 
-          const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
+          const patientQuery = 'SELECT patient_id, first_name, last_name FROM Patient WHERE patient_id = ?';
           const [patientResult] = await db.promise().query(patientQuery, [patient_id]);
 
 
@@ -73,6 +73,7 @@ async function getClinicAppointments(res, db, clinic_id) {
               last_name: doctorResult[0].last_name
             },
             patient: {
+              patient_id : patientResult[0].patient_id,
               first_name: patientResult[0].first_name,
               last_name: patientResult[0].last_name
             },
@@ -248,4 +249,25 @@ const updateAppointmentStatusInDB = (res, db, appointment_id, status) => {
   });
 };
 
-module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus };  
+async function cancelAppointmentTransfer(req, res, db){
+  try{
+    const body = await PostData(req);
+    const { appointment_date, doctor_id } = JSON.parse(body);
+
+    
+    
+    db.query(`UPDATE Appointment SET appointment_status = 'cancelled' WHERE appointment_date > ? AND doctor_id = ?;`, [appointment_date, doctor_id], (err, db_res) => {
+      if(err){
+        throw(err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    });
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer };  

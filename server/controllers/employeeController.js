@@ -54,7 +54,7 @@ function getEmployeesByClinic(res, db, clinic_id, role) {
     employeeRoleCondition = ` AND employee_role='${role}'`;
   }
 
-  db.query(`SELECT employee_id, first_name, last_name FROM Employee WHERE primary_clinic=? ${employeeRoleCondition}`, [clinic_id], (err, db_res) => {
+  db.query(`SELECT employee_id, first_name, last_name, title FROM Employee WHERE primary_clinic=? ${employeeRoleCondition}`, [clinic_id], (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: err }));
@@ -178,11 +178,14 @@ async function loginEmployee(req, res, db) {
 async function employeeTransfer(req, res, db){
   try {
     const body = await PostData(req);
-    const { email_address, clinic_id } = JSON.parse(body);
+
+    const { clinic_id, employee_id } = JSON.parse(body);
+
     
-    console.log(`Transfer Employee with email ${email_address} to clinic id: ${clinic_id}`);
-    db.query(`UPDATE Employee SET clinic_id = ${clinic_id} WHERE E.email_address = '${email_address}';`, 
-    [email_address, clinic_id], (err, db_res) => {
+    console.log(`Transfer Employee with email ${employee_id} to clinic id: ${clinic_id}`);
+  
+    db.query(`UPDATE Employee SET primary_clinic =? WHERE employee_id = ?;`, 
+    [clinic_id, employee_id], (err, db_res) => {
       if(err){
         throw (err);
       }
@@ -202,7 +205,7 @@ function getSpecialists(res, db) {
   try{
     console.log('getting specialists');
 
-    db.query('SELECT D.employee_id, D.first_name, D.last_name FROM Employee AS D WHERE D.specialist', (err, db_res) => {
+    db.query('SELECT D.employee_id, D.first_name, D.last_name, D.title FROM Employee AS D WHERE D.specialist', (err, db_res) => {
       if (err) {
         throw err;
       }
@@ -308,4 +311,22 @@ function getClinicEmployees(res, db, clinicId){
   }
 }
 
-module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic, getClinicEmployees };
+function getClinicGeneralDoctor(res, db, clinicId, notDoctor){
+  try{
+    db.query(`SELECT E.first_name, E.last_name, E.employee_id
+    FROM Employee AS E
+    WHERE E.employee_role = 'Doctor' AND E.specialist = 0 AND E.primary_clinic = ${clinicId} AND NOT E.employee_id = ${notDoctor};`, (err, db_res) => {
+      if(err){
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify({ message: db_res}));
+    });
+  }
+  catch(err){
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { getEmployeesByType, getEmployeesByClinic, loginEmployee, createEmployeeAccount, employeeTransfer, getSpecialists, getPatientsOf,getAppointments,getDoctorInformation, getAdminClinic, getClinicEmployees, getClinicGeneralDoctor };

@@ -4,13 +4,13 @@ async function createPatientAccount(req, res, db) {
   try {
 
     const body = await PostData(req);
-    const { email, phone_number, address, password, first_name, last_name, date_of_birth } = JSON.parse(body);
+    const { email, phone_number, address, password, first_name, last_name, date_of_birth, gender } = JSON.parse(body);
 
     console.log(`creating patient account with email: ${email}`);
 
     const email_address = await createPatientContact(email, phone_number, address, res, db);
 
-    const patient_id = await createPatient(email_address, first_name, last_name, date_of_birth, db);
+    const patient_id = await createPatient(email_address, first_name, last_name, date_of_birth, gender, db);
 
     const msg = await createPatientLogin(email_address, password, patient_id, db);
 
@@ -39,10 +39,10 @@ async function createPatientContact(email, phone_number, address, res, db) {
   });
 }
 
-async function createPatient(email, first_name, last_name, date_of_birth, db) {
+async function createPatient(email, first_name, last_name, date_of_birth, gender, db) {
   return new Promise((resolve, reject) => {
-    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth) VALUES (?, ?, ?, DATE ?)',
-      [email, first_name, last_name, date_of_birth], async (err, db_res) => {
+    db.query('INSERT INTO Patient(email_address, first_name, last_name, date_of_birth, gender) VALUES (?, ?, ?, DATE ?, ?)',
+      [email, first_name, last_name, date_of_birth, gender], async (err, db_res) => {
         if (err) {
           reject(`${err.sqlMessage.includes('Duplicate') ? 'There is already an account with that email' : 'Unkown error when making account'}`);
         }
@@ -143,6 +143,63 @@ function getPatientFinancial(res, db, patient_id) {
   });
 }
 
+function getPatientEmergencyContacts(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_EmergencyContacts WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user emergency contacts' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+function getPatientCharges(res, db, patient_id) {
+  console.log(patient_id);
+  db.query(
+    `
+    SELECT 
+    Charges.patient_id, Charges.invoice_num, Charges.date_charged, Charges.clinic_id, Charges.amount, Charges.charge_type, 
+      Clinic.clinic_name
+    FROM Charges
+    LEFT JOIN Clinic ON Charges.clinic_id = Clinic.clinic_id
+    WHERE patient_id = ${patient_id}
+    ORDER BY Charges.date_charged;
+  `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user charges' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
+function getPatientInsurance(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_InsuranceInformation WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user insurance' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 async function getPatientId(db, email) {
   return new Promise((resolve, reject) => {
     db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
@@ -193,6 +250,52 @@ async function postPatientProfile(req, res, db) {
   }
 }
 
+async function postPatientEmergencyContacts(req, res, db) {
+  try {
+    const body = await PostData(req);
+
+    const {
+      patient_id, contact_name, contact_number, contact_relationship, action
+    } = JSON.parse(body);
+
+    if (action === "insert") {
+      console.log(patient_id, contact_name, contact_number, contact_relationship, action);
+      db.query(`
+      INSERT INTO Patient_EmergencyContacts (patient_id, contact_name, contact_number, contact_relationship)
+      VALUES (${patient_id}, '${contact_name}', '${contact_number}', '${contact_relationship}');`, (err, result) => {
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient emergency contact added!" }));
+        }
+      });
+    }
+    else {
+      console.log(patient_id, contact_name, contact_number, contact_relationship, action);
+      db.query(`
+      DELETE FROM Patient_EmergencyContacts
+      WHERE patient_id = ${patient_id} AND contact_number = '${contact_number}';
+      `, (err, result) => {
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient emergency contact deleted!" }));
+        }
+      });
+    }
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  }
+}
+
 async function postPatientFinancial(req, res, db) {
   try {
     const body = await PostData(req);
@@ -205,15 +308,15 @@ async function postPatientFinancial(req, res, db) {
       db.query(`
       INSERT INTO Patient_FinancialInformation (patient_id, card_number, name_on_card, expiration_date, cvv)
       VALUES (${patient_id}, '${card_number}', '${name_on_card}', '${expiration_date}', '${cvv}')`, (err, result) => {
-      if (err) {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ message: err }));
-      }
-      else {
-        res.writeHead(200, headers);
-        res.end(JSON.stringify({ message: "Patient credit card added!" }));
-      }
-    });
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient credit card added!" }));
+        }
+      });
     }
     else {
       console.log(patient_id, card_number, name_on_card, expiration_date, cvv, action);
@@ -221,15 +324,15 @@ async function postPatientFinancial(req, res, db) {
       DELETE FROM Patient_FinancialInformation
       WHERE patient_id = ${patient_id} AND card_number = '${card_number}';
       `, (err, result) => {
-      if (err) {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ message: err }));
-      }
-      else {
-        res.writeHead(200, headers);
-        res.end(JSON.stringify({ message: "Patient credit card deleted!" }));
-      }
-    });
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient credit card deleted!" }));
+        }
+      });
     }
   } catch (error) {
     console.log(`patientController.js: ${error}`);
@@ -238,42 +341,109 @@ async function postPatientFinancial(req, res, db) {
   }
 }
 
+async function postPatientInsurance(req, res, db) {
+  try {
+    const body = await PostData(req);
 
-function getPatientMedicalHistory(res, db, patient_id) {
-  console.log(`getting medical history for patient: ${patient_id}`);
+    const {
+      patient_id, group_number, policy_number
+    } = JSON.parse(body);
 
-  db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
-    if (err) {
-      console.log(err);
+    console.log(patient_id, group_number, policy_number);
+    db.query(`
+    INSERT INTO Patient_InsuranceInformation (patient_id, group_number, policy_number) 
+    VALUES ('${patient_id}', '${group_number}', '${policy_number}')
+    ON DUPLICATE KEY UPDATE group_number = '${group_number}', policy_number = '${policy_number}';
+      `, (err, result) => {
+      if (err) {
+        res.writeHead(400, headers);
+        res.end(JSON.stringify({ message: err }));
+      }
+      else {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ message: "Patient profile saved!" }));
+      }
+    });
 
-      res.writeHead(400, headers);
-      res.end(JSON.stringify({ error: 'Cant retrieve patients medical history' }));
-      return;
-    }
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  }
+}
+
+async function getPatientName(db, patient_id) {
+  return await new Promise((resolve, reject) => {
+    const query = 'SELECT P.first_name, P.last_name FROM Patient AS P WHERE P.patient_id=?';
+
+    db.query(query, [patient_id], (err, db_res) => {
+      if (err) {
+        console.log(err);
+
+        reject('Could not get patient information');
+      }
+
+      resolve(`${db_res[0].first_name} ${db_res[0].last_name}`);
+    });
+  });
+}
+
+async function getPatientMedicalHistory(res, db, patient_id) {
+  try {
+
+    console.log('getting patient info');
+
+    const patient_name = await getPatientName(db, patient_id);
+
+    console.log(`getting medical history for patient: ${patient_id}`);
+
+    const medicalHistory = await new Promise((resolve, reject) => {
+      db.query(`SELECT conditions, allergies, family_history FROM Patient_MedicalHistory WHERE patient_id=?`, [patient_id], (err, db_res) => {
+        if (err) {
+          console.log(err);
+
+          reject(`Could not get patient's medical history`);
+        }
+
+        resolve((db_res.length > 0) ? db_res[0] : { conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed' });
+      });
+    });
 
     console.log('success getting medical history');
 
-    const msg = (db_res.length > 0) ? db_res[0] : { conditions: 'no conditions listed', allergies: 'no allergies listed', family_history: 'no family history listed' };
+    const msg = {
+      patient_name,
+      ...medicalHistory,
+    };
 
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  });
+  } catch(err) {
+
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ error: err }));
+  }
 }
 
 async function updatePatientMedicalHistory(req, res, db) {
   try {
 
     const body = await PostData(req);
-    const { patient_id, conditions, allergies, family_history } = JSON.parse(body);
+    const { conditions, allergies, family_history, patient_id } = JSON.parse(body);
 
-    if (!patientHasHistory(patient_id, db)) {
-      console.log('patient doesnt have history creating new entry');
+    const needToCreateHistory = await patientHasHistory(patient_id, db);
+    console.log(` need ot creat history: ${needToCreateHistory}`);
+
+    if (needToCreateHistory) {
+      console.log(`patient ${patient_id} doesnt have history creating new entry`);
 
       await createPatientMedicalHistory(patient_id, conditions, allergies, family_history, res, db);
+
+      console.log('Medical history updated successfully');
       return;
     }
 
-    console.log('updating medical history for patient');
+    console.log(`updating medical history for patient ${patient_id}`);
 
     const msg = await new Promise((resolve, reject) => {
       db.query('UPDATE Patient_MedicalHistory SET conditions=?, allergies=?, family_history=? WHERE patient_id=?', [conditions, allergies, family_history, patient_id], (err, db_res) => {
@@ -298,15 +468,17 @@ async function updatePatientMedicalHistory(req, res, db) {
   }
 }
 
-function patientHasHistory(patient_id, db) {
-  return db.query('SELECT patient_id FROM Patient_MedicalHistory WHERE patient_id=?', [patient_id], (err, db_res) => {
-    if (err) {
-      console.log(err);
+async function patientHasHistory(patient_id, db) {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT patient_id FROM Patient_MedicalHistory WHERE patient_id=?', [patient_id], (err, db_res) => {
+      if (err) {
+        console.log(err);
 
-      return false;
-    }
+        reject(false);
+      }
 
-    return db_res.length > 0;
+      resolve(db_res.length === 0);
+    });
   });
 }
 
@@ -373,8 +545,10 @@ function getPrimaryDoctorForPatient(res, db, patient_id) {
       return;
     }
 
+    const msg = (db_res.length > 0) ? db_res : 'No primary doctor';
+
     res.writeHead(200, headers);
-    res.end(JSON.stringify({ message: db_res }));
+    res.end(JSON.stringify({ message: msg }));
   });
 
   console.log('successfully got primary doctor');
@@ -399,12 +573,37 @@ async function updatePrimaryDoctor(req, res, db) {
       });
 
     });
-  
+
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  } catch(err) {
+  } catch (err) {
     res.writeHead(200, headers);
     res.end(JSON.stringify({ error: err }));
+  }
+}
+
+async function updatePrimaryDoctorAfterTransfer(req, res, db){
+  try {
+    const body = await PostData(req);
+    const { new_doctor, old_doctor } = JSON.parse(body);
+    //let old_d = old_doctor;
+    //let new_d = new_doctor
+    const query = 'UPDATE Patient SET primary_doctor_id =? WHERE primary_doctor_id = ?';
+    console.log(`Transfer Patients with old ${new_doctor} to new ${old_doctor}`);
+  
+    db.query(query, [new_doctor, old_doctor], (err, db_res) => {
+      if(err){
+        console.log(`${new_doctor}, ${old_doctor}`);
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    }); 
+    
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
   }
 }
 
@@ -416,9 +615,15 @@ module.exports = {
   postPatientProfile,
   getPatientFinancial,
   postPatientFinancial,
+  getPatientEmergencyContacts,
+  postPatientEmergencyContacts,
+  getPatientInsurance,
+  postPatientInsurance,
+  getPatientCharges,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,
   getPrimaryDoctorForPatient,
-  updatePrimaryDoctor
+  updatePrimaryDoctor, 
+  updatePrimaryDoctorAfterTransfer
 };

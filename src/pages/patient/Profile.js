@@ -114,7 +114,7 @@ function PatientProfile() {
             <div className="col-3">
                 <div className="mr-3 ml-3">
                   <label>Date of Birth</label>
-                  <input type="text" className="form-control mt-1" id="DateOfBirth" value={thisPatient.date_of_birth === null ? "" : thisPatient.date_of_birth} readOnly />
+                  <input type="text" className="form-control mt-1" id="DateOfBirth" value={thisPatient.date_of_birth === null ? "" : thisPatient.date_of_birth.slice(0, 10)} readOnly />
                 </div>
               </div>
               <div className="col-3">
@@ -126,7 +126,7 @@ function PatientProfile() {
               <div className="col-6">
                 <div className="mr-3 ml-3">
                   <label>Primary Doctor</label>
-                  <input type="text" className="form-control mt-1" id="PrimaryDoctor" value={thisPatient.primary_doctor_id === null ? "" : thisPatient.doctor_first_name + " " + thisPatient.doctor_last_name} readOnly />
+                  <input type="text" className="form-control mt-1" id="PrimaryDoctor" value={thisPatient.primary_doctor_id === null ? "No primary doctor assigned" : thisPatient.doctor_first_name + " " + thisPatient.doctor_last_name} readOnly />
                 </div>
               </div>
             </div>
