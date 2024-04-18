@@ -249,4 +249,25 @@ const updateAppointmentStatusInDB = (res, db, appointment_id, status) => {
   });
 };
 
-module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus };  
+async function cancelAppointmentTransfer(req, res, db){
+  try{
+    const body = await PostData(req);
+    const { appointment_date, doctor_id } = JSON.parse(body);
+
+    
+    
+    db.query(`UPDATE Appointment SET appointment_status = 'cancelled' WHERE appointment_date > ? AND doctor_id = ?;`, [appointment_date, doctor_id], (err, db_res) => {
+      if(err){
+        throw(err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    });
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { createAppointment, availableAppointments, getClinicAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer };  
