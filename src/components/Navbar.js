@@ -83,7 +83,7 @@ function Navbar() {
         return (
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href="/receptionist">Home</a>
+              <a className="nav-link" aria-current="page" href="/receptionist">Front Desk Home</a>
             </li>
             {/* Add other receptionist-specific navigation links here */}
           </ul>

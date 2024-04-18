@@ -146,6 +146,7 @@ function PatientFinancial() {
         fetchFinancial();
     }, [postFunctionRef]);
 
+
     return (
         <>
             <Navbar />
