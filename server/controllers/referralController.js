@@ -47,7 +47,7 @@ async function getReferralDataForReceptionist(res, db) {
       console.log('Patient result:', patientResult); // Log the retrieved patient details
 
       // Fetch doctor's first name and last name
-      const doctorQuery = 'SELECT first_name, last_name FROM Employee WHERE employee_id = ?';
+      const doctorQuery = 'SELECT first_name, last_name, title FROM Employee WHERE employee_id = ?';
       const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
 
       console.log('Doctor result:', doctorResult); // Log the retrieved doctor details
@@ -59,7 +59,8 @@ async function getReferralDataForReceptionist(res, db) {
         },
         doctor: {
           first_name: doctorResult[0].first_name,
-          last_name: doctorResult[0].last_name
+          last_name: doctorResult[0].last_name,
+          title: doctorResult[0].title
         },
         reason_for_referral,
         expiration_date

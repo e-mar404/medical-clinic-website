@@ -153,10 +153,10 @@ function DisplayClinicAppointment() {
         </Link>
       </div>
 
-      <hr style={{ width: "101em", color: "black" }} />
+      <hr style={{ color: "black" }} />
 
-      <div className="container">
-        <table className="table table-striped" style={{ width: "100em" }}>
+      <div className="container-fluid">
+        <table className="table table-stripped">
           <thead>
             <tr>
               <th>Patient Name</th>

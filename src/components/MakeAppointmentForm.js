@@ -7,7 +7,7 @@ import './MakeAppointmentForm.css';
 const MakeAppointmentForm = ({ patientEmail }) => {
   patientEmail = (patientEmail) ? patientEmail : localStorage.getItem('UserEmail'); 
   const [clinics, setClinics] = useState([{'clinic_id': 0, 'clinic_name': 'Select clinic'}]);
-  const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
+  const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': '', 'title': ''}]);
   const [availableTimes, setAvailableTimes] = useState(['Select a date']);
   const [formData, setFormData] = useState({
     clinicId: -1,
@@ -219,7 +219,7 @@ const MakeAppointmentForm = ({ patientEmail }) => {
             >
               <option key={0} value={-1} disabled>Select a doctor</option>
               {doctors.map((doctor) => (
-                <option key={doctor.employee_id} value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name}`}</option>
+                <option key={doctor.employee_id} value={doctor.employee_id}>{`Dr. ${doctor.first_name} ${doctor.last_name} (${doctor.title})`}</option>
               ))}
             </select>
 
