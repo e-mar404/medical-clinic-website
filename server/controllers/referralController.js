@@ -31,14 +31,14 @@ async function getReferralDataForReceptionist(res, db) {
     console.log('hello from referral controller'); // Log to indicate the function is being executed
 
     // Query the referral table for patient_id, doctor_id, and expiration_date
-    const referralQuery = 'SELECT patient_id, doctor_id, expiration_date FROM Referral';
+    const referralQuery = 'SELECT patient_id, doctor_id, reason_for_referral, expiration_date FROM Referral';
     const [referralRows] = await db.promise().query(referralQuery);
 
     console.log('Referral rows:', referralRows); // Log the retrieved referral rows
 
     // Fetch details for each referral
     const referralsWithDetails = await Promise.all(referralRows.map(async referral => {
-      const { patient_id, doctor_id, expiration_date } = referral;
+      const { patient_id, doctor_id, reason_for_referral, expiration_date } = referral;
 
       // Fetch patient's first name and last name
       const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
@@ -61,6 +61,7 @@ async function getReferralDataForReceptionist(res, db) {
           first_name: doctorResult[0].first_name,
           last_name: doctorResult[0].last_name
         },
+        reason_for_referral,
         expiration_date
       };
     }));
