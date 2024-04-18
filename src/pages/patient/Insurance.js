@@ -17,9 +17,10 @@ function PatienceInsurance() {
                 alert(data.error);
                 return;
               }
-              console.log(data.message[0]);
-              document.querySelector("#GroupNumber").value = data.message[0].group_number;
-              document.querySelector("#PolicyNumber").value = data.message[0].policy_number;
+              if (data.message.length > 0) {
+                document.querySelector("#GroupNumber").value = data.message[0].group_number;
+                document.querySelector("#PolicyNumber").value = data.message[0].policy_number;  
+              }
             });
           });
         }
