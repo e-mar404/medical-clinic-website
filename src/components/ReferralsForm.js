@@ -4,8 +4,8 @@ import { subDays } from 'date-fns';
 import DatePicker from 'react-datepicker'; 
 
 function ReferralsForm() {
-  const [specialists, setSpecialists] = useState([{"employee_id": 0, "first_name": "", "last_name": ""}]);
-  const [patients, setPatients] = useState([{"patient_id": 0, "patient_fname": "", "patient_lname": ""}]);
+  const [specialists, setSpecialists] = useState([{'employee_id': 0, 'first_name': '', 'last_name': '', 'title': ''}]);
+  const [patients, setPatients] = useState([{'patient_id': 0, 'patient_fname': '', 'patient_lname': ''}]);
 
   const specialistsRef = useRef();
   const patientsRef = useRef();
@@ -128,7 +128,7 @@ function ReferralsForm() {
           >
           <option key={0} value={-1} disabled>Select a specialist</option>
           {specialists.map(specialist => (
-            <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name}</option>
+            <option key={specialist.employee_id} value={specialist.employee_id}>Dr. {specialist.first_name} {specialist.last_name} ({specialist.title})</option>
           ))}
         </select>
 

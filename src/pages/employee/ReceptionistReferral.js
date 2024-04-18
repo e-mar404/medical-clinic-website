@@ -18,6 +18,7 @@ const ReceptionistReferral = () => {
             patientLastName: referral.patient.last_name,
             doctorFirstName: referral.doctor.first_name,
             doctorLastName: referral.doctor.last_name,
+            doctorTitle: referral.doctor.title,
             reasonForReferral: referral.reason_for_referral,
             expirationDate: referral.expiration_date.split('T')[0] // Remove time portion
         }));
@@ -51,7 +52,7 @@ return (
             {referrals.map((referral, index) => (
               <tr key={index}>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>{referral.patientFirstName} {referral.patientLastName}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>{referral.doctorFirstName} {referral.doctorLastName}</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>{referral.doctorFirstName} {referral.doctorLastName} ({referral.doctorTitle})</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>{referral.reasonForReferral}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>{referral.expirationDate}</td>
               </tr>

@@ -54,7 +54,7 @@ function getEmployeesByClinic(res, db, clinic_id, role) {
     employeeRoleCondition = ` AND employee_role='${role}'`;
   }
 
-  db.query(`SELECT employee_id, first_name, last_name FROM Employee WHERE primary_clinic=? ${employeeRoleCondition}`, [clinic_id], (err, db_res) => {
+  db.query(`SELECT employee_id, first_name, last_name, title FROM Employee WHERE primary_clinic=? ${employeeRoleCondition}`, [clinic_id], (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ error: err }));
@@ -202,7 +202,7 @@ function getSpecialists(res, db) {
   try{
     console.log('getting specialists');
 
-    db.query('SELECT D.employee_id, D.first_name, D.last_name FROM Employee AS D WHERE D.specialist', (err, db_res) => {
+    db.query('SELECT D.employee_id, D.first_name, D.last_name, D.title FROM Employee AS D WHERE D.specialist', (err, db_res) => {
       if (err) {
         throw err;
       }
