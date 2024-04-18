@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 
 function PatienceInsurance() {
