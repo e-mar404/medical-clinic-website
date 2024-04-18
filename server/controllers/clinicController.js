@@ -18,7 +18,7 @@ async function getClinics(res, db) {
 
 async function getClinicName(res, db, adminClinicID) {
   db.query(` SELECT C.clinic_name
-          FROM CLINIC AS C
+          FROM Clinic AS C
           JOIN Employee AS E ON E.primary_clinic = C.clinic_id
           WHERE E.email_address = '${adminClinicID}';`, (err, db_res) => {
     if (err) {
