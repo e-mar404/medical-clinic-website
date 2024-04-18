@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import './DisplayEmployee.css';
 
 function DisplayEmployee(){
   const [employees, setEmployee] = useState([{"employee_id": 1, "first_name": "test", "last_name":"test", "employee_role":1}]);
@@ -65,8 +64,8 @@ function DisplayEmployee(){
      nav(`viewappointment/${employee_id}`, {});
   }
     return(
-        <div className="container">
-              <table className="table table-stripped" style={{ width: 118 + 'em'}}>
+        <div className="container-fluid">
+              <table className="table table-stripped" >
                 <thead>
                   <tr>
                     <th>First Name</th>

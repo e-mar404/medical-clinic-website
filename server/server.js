@@ -2,10 +2,10 @@ const http = require('http');
 const mysql = require('mysql2');
 
 const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('./controllers/reportController');
-const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
+const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus, cancelAppointmentTransfer } = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor, updatePrimaryDoctorAfterTransfer } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral } = require('./controllers/referralController');
 const { patientCharges } = require('./controllers/billingController');
@@ -20,8 +20,8 @@ const {
   getAppointments,
   getDoctorInformation,
   getAdminClinic,
-  getClinicEmployees
-
+  getClinicEmployees,
+  getClinicGeneralDoctor
 } = require('./controllers/employeeController');
 
 require('dotenv').config();
@@ -117,6 +117,14 @@ const server = http.createServer((req, res) => {
 
           case '/admin/transfer':
             employeeTransfer(req, res, db);
+            break;
+
+          case '/update_all_patients':
+            updatePrimaryDoctorAfterTransfer(req, res, db);
+            break;
+          
+          case '/cancel_appointments_transfer':
+            cancelAppointmentTransfer(req, res, db);
             break;
 
           default:
@@ -259,6 +267,12 @@ const server = http.createServer((req, res) => {
           getClinicName(res, db, adminClinicID);
           //res.writeHead(500, headers);
           //res.end(JSON.stringify({ message: 'Route for clinic' }));
+          break;
+
+        case /getClinicDoctor/.test(req.url):
+          const doctorClinicID = req.url.split('/')[2];
+          const notDoctor = req.url.split('/')[3];
+          getClinicGeneralDoctor(res, db, doctorClinicID, notDoctor);
           break;
 
         default:
