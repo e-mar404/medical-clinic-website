@@ -34,8 +34,8 @@ function DisplayClinicAppointment() {
   const fetchAppointments = async (clinicId) => {
     console.log('fetchAppointments is called');
     console.log(clinicId);
+
     try {
-      // Construct the URL with clinicId as a query parameter
       const url = `${process.env.REACT_APP_BACKEND_HOST}/clinicAppointments/${clinicId}`;
   
       const response = await fetch(url);
@@ -44,11 +44,10 @@ function DisplayClinicAppointment() {
       }
       const data = await response.json();
   
-      // Modify date and time format, add clinicId to each appointment object
       const modifiedAppointments = data.map(appointment => ({
         ...appointment,
-        appointment_date: appointment.appointment_date.split('T')[0], // Extract date part
-        appointment_time: formatTime(appointment.appointment_time), // Format time
+        appointment_date: appointment.appointment_date.split('T')[0], 
+        appointment_time: formatTime(appointment.appointment_time),
         clinicId: clinicId,
         clinic_name: appointment.clinic_name,
         status: appointment.status,
@@ -60,7 +59,6 @@ function DisplayClinicAppointment() {
     }
   };
   
-  // Function to format time
   const formatTime = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
     const amOrPm = hours >= 12 ? 'PM' : 'AM';
@@ -161,10 +159,8 @@ function DisplayClinicAppointment() {
         <table className="table table-striped" style={{ width: "100em" }}>
           <thead>
             <tr>
-              <th>Patient First Name</th>
-              <th>Patient Last Name</th>
-              <th>Doctor First Name</th>
-              <th>Doctor Last Name</th>
+              <th>Patient Name</th>
+              <th>Doctor Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
               <th>Status</th> 
@@ -173,10 +169,14 @@ function DisplayClinicAppointment() {
           <tbody>
             {filteredAppointments.map((appointment, index) => (
               <tr key={index}>
-                <td>{appointment.patient.first_name}</td>
-                <td>{appointment.patient.last_name}</td>
-                <td>{appointment.doctor.first_name}</td>
-                <td>{appointment.doctor.last_name}</td>
+                <td>
+                  <a href={
+                    (localStorage.getItem('UserType') === 'Nurse') ? `/medical/patient_medical_history/${appointment.patient.patient_id}` : '/receptionist/clinicAppointments'
+                  }>
+                    {appointment.patient.first_name}  {appointment.patient.last_name}
+                  </a>
+                </td>
+                <td>{appointment.doctor.first_name} {appointment.doctor.last_name}</td>
                 <td>{appointment.appointment_date}</td>
                 <td>{appointment.appointment_time}</td>
                 <td>

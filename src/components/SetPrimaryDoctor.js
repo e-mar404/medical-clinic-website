@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function SetPrimaryDoctor({ patient_id }) {
   const [doctors, setDoctors] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
-  const [primaryDoctor, setPrimaryDoctor] = useState([{'employee_id': 0, 'first_name': '', 'last_name': ''}]);
+  const [primaryDoctor, setPrimaryDoctor] = useState([{'employee_id': 0, 'name': ''}]);
   const [newPrimaryDoctor, setNewPrimaryDoctor] = useState(0);
   
   const handleInputChange = (e) => {
@@ -41,8 +41,19 @@ export default function SetPrimaryDoctor({ patient_id }) {
           alert(data.error);
           return;
         }
+        
+        const msg = data.message;
 
-        setPrimaryDoctor(data.message);
+        console.log(msg);
+
+        const name = msg.includes('No primary doctor') ? msg : `Dr. ${msg[0].first_name} ${msg[0].last_name}`;
+        const employee_id = msg.includes('No primary doctor') ? msg : 0; 
+        console.log(name, employee_id);
+
+        setPrimaryDoctor({
+          'employee_id': employee_id,
+          'name': name
+        });
       });
     });
   };
@@ -89,7 +100,7 @@ export default function SetPrimaryDoctor({ patient_id }) {
   return (
     <>
       <form id="MedicationForm" className="form-control m-4 w-auto" onSubmit={handleSubmit}> 
-        <h3>Primary Doctor For Patient: Dr. {primaryDoctor[0].first_name} {primaryDoctor[0].last_name}</h3>
+        <h3>Primary Doctor For Patient: { primaryDoctor.name }</h3>
         
         <label className="d-flex">Set new primary doctor:</label>
         <select

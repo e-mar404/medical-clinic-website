@@ -62,7 +62,7 @@ async function getClinicAppointments(res, db, clinic_id) {
           const doctorQuery = 'SELECT employee_id, first_name, last_name FROM Employee WHERE employee_id = ?';
           const [doctorResult] = await db.promise().query(doctorQuery, [doctor_id]);
 
-          const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
+          const patientQuery = 'SELECT patient_id, first_name, last_name FROM Patient WHERE patient_id = ?';
           const [patientResult] = await db.promise().query(patientQuery, [patient_id]);
 
 
@@ -73,6 +73,7 @@ async function getClinicAppointments(res, db, clinic_id) {
               last_name: doctorResult[0].last_name
             },
             patient: {
+              patient_id : patientResult[0].patient_id,
               first_name: patientResult[0].first_name,
               last_name: patientResult[0].last_name
             },

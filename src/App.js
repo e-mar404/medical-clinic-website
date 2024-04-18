@@ -64,12 +64,14 @@ function App() {
         <Route path='/receptionist/referral' element={<ReceptionistReferral />} /> 
         
         <Route path='/nurse' element={<NurseHomepage />} />
+        <Route path='/nurse/referral' element={<ReceptionistReferral />} /> 
         <Route path='/nurse/clinic_appointments' element={<ViewClinicAppointments />} />
+
+        <Route path='/medical/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
         <Route path='/doctor' element={<DoctorHomepage />} />
         <Route path='/doctor/appointment_calendar/:doctor_id' element={<ViewDoctorAppointments />} />
         <Route path='/doctor/referral' element={<DoctorReferralsPage />} />
-        <Route path='/doctor/patient_medical_history/:patient_id' element={<PatientMedicalHistoryPage />} />
 
 
         <Route path='/admin/employeelist' element={<AdminEmployeeList />} />
