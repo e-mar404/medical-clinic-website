@@ -10,11 +10,11 @@ function Homepage() {
 
       <div className="text-left mx-auto bg-info p-3 mb-5" style={{ maxWidth: '85%' }}>
         <p className="text-center h4">
-          <strong>Welcome to the Medical Clinic, Your Partner in Health and Wellness!</strong>
+          <strong>Welcome to VitalLife Healthcare, Your Partner in Health and Wellness!</strong>
         </p>
 
         <p className="fs-6">
-          At the Medical Clinic, we are dedicated to providing exceptional healthcare services with a compassionate touch. As a leading medical clinic in our community, we prioritize the well-being of our patients above all else. Our team of experienced healthcare professionals is committed to delivering personalized care tailored to your unique needs.
+          At VitalLife Healthcare, we are dedicated to providing exceptional healthcare services with a compassionate touch. As a leading medical clinic in our community, we prioritize the well-being of our patients above all else. Our team of experienced healthcare professionals is committed to delivering personalized care tailored to your unique needs.
         </p>
 
         <p className="fs-6">

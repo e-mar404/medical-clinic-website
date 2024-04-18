@@ -9,7 +9,7 @@ function HomeCarousel() {
                         <img src="https://wallpapers.com/images/hd/medical-hospital-surgeons-in-operating-room-r3v9xr0526gzbalv.jpg" className="d-block w-100" alt="Slide 1" />
                         <div className="carousel-caption d-none d-md-block">
                             <h5>Our team of experienced doctors</h5>
-                            <p>At the Medical Clinic, you can expect top tier medical services!</p>
+                            <p>At VitalLife Healthcare, you can expect top tier medical services!</p>
                         </div>
                     </div>
                     <div className="carousel-item">

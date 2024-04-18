@@ -9,7 +9,7 @@ const BillingPDF = ({ billingData }) => {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>VitalLife HealthCare</Text>
+          <Text style={styles.headerText}>VitalLife Healthcare🍃</Text>
           <Text style={styles.invoiceText}>Receipt</Text>
         </View>
 
