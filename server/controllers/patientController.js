@@ -143,6 +143,23 @@ function getPatientFinancial(res, db, patient_id) {
   });
 }
 
+function getPatientInsurance(res, db, patient_id) {
+  db.query(
+    `
+    SELECT * FROM Patient_InsuranceInformation WHERE patient_id = ${patient_id};    
+    `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user insurance' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 async function getPatientId(db, email) {
   return new Promise((resolve, reject) => {
     db.query('SELECT patient_id FROM Patient WHERE email_address=?', [email], (err, db_res) => {
@@ -205,15 +222,15 @@ async function postPatientFinancial(req, res, db) {
       db.query(`
       INSERT INTO Patient_FinancialInformation (patient_id, card_number, name_on_card, expiration_date, cvv)
       VALUES (${patient_id}, '${card_number}', '${name_on_card}', '${expiration_date}', '${cvv}')`, (err, result) => {
-      if (err) {
-        res.writeHead(400, headers);
-        res.end(JSON.stringify({ message: err }));
-      }
-      else {
-        res.writeHead(200, headers);
-        res.end(JSON.stringify({ message: "Patient credit card added!" }));
-      }
-    });
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient credit card added!" }));
+        }
+      });
     }
     else {
       console.log(patient_id, card_number, name_on_card, expiration_date, cvv, action);
@@ -221,16 +238,47 @@ async function postPatientFinancial(req, res, db) {
       DELETE FROM Patient_FinancialInformation
       WHERE patient_id = ${patient_id} AND card_number = '${card_number}';
       `, (err, result) => {
+        if (err) {
+          res.writeHead(400, headers);
+          res.end(JSON.stringify({ message: err }));
+        }
+        else {
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ message: "Patient credit card deleted!" }));
+        }
+      });
+    }
+  } catch (error) {
+    console.log(`patientController.js: ${error}`);
+    res.writeHead(400, headers);
+    res.end(JSON.stringify({ 'message': error }));
+  }
+}
+
+async function postPatientInsurance(req, res, db) {
+  try {
+    const body = await PostData(req);
+
+    const {
+      patient_id, group_number, policy_number
+    } = JSON.parse(body);
+
+    console.log(patient_id, group_number, policy_number);
+    db.query(`
+    INSERT INTO Patient_InsuranceInformation (patient_id, group_number, policy_number) 
+    VALUES ('${patient_id}', '${group_number}', '${policy_number}')
+    ON DUPLICATE KEY UPDATE group_number = '${group_number}', policy_number = '${policy_number}';
+      `, (err, result) => {
       if (err) {
         res.writeHead(400, headers);
         res.end(JSON.stringify({ message: err }));
       }
       else {
         res.writeHead(200, headers);
-        res.end(JSON.stringify({ message: "Patient credit card deleted!" }));
+        res.end(JSON.stringify({ message: "Patient profile saved!" }));
       }
     });
-    }
+
   } catch (error) {
     console.log(`patientController.js: ${error}`);
     res.writeHead(400, headers);
@@ -410,7 +458,7 @@ function getPrimaryDoctorForPatient(res, db, patient_id) {
       res.end(JSON.stringify({ error: 'Error when getting user appointments' }));
       return;
     }
-    
+
     const msg = (db_res.length > 0) ? db_res : 'No primary doctor';
 
     res.writeHead(200, headers);
@@ -439,16 +487,16 @@ async function updatePrimaryDoctor(req, res, db) {
       });
 
     });
-  
+
     res.writeHead(200, headers);
     res.end(JSON.stringify({ message: msg }));
-  } catch(err) {
+  } catch (err) {
     res.writeHead(200, headers);
     res.end(JSON.stringify({ error: err }));
   }
 }
 
-module.exports = { 
+module.exports = {
   createPatientAccount,
   loginPatient,
   getPatientId,
@@ -456,6 +504,8 @@ module.exports = {
   postPatientProfile,
   getPatientFinancial,
   postPatientFinancial,
+  getPatientInsurance,
+  postPatientInsurance,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,
