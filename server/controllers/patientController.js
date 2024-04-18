@@ -582,7 +582,32 @@ async function updatePrimaryDoctor(req, res, db) {
   }
 }
 
-module.exports = {
+async function updatePrimaryDoctorAfterTransfer(req, res, db){
+  try {
+    const body = await PostData(req);
+    const { new_doctor, old_doctor } = JSON.parse(body);
+    //let old_d = old_doctor;
+    //let new_d = new_doctor
+    const query = 'UPDATE Patient SET primary_doctor_id =? WHERE primary_doctor_id = ?';
+    console.log(`Transfer Patients with old ${new_doctor} to new ${old_doctor}`);
+  
+    db.query(query, [new_doctor, old_doctor], (err, db_res) => {
+      if(err){
+        console.log(`${new_doctor}, ${old_doctor}`);
+        throw (err);
+      }
+      res.writeHead(200, headers);
+      res.end(JSON.stringify ({ message: db_res}));
+    }); 
+    
+  }
+  catch (err) {
+    res.writeHead(400, headers);
+    res.end(JSON.stringify ({ error: `${err.name}: ${err.message}` }));
+  }
+}
+
+module.exports = { 
   createPatientAccount,
   loginPatient,
   getPatientId,
@@ -599,5 +624,6 @@ module.exports = {
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,
   getPrimaryDoctorForPatient,
-  updatePrimaryDoctor
+  updatePrimaryDoctor, 
+  updatePrimaryDoctorAfterTransfer
 };

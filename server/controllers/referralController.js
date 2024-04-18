@@ -3,10 +3,10 @@ const { headers, PostData } = require('../utils');
 async function createReferral(req, res, db) {
   try {
     const body = await PostData(req);
-    const { doctor_id, patient_id, expiration_date } = JSON.parse(body);
+    const { doctor_id, patient_id, reason_for_referral, expiration_date } = JSON.parse(body);
 
     const msg = await new Promise((resolve, reject) => {
-      db.query('INSERT INTO Referral(patient_id, doctor_id, expiration_date) VALUES(?, ?, DATE ?)', [patient_id, doctor_id, expiration_date], (err, _db_res) => {
+      db.query('INSERT INTO Referral(patient_id, doctor_id, reason_for_referral, expiration_date) VALUES(?, ?, ?, DATE ?)', [patient_id, doctor_id, reason_for_referral, expiration_date], (err, _db_res) => {
         if (err) {
           reject(err.sqlMessage);
         }
@@ -31,14 +31,14 @@ async function getReferralDataForReceptionist(res, db) {
     console.log('hello from referral controller'); // Log to indicate the function is being executed
 
     // Query the referral table for patient_id, doctor_id, and expiration_date
-    const referralQuery = 'SELECT patient_id, doctor_id, expiration_date FROM Referral';
+    const referralQuery = 'SELECT patient_id, doctor_id, reason_for_referral, expiration_date FROM Referral';
     const [referralRows] = await db.promise().query(referralQuery);
 
     console.log('Referral rows:', referralRows); // Log the retrieved referral rows
 
     // Fetch details for each referral
     const referralsWithDetails = await Promise.all(referralRows.map(async referral => {
-      const { patient_id, doctor_id, expiration_date } = referral;
+      const { patient_id, doctor_id, reason_for_referral, expiration_date } = referral;
 
       // Fetch patient's first name and last name
       const patientQuery = 'SELECT first_name, last_name FROM Patient WHERE patient_id = ?';
@@ -61,6 +61,7 @@ async function getReferralDataForReceptionist(res, db) {
           first_name: doctorResult[0].first_name,
           last_name: doctorResult[0].last_name
         },
+        reason_for_referral,
         expiration_date
       };
     }));
