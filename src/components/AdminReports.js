@@ -5,6 +5,13 @@ function AdminReports(){
     const[showTable, setTable] = useState(false);
     const [userAccounts, setUserAccounts] = useState([{'first_name':'first', 'last_name':'last', 'email_address':'email', 'created':''}]);
     const [appointments, setAppointments] = useState([{'employee_id':'test', 'first_name':'first','last_name':'last', 'total_appointment':''}]);
+    const [revenue, setRevenue] = useState([{"total_amount":0}]);
+    const [invoices, setInvoices] = useState([{"invoice_num": 0, "patient_id": 0, "amount": "", "charge_type": "", "date_charged": ""}]);
+    const [totalAccount, setTotalAccounts] = useState([{"total_accounts":0}]);
+    const [totalAppointments, setTotalAppointments] = useState([{"total_appointments":0}]);
+    //const [undefTest, setUndefTest] = useState(0);
+
+
     const [formData, setFormData] = useState({
         reportId:-1, // 1 is for new users created ,  2 is for doctor and their appointments, 3 is a work in progress
         startDate: null,
@@ -25,18 +32,17 @@ function AdminReports(){
         //console.log(formData);
     };
 
+
     const handleSubmit = (e) => {
         //console.log('handleSubmit clicked');
         e.preventDefault();
 
         const formatDate ={
-            reportId: formData.reportId, // 1 is for new users created ,  2 is for doctor and their appointments, 3 is TBD
+            reportId: formData.reportId, // 1 is for new users created ,  2 is for doctor and their appointments, 3 is revenue
             startDate: formData.startDate.toISOString().slice(0, 10),
             endDate: formData.endDate.toISOString().slice(0, 10),
         };
-        //console.log(formatDate);
-        
-        // get the clinic id before i send in the info and add that to query 
+
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
@@ -49,21 +55,16 @@ function AdminReports(){
               return;
             }
             clinic_id = data.message[0].primary_clinic;
-            //console.log(clinic_id);
         
-        //console.log(`checking the reportId ${formatDate.reportId} and clinic id ${clinic_id}`);
         if(formData.reportId === '1'){
-            //console.log(`in the if statement of reportId ${formatDate.reportId}`);
-        
-            //console.log(`fetch is called with ${formatDate.startDate} and ${formatDate.endDate}`);
+  
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/accounts_created/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
                     response.json().then((data) => {
                         if(response.status !== 200){
                             alert(data.error);
                             return;
                         }
-                        //console.log(data.message);
-                        //setUserAccounts(data.message);
+        
 
                         const fixDate = data.message.map(account => ({
                             ...account,
@@ -72,10 +73,24 @@ function AdminReports(){
                           }));
                           
                         setUserAccounts(fixDate);
+                        fetch(`${process.env.REACT_APP_BACKEND_HOST}/new_account_total/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
+                            response.json().then((data) => {
+                                if(response.status !== 200){
+                                    alert(data.error);
+                                    return;
+                                }
+                
+                                  
+                                setTotalAccounts(data.message);
+                                
+                                setTable(true);
+                            });
+                        });
                         
-                        setTable(true);
+                        //setTable(true);
                     });
                 });
+
         }
         else if(formData.reportId === '2'){
             //console.log(`in the else statement of reportId ${formatDate.reportId}`);
@@ -90,13 +105,55 @@ function AdminReports(){
                         }
                         console.log(data.message);
                         setAppointments(data.message);
-                        
-                        setTable(true);
+
+                        fetch(`${process.env.REACT_APP_BACKEND_HOST}/getTotalDoctor/${formatDate.startDate}/${formatDate.endDate}/${clinic_id}`, requestOptions).then((response) =>{
+                            response.json().then((data) => {
+                                if(response.status !== 200){
+                                    alert(data.error);
+                                    return;
+                                }
+                                console.log(data.message);
+                                setTotalAppointments(data.message);
+                                
+                                setTable(true);
+                            });
+                        });
+        
                     });
                 });
         }
         else if(formData.reportId === '3'){
-            
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}/getBillingReport/${clinic_id}/${formatDate.startDate}/${formatDate.endDate}`, requestOptions).then((response) =>{
+                response.json().then((data) => {
+                    if(response.status !== 200){
+                        alert(data.error);
+                        return;
+                    }
+                     // first fetch is entire revenue
+                    setRevenue(data.message);
+                    
+                
+                });
+            });
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}/getInvoicesReport/${clinic_id}/${formatDate.startDate}/${formatDate.endDate}`, requestOptions).then((response) =>{
+                response.json().then((data) => {
+                    if(response.status !== 200){
+                        alert(data.error);
+                        return;
+                    }
+                    console.log(data.message); // first fetch is entire revenue
+
+                    const fixDate = data.message.map((app) => ({
+                        ...app,
+                        date_charged: app.date_charged.split('T')[0],
+                      }));
+                    setInvoices(fixDate);
+
+                    setTable(true);
+                
+                });
+            });
+            // second statement is the invoices
             console.log(`in the if else statement of reportId ${formatDate.reportId}`);
         }
         else{
@@ -112,7 +169,7 @@ function AdminReports(){
         return(
             <>
             <div className="container-fluid">
-            
+                <h4>{`Total Account Created: ${totalAccount[0].total_accounts}`}</h4>
                 <table className="table table-stripped">
                     <thead>
                         <tr>
@@ -142,6 +199,7 @@ function AdminReports(){
     function reportTwo(){
         return(
             <>
+             <h4>{`Total Appointments Schedules: ${totalAppointments[0].total_appointments}`}</h4>
                 <table className="table table-stripped">
                     <thead>
                         <tr>
@@ -158,6 +216,56 @@ function AdminReports(){
                                 <td>{`${user.first_name}`}</td>
                                 <td>{`${user.last_name}`}</td>
                                 <td>{`${user.total_appointment}`}</td>
+                            </tr>
+                        ))
+                        }
+                    </tbody>
+                </table>
+            </>
+        );
+    }
+
+
+    function reportThree(){
+        return(
+            <>
+                <table className="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th>Appointment Revenue</th>
+                            <th>Late Fees Revenue</th>
+                            <th> Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    <tr key={0}>
+                                <td>{`$ ${revenue[2].total_amount}.00`}</td>
+                                <td>{`$ ${revenue[1].total_amount}.00`}</td>
+                                <td>{`$ ${revenue[0].total_amount}.00`}</td>
+                            </tr>
+                            
+                    </tbody>
+                </table>
+                        
+                <table className="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th>Date Charged</th>
+                            <th>Invoice ID</th>
+                            <th>Patient ID</th>
+                            <th>Type of Charge</th>
+                            <th>Amount Charged</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {invoices.map((invoice, index) => (
+                            <tr key={index}>
+                                <td>{`${invoice.date_charged}`}</td>
+                                <td>{`${invoice.invoice_num}`}</td>
+                                <td>{`${invoice.patient_id}`}</td>
+                                <td>{`${invoice.charge_type}`}</td>
+                                <td>{`$ ${invoice.amount}.00`}</td>
                             </tr>
                         ))
                         }
@@ -186,7 +294,7 @@ function AdminReports(){
                         <option value="" defaultValue>Select Report Type</option>
                         <option value="1">New User Accounts Created</option>
                         <option value="2">Appointments For Doctor</option>
-                        <option value="3">Other Report</option>
+                        <option value="3">Clinic Revenue</option>
                     </select>
                 
                     <label>Start Date: (yyyy-mm-dd)</label>
@@ -220,6 +328,7 @@ function AdminReports(){
               </div>
                 { formData.reportId === '1' && showTable && reportOne()}
                 { formData.reportId === '2' && showTable && reportTwo()}
+                { formData.reportId === '3' && showTable && reportThree()}
            </form>
         
     </>

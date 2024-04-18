@@ -47,34 +47,6 @@ function Navbar() {
           <li className="nav-item">
             <a className="nav-link" aria-current="page" href="/admin">Admin Home</a>
           </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Employees
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item" href="/admin/employeelist">View Employees</a></li>
-              <div class="dropdown-divider"></div>
-              <li><a className="dropdown-item" href="/admin/newemployee">Add an Employee</a></li>
-            </ul>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Appointments
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a className="dropdown-item" href="/admin/viewappointment">View Appointments</a></li>
-              <div class="dropdown-divider"></div>
-              <li><a className="dropdown-item" href="/admin/make_appointment">Create Appointment</a></li>
-            </ul>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Clinics
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a className="dropdown-item" href="/admin/transfer">Transfer a Doctor</a></li>
-            </ul>
-          </li>
         </ul>
       )
     }
@@ -160,7 +132,7 @@ function Navbar() {
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-info">
         <div id="navbarContainer" className="container-fluid">
-          <a className="navbar-brand" href="/">Medical Clinic Application</a>
+          <a className="navbar-brand" href="/">VitalLife Healthcare🍃</a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
