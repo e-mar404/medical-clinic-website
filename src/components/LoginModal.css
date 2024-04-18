@@ -17,7 +17,7 @@
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-.login-form input {
+.login-form input, select, select option {
   font-family: "Roboto", sans-serif;
   outline: 0;
   background: #f2f2f2;
@@ -28,6 +28,8 @@
   box-sizing: border-box;
   font-size: 14px;
 }
+
+
 
 .form button {
   font-family: "Roboto", sans-serif;
