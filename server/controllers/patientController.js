@@ -160,6 +160,29 @@ function getPatientEmergencyContacts(res, db, patient_id) {
   });
 }
 
+function getPatientCharges(res, db, patient_id) {
+  console.log(patient_id);
+  db.query(
+    `
+    SELECT 
+    Charges.patient_id, Charges.invoice_num, Charges.date_charged, Charges.clinic_id, Charges.amount, Charges.charge_type, Charges.paid,
+    Clinic.clinic_name
+    FROM Charges
+    LEFT JOIN Clinic ON Charges.clinic_id = Clinic.clinic_id
+    WHERE patient_id = ${patient_id}
+    ORDER BY Charges.date_charged;
+  `, (err, db_res) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Error when getting user charges' }));
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ message: db_res }));
+  });
+}
+
 function getPatientInsurance(res, db, patient_id) {
   db.query(
     `
@@ -596,6 +619,7 @@ module.exports = {
   postPatientEmergencyContacts,
   getPatientInsurance,
   postPatientInsurance,
+  getPatientCharges,
   getPatientMedicalHistory,
   updatePatientMedicalHistory,
   getPatientAppointmentHistory,

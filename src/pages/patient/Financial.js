@@ -70,7 +70,7 @@ function PatientFinancial() {
                     window.location.reload();
                 }
                 else {
-                    alert("something broke");
+                    alert("You cannot add a card you already added!");
                 }
             });
         });
@@ -145,6 +145,7 @@ function PatientFinancial() {
 
         fetchFinancial();
     }, [postFunctionRef]);
+
 
     return (
         <>
