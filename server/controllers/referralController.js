@@ -52,6 +52,12 @@ async function getReferralDataForReceptionist(res, db) {
 
       console.log('Doctor result:', doctorResult); // Log the retrieved doctor details
 
+      // Fetch insurance information for the patient
+      const insuranceQuery = 'SELECT policy_number, group_number FROM Patient_InsuranceInformation WHERE patient_id = ?';
+      const [insuranceResult] = await db.promise().query(insuranceQuery, [patient_id]);
+
+      console.log('Insurance result:', insuranceResult); // Log the retrieved insurance details
+
       return {
         patient: {
           first_name: patientResult[0].first_name,
@@ -61,6 +67,10 @@ async function getReferralDataForReceptionist(res, db) {
           first_name: doctorResult[0].first_name,
           last_name: doctorResult[0].last_name,
           title: doctorResult[0].title
+        },
+        insurance: {
+          policy_number: insuranceResult[0].policy_number,
+          group_number: insuranceResult[0].group_number
         },
         reason_for_referral,
         expiration_date
@@ -78,7 +88,6 @@ async function getReferralDataForReceptionist(res, db) {
     res.end(JSON.stringify({ error: 'Internal server error' }));
   }
 }
-
 
 
 module.exports = { createReferral, getReferralDataForReceptionist };

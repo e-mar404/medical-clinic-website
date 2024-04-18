@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import BillingPDF from '../../components/BillingPDF';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import '../../components/ReceptionistBilling.css'
 
 const ReceptionistBilling = () => {
 
@@ -130,7 +131,7 @@ const ReceptionistBilling = () => {
     const handleInvoiceNumberChange = (event) => {
         setInvoiceNumberFilter(event.target.value);
     };
-    console.log(lastSuccessfulPayment);
+    
     const handleGeneratePDF = () => {
         // Generate the PDF content dynamically using @react-pdf/renderer
         console.log('hello zair');
@@ -138,16 +139,28 @@ const ReceptionistBilling = () => {
           <BillingPDF billingData={lastSuccessfulPayment ? [lastSuccessfulPayment] : []} />
         );
     
+        // Inline styles for the link
+        const linkStyle = {
+            textDecoration: 'none',
+            color: '#000',
+            fontSize: '16px',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+        };
+    
         // Return a PDFDownloadLink component to trigger the download
         return (
           <PDFDownloadLink document={pdfContent} fileName="billing.pdf">
-            {({ blob, url, loading, error }) =>
-              loading ? 'Loading document...' : 'Download PDF'
-            }
+            {({ loading }) => (
+              <span style={linkStyle}>
+                {loading ? 'Loading...' : 'Download PDF'}
+              </span>
+            )}
           </PDFDownloadLink>
         );
-      };
-
+    };
+    
       const formatCurrency = (value) => {
         // Convert value to a number
         const numericValue = parseFloat(value);
@@ -182,9 +195,9 @@ const ReceptionistBilling = () => {
                 style={{ marginRight: '50px' }} // Add margin between input and select
             />
             <select
+                id="amountSelect" // Assign an id to the select element
                 value={selectedAmount}
                 onChange={handleFilterChange}
-                style={{ marginRight: '50px' }} // Add margin between select and input
             >
                 <option value="">Select Amount</option>
                 <option value="15">No-Show Charge</option>
@@ -205,28 +218,28 @@ const ReceptionistBilling = () => {
                 style={{ marginRight: '50px' }} // Add margin between input and select
             />
             </div>
-            <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '80%', margin: 'auto' }}>
+            <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '95%', margin: 'auto', fontSize: '16px' }}>
                 <thead>
                     <tr>
-                        <th style={{ border: '1px solid black' }}>Invoice Number</th>
-                        <th style={{ border: '1px solid black' }}>First Name</th> {/* New column for patient first name */}
-                        <th style={{ border: '1px solid black' }}>Last Name</th> {/* New column for patient last name */}
-                        <th style={{ border: '1px solid black' }}>Amount</th>
-                        <th style={{ border: '1px solid black' }}>Date Charged</th>
-                        <th style={{ border: '1px solid black' }}>Paid</th>
-                        <th style={{ border: '1px solid black' }}></th>
+                        <th style={{ border: '1px solid black', padding: '10px' }}>Invoice Number</th>
+                        <th style={{ border: '1px solid black', padding: '10px' }}>First Name</th> {/* New column for patient first name */}
+                        <th style={{ border: '1px solid black', padding: '10px' }}>Last Name</th> {/* New column for patient last name */}
+                        <th style={{ border: '1px solid black', padding: '10px' }}>Amount</th>
+                        <th style={{ border: '1px solid black', padding: '10px' }}>Date Charged</th>
+                        <th style={{ border: '1px solid black', padding: '10px' }}>Paid</th>
+                        <th style={{ border: '1px solid black', padding: '10px' }}></th>
                     </tr>
                 </thead>
                 <tbody>
                     {filteredCharges.map((charge, index) => (
                         <tr key={charge.invoice_num}>
-                            <td style={{ border: '1px solid black' }}>{charge.invoice_num}</td>
-                            <td style={{ border: '1px solid black' }}>{charge.patientFirstName}</td> {/* Display patient first name */}
-                            <td style={{ border: '1px solid black' }}>{charge.patientLastName}</td> {/* Display patient last name */}
-                            <td style={{ border: '1px solid black' }}>{formatCurrency(charge.amount)}</td>
-                            <td style={{ border: '1px solid black' }}>{charge.date_charged}</td>
-                            <td style={{ border: '1px solid black' }}>{formatCurrency(charge.paid)}</td>
-                            <td style={{ border: '1px solid black' }}>
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{charge.invoice_num}</td>
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{charge.patientFirstName}</td> {/* Display patient first name */}
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{charge.patientLastName}</td> {/* Display patient last name */}
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{formatCurrency(charge.amount)}</td>
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{charge.date_charged}</td>
+                            <td style={{ border: '1px solid black', padding: '10px' }}>{formatCurrency(charge.paid)}</td>
+                            <td style={{ border: '1px solid black', padding: '10px' }}>
                                 <button onClick={() => handlePayment(index)}>Pay</button>
                             </td>
                         </tr>

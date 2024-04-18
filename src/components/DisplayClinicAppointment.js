@@ -189,6 +189,7 @@ function DisplayClinicAppointment() {
                   {appointment.status === 'no show' && <option value="no show">no show</option>} 
                   <option value="cancelled">cancelled</option>
                   <option value="confirm">confirm</option>
+                  <option value="complete">complete</option>
                 </select>
                 </td>
               </tr>
