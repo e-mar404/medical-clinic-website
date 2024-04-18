@@ -54,9 +54,13 @@ async function getReferralDataForReceptionist(res, db) {
 
       // Fetch insurance information for the patient
       const insuranceQuery = 'SELECT policy_number, group_number FROM Patient_InsuranceInformation WHERE patient_id = ?';
-      const [insuranceResult] = await db.promise().query(insuranceQuery, [patient_id]);
+      const [insuranceDbResult] = await db.promise().query(insuranceQuery, [patient_id]);
 
-      console.log('Insurance result:', insuranceResult); // Log the retrieved insurance details
+      console.log('Insurance result:', insuranceDbResult); // Log the retrieved insurance details
+
+      const insuranceResult = (insuranceDbResult.length > 0) ? insuranceDbResult[0] : { 'policy_number': 'No insurance info', 'group_number': 'No insurance info' };
+      
+      console.log(insuranceResult);
 
       return {
         patient: {
@@ -69,8 +73,8 @@ async function getReferralDataForReceptionist(res, db) {
           title: doctorResult[0].title
         },
         insurance: {
-          policy_number: insuranceResult[0].policy_number,
-          group_number: insuranceResult[0].group_number
+          policy_number: insuranceResult.policy_number,
+          group_number: insuranceResult.group_number
         },
         reason_for_referral,
         expiration_date
