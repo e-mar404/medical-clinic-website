@@ -5,7 +5,7 @@ const { generateReportFor, getNewUsersReport, generateDoctorTotal } = require('.
 const { createAppointment, getClinicAppointments, availableAppointments, getClinicOfReceptionist, updateAppointmentStatus} = require('./controllers/appointmentController');
 const { getClinics, getClinicName } = require('./controllers/clinicController');
 const { headers } = require('./utils');
-const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
+const { createPatientAccount, loginPatient, getPatientProfile, postPatientProfile, getPatientFinancial, postPatientFinancial, getPatientEmergencyContacts, postPatientEmergencyContacts, getPatientInsurance, postPatientInsurance, getPatientCharges, getPatientMedicalHistory, updatePatientMedicalHistory, getPatientAppointmentHistory, getPrimaryDoctorForPatient, updatePrimaryDoctor } = require('./controllers/patientController');
 const { prescribeMedicationToPatient, getMedicationsForPatient, removeMedicationForPatient } = require('./controllers/medicationsController')
 const { createReferral, getReferralDataForReceptionist } = require('./controllers/referralController');
 const { patientCharges, StoreBillPayment } = require('./controllers/billingController');
@@ -201,6 +201,11 @@ const server = http.createServer((req, res) => {
           case /\/patient\/appointment_history/.test(req.url):
             patient_id = req.url.split('/')[3];
             getPatientAppointmentHistory(res, db, patient_id);
+            break;
+
+          case /\/patient\/view_charges/.test(req.url):
+            patient_id = req.url.split('/')[3];
+            getPatientCharges(res, db, patient_id);
             break;
 
           case /\/employee\/bytype/.test(req.url): 
