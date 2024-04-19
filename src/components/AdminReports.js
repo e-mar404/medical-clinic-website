@@ -3,10 +3,10 @@ import DatePicker from 'react-datepicker';
 
 function AdminReports(){
     const[showTable, setTable] = useState(false);
-    const [userAccounts, setUserAccounts] = useState([{'first_name':'first', 'last_name':'last', 'email_address':'email', 'created':''}]);
-    const [appointments, setAppointments] = useState([{'employee_id':'test', 'first_name':'first','last_name':'last', 'total_appointment':''}]);
+    const [userAccounts, setUserAccounts] = useState([{'first_name':'first', 'last_name':'last', 'email_address':'email', 'created':'', 'appointment_created':''}]);
+    const [appointments, setAppointments] = useState([{'doctor_id':'test', 'first_name':'first','last_name':'last', 'total_appointment':''}]);
     const [revenue, setRevenue] = useState([{"total_amount":0}]);
-    const [invoices, setInvoices] = useState([{"invoice_num": 0, "patient_id": 0, "amount": "", "charge_type": "", "date_charged": ""}]);
+    const [invoices, setInvoices] = useState([{"invoice_num": 0, "patient_id": 0, "last_name": "", "amount": "", "charge_type": "", "date_charged": ""}]);
     const [totalAccount, setTotalAccounts] = useState([{"total_accounts":0}]);
     const [totalAppointments, setTotalAppointments] = useState([{"total_appointments":0}]);
     //const [undefTest, setUndefTest] = useState(0);
@@ -36,6 +36,16 @@ function AdminReports(){
     const handleSubmit = (e) => {
         //console.log('handleSubmit clicked');
         e.preventDefault();
+
+        if(formData.startDate === null){
+            alert("Please select a start date.")
+            return;
+        }
+
+        if(formData.endDate === null){
+            alert("Please select an end date.")
+            return;
+        }
 
         const formatDate ={
             reportId: formData.reportId, // 1 is for new users created ,  2 is for doctor and their appointments, 3 is revenue
@@ -177,6 +187,7 @@ function AdminReports(){
                             <th>Last Name</th>
                             <th>Email Address</th>
                             <th>Date Created</th>
+                            <th>Created Appointment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -186,6 +197,7 @@ function AdminReports(){
                                 <td>{`${user.last_name}`}</td>
                                 <td>{`${user.email_address}`}</td>
                                 <td>{`${user.created}`}</td>
+                                <td>{`${user.appointment_created}`}</td>
                             </tr>
                         ))
                         }
@@ -212,7 +224,7 @@ function AdminReports(){
                     <tbody>
                         {appointments.map((user, index) => (
                             <tr key={index}>
-                                <td>{`${user.employee_id}`}</td>
+                                <td>{`${user.doctor_id}`}</td>
                                 <td>{`${user.first_name}`}</td>
                                 <td>{`${user.last_name}`}</td>
                                 <td>{`${user.total_appointment}`}</td>
@@ -254,6 +266,7 @@ function AdminReports(){
                             <th>Date Charged</th>
                             <th>Invoice ID</th>
                             <th>Patient ID</th>
+                            <th>Patient Last Name</th>
                             <th>Type of Charge</th>
                             <th>Amount Charged</th>
                         </tr>
@@ -264,6 +277,7 @@ function AdminReports(){
                                 <td>{`${invoice.date_charged}`}</td>
                                 <td>{`${invoice.invoice_num}`}</td>
                                 <td>{`${invoice.patient_id}`}</td>
+                                <td>{`${invoice.last_name}`}</td>
                                 <td>{`${invoice.charge_type}`}</td>
                                 <td>{`$ ${invoice.amount}.00`}</td>
                             </tr>
