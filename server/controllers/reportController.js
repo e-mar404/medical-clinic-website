@@ -17,10 +17,11 @@ function getNewUsersReport(res, db, start_date, end_date, clinic_id) {
   const start = start_date;
   const end = end_date; 
   
-  db.query(`SELECT P.first_name, P.last_name, P.email_address, P.created
-  FROM Patient AS P
-  JOIN Employee AS E ON E.employee_id = P.primary_doctor_id AND E.primary_clinic = '${clinic_id}'
-  WHERE P.created BETWEEN '${start}' AND '${end}'`, (err, db_res) => {
+  db.query(`SELECT P.first_name, P.last_name, P.email_address, P.created, 
+	    (CASE WHEN EXISTS (SELECT A.appointment_date FROM Appointment AS A WHERE A.patient_id = P.patient_id) THEN 'yes' ELSE 'no' END) AS appointment_created
+      FROM Patient AS P
+      JOIN Employee AS E ON E.employee_id = P.primary_doctor_id AND E.primary_clinic = '${clinic_id}'
+      WHERE P.created BETWEEN '${start}' AND '${end}'`, (err, db_res) => {
     if (err) {
       res.writeHead(400, headers);
       res.end(JSON.stringify({ message: err }));
@@ -36,9 +37,9 @@ function generateDoctorTotal(res, db, startDate, endDate, clinic_id) {
   const start = startDate;
   const end = endDate; 
     
-  db.query(`SELECT E.employee_id, E.first_name, E.last_name, COUNT(*) AS total_appointment
-    FROM Employee AS E
-    JOIN Appointment AS A ON  E.employee_id = A.doctor_id
+  db.query(`SELECT A.doctor_id, E.first_name, E.last_name, COUNT(*) AS total_appointment
+  FROM Employee AS E
+  JOIN Appointment AS A ON  E.employee_id = A.doctor_id
     WHERE (A.appointment_date BETWEEN '${start}' AND '${end}') AND A.clinic_id = ${clinic_id}   
     GROUP BY E.employee_id, A.doctor_id`, (err, db_res) => {
       if (err) {
@@ -80,9 +81,10 @@ function generateClinicRevenue(res, db, startDate, endDate, clinic_id){
 }
 
 function getClinicInvoices(res, db, startDate, endDate, clinic_id){
-  db.query(`SELECT C.invoice_num, C.patient_id, C.amount, C.charge_type, C.date_charged
-    FROM Charges AS C
-    WHERE (C.date_charged BETWEEN '${startDate}' AND '${endDate}') AND C.clinic_id = ${clinic_id};`, (err, db_res) => {
+  db.query(`  SELECT C.invoice_num, P.patient_id, P.last_name, C.amount, C.charge_type, C.date_charged
+      FROM Charges AS C
+      JOIN Patient AS P ON C.patient_id = P.patient_id
+      WHERE (C.date_charged BETWEEN '${startDate}' AND '${endDate}') AND C.clinic_id = ${clinic_id};`, (err, db_res) => {
       if (err) {
         res.writeHead(400, headers);
         res.end(JSON.stringify({ message: err }));
