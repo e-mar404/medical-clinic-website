@@ -16,7 +16,7 @@ If you dont have it installed:
 
 ## Setting up mysql
 
-The file `Medical Clinic Database.sql` contains our sql dump that can be used to set up the schema on mysql.
+The file `Medical Clinic Database.sql` contains our sql dump that can be used to set up the schema and preload our data on mysql.
 There are two ways to set up either by command line or with the mysql workbench.
 
 ### Command line
