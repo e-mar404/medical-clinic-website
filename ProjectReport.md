@@ -40,9 +40,9 @@ For the nurse’s view they also have the same two view cards but because they a
 ### Receptionist
 Appointment calendar shows the appointments made to the specific clinic that the receptionist works for. She has the ability to change the status of the appointment and make an appointment. If you want to make an appointment you have to use a patient email that is already registered with the company. If you leave an appointment on scheduled status 15 minutes after the time of the appointment passes the patient will be charged $15 and the appointment will be set as a no show (semantic constraint). If you change it to complete they will be charged $100.
 
-To view charges go to the billing panel. You can see the chargers updated and when the patient pays all the receptionist has to do is log how much that patient paid. Once you do that you will be allowed to download a pdf of the receipt. 
+To view charges go to the billing panel. You can see the charges updated and when the patient pays all the receptionist has to do is log how much that patient paid. Once you do that you will be allowed to download a pdf of the receipt. 
 
-Receptionists can view the referrals made by a patient's primary doctor. After selecting the referral she wants you are then allowed to download the referral as a PDF to send to the specialist and give a copy to the patient. 
+Receptionists can view the referrals made by a patient's primary doctor. After selecting the referral she wants, you are then allowed to download the referral as a PDF to send to the specialist and give a copy to the patient. 
 
 ### Administrator
 After being redirected to their homepage administrators have the ability to view the 
