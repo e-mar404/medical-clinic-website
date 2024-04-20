@@ -45,7 +45,7 @@ DB_PASSWORD=<password>
 DATABASE=mdb
 ```
 
-That uses the default mysql port, if you use a different port to connect to mysql this is where to set it. For <password> this is were you put your passsword to connect to mysql. 
+That uses the default mysql port, if you use a different port to connect to mysql this is where to set it. Dont forget to change `<password>` to your passsword to connect to mysql. 
 
 # Running the Application
 To run the application go to the root of the git directory run the following commands to install dependencies and then start up the application.
