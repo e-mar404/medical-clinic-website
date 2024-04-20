@@ -50,7 +50,7 @@ function PatientProfile() {
         'Connection': 'keep-alive'
       },
       body: JSON.stringify({
-        'patient_id': document.querySelector('#PatientID').value,
+        'patient_id': localStorage.getItem("UserId"),
         'email_address': document.querySelector('#EmailAddress').value,
         'phone_number': document.querySelector('#PhoneNumber').value,    
         "address": document.querySelector('#Address').value,

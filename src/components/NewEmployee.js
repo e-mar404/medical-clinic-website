@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LoginModal.css';
+import { useNavigate } from 'react-router-dom';
 
 function NewEmployee() {
 
@@ -26,6 +27,7 @@ function NewEmployee() {
       });
   }
 
+
   const handleRoleChange = (e) => {
       //setRole(e.target.value);
       if(e.target.value === "Doctor" || e.target.value === "Nurse"){
@@ -34,9 +36,9 @@ function NewEmployee() {
         }
         else{
         setRoleDoctor(false);
-        formData.type= "Medical";
+        
         }
-
+        formData.type= "Medical";
       }else{
         formData.type = "Staff";
         setRoleDoctor(false);
@@ -52,7 +54,7 @@ function NewEmployee() {
       setSpecialistValue(false);
     }
   }
-  
+  const nav = useNavigate();
   function registerEmployee(e){
     e.preventDefault();
 
@@ -95,6 +97,7 @@ function NewEmployee() {
         console.log(data);
         if(response.status === 200){
           alert("Employee created successfully!");
+          nav('/admin/employeeList', {});
         }
         else{
           alert("Failed to create new employee!");
