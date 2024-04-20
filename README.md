@@ -28,14 +28,15 @@ mysql < 'Medical Clinic Database.sql' -u root -p
 Documentation to import data into workbench: https://dev.mysql.com/doc/workbench/en/wb-admin-export-import-management.html
 
 ## Environment Set Up 
-After thy mysql db is set up on the root of the directory `/` we need to add a .env file with the following variable declaration:
+After the mysql db is set up we need to add an env file at the root of the fit dir like so `medical-clinic-website/.env` with the following variable declaration:
+
 ```
 REACT_APP_BACKEND_HOST=
 ```
 
 Our hosted website deploys from main and it has this env variable to point to our backend host but because it is local we add nothing. If we were to not add this env var then the application does not work since it does not know where to point to.
 
-After that the next env file we need to add is under server `/server/.env`. This env file will contain the information to connect to the db like so:
+After that the next env file we need to add is under server like so `medical-clinic-website/server/.env`. This env file will contain the information to connect to the db like so:
 
 ```
 DB_HOST=localhost
