@@ -1,3 +1,61 @@
+# Getting Started 
+To run this locally clone the repo:
+
+```
+git clone --depth=1 https://github.com/e-mar404/medical-clinic-website.git
+```
+
+note: it has depth=1 just for it to download faster, if you are wanting all commit history then dont add that option.
+
+After the repo is cloned locally cd into the root of the repo. The rest of these commands assume that you are at the root of the dir.
+
+*MySQL and node should already be installed*
+If you dont have it installed:
+- Install MySQL: https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/installing.html
+- Node: https://nodejs.org/en/learn/getting-started/how-to-install-nodejs
+
+## Setting up mysql
+
+The file `Medical Clinic Database.sql` contains our sql dump that can be used to set up the schema on mysql.
+There are two ways to set up either by command line or with the mysql workbench.
+
+### Command line
+```
+mysql < 'Medical Clinic Database.sql' -u root -p
+```
+
+### MySQL Workbench
+Documentation to import data into workbench: https://dev.mysql.com/doc/workbench/en/wb-admin-export-import-management.html
+
+## Environment Set Up 
+After the mysql db is set up we need to add an env file at the root of the fit dir like so `medical-clinic-website/.env` with the following variable declaration:
+
+```
+REACT_APP_BACKEND_HOST=
+```
+
+Our hosted website deploys from main and it has this env variable to point to our backend host but because it is local we add nothing. If we were to not add this env var then the application does not work since it does not know where to point to.
+
+After that the next env file we need to add is under server like so `medical-clinic-website/server/.env`. This env file will contain the information to connect to the db like so:
+
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=<password>
+DATABASE=mdb
+```
+
+That uses the default mysql port, if you use a different port to connect to mysql this is where to set it. Dont forget to change `<password>` to your passsword to connect to mysql. 
+
+# Running the Application
+To run the application go to the root of the git directory run the following commands to install dependencies and then start up the application.
+
+```
+npm install
+npm start
+```
+
 # Presentation Layout 
 ## 1) Patient 
 - [ ] registering 

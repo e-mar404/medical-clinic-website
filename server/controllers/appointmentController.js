@@ -154,11 +154,16 @@ async function availableAppointments(req, res, db) {
 
     const curDate = new Date();
     const appointmentDate = new Date(date.replaceAll('-', '/'));
+    const month = appointmentDate.getUTCMonth() + 1; 
+    const day = appointmentDate.getUTCDate();
+    const year = appointmentDate.getUTCFullYear();
+    const formatedAppointmentDate = `${year}-${(month < 10) ? '0'+month : month}-${(day < 10) ? '0'+day : day}`;
+    
     const timeOptions = { timeZone: 'CST', timeZoneName: 'short', hour12: false };
 
-    console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString('en-US', timeOptions)}, curDate: ${curDate.toLocaleDateString('en-US', timeOptions)}`);
+    console.log(`appoitmentDate: ${formatedAppointmentDate}, curDate: ${date}`);
 
-    const sameDateAppointment = (appointmentDate.toLocaleDateString('en-US', timeOptions) === curDate.toLocaleDateString('en-US', timeOptions));
+    const sameDateAppointment = (formatedAppointmentDate === date);
 
     if (sameDateAppointment) {
       console.log('this is a same day appointment, making sure to return only future times');
