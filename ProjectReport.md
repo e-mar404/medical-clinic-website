@@ -64,7 +64,8 @@ The second report, which displays the total appointments per doctor, pulls data 
 Our final report deals with the clinic revenue, which can be divided into the revenue from complete appointments and the no-show fees. Our revenue report pulls data from the Charges and Patient tables. As shown in one of our triggers, our clinic charges patients if they are more than 15 minutes late to their scheduled appointment. The complete appointments are those that the receptionist confirms as “complete.” By tracking this data, the admin can see the source of the clinic’s revenue. Furthermore, when displaying the revenue, we include more information about what invoices are being taken into consideration based on the dates selected by the administrator. 
 
 All our reports are specific to the clinic of the administrator who is currently logged in. We use the administrator’s unique primary key to find the clinic that they oversee to then be able to pull the correct data within the selected timeframe.
-Semantic Constraints
+
+## Semantic Constraints
 
 The two business rules that we focused on were: patients can only make an appointment with a specialist if they have a valid referral from their primary doctor and if a patient missed their appointment time by 15 minutes they will get charged a no show fee and will have to reschedule.
 	
