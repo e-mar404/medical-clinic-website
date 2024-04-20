@@ -56,6 +56,46 @@ npm install
 npm start
 ```
 
+## Accounts to sign into the application
+All passwords for the accounts are `password`
+
+### Employee Accounts 
+**Clinic Houston-Downtown:**
+Receptionist:
+    - mzaker@medc.org
+
+Nurse:
+    - mclavin@medc.org
+
+Doctor:
+    - test@medc.org (General Doctor) *made during presentation*
+    - eelbadawi@medc.org (Cardiologist)
+
+Admin:
+    - uramamurthy@medc.org
+
+*Clinic Houston-Pearland:*
+Receptionist:
+    - jbailey@medc.org
+
+Nurse:
+    - dpoiltzer@medc.org
+
+Doctor:
+    - lmckinney@medc.org (Family Doctor)
+    - swong@medc.org (Dermatorlogist)
+    - szalman@medc.org (Family Doctor)
+
+Admin:
+    - nshepley@medc.org
+
+### Patient Accounts
+- emarin@gmail.com
+- drodrigues@gmail.com
+- yrodriguez@gmail.com
+- btuason@gmail.com
+- john@gmail.com
+
 # Presentation Layout 
 ## 1) Patient 
 - [ ] registering 
