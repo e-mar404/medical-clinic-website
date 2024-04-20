@@ -62,39 +62,39 @@ All passwords for the accounts are `password`
 ### Employee Accounts 
 **Clinic Houston-Downtown:**
 Receptionist:
-    - mzaker@medc.org
+- mzaker@medc.org
 
 Nurse:
-    - mclavin@medc.org
+- mclavin@medc.org
 
 Doctor:
-    - test@medc.org (General Doctor) *made during presentation*
-    - eelbadawi@medc.org (Cardiologist)
+- test@medc.org (General Doctor) *made during presentation*
+- eelbadawi@medc.org (Cardiologist)
 
 Admin:
-    - uramamurthy@medc.org
+- uramamurthy@medc.org
 
 *Clinic Houston-Pearland:*
 Receptionist:
-    - jbailey@medc.org
+- jbailey@medc.org
 
 Nurse:
-    - dpoiltzer@medc.org
+- dpoiltzer@medc.org
 
 Doctor:
-    - lmckinney@medc.org (Family Doctor)
-    - swong@medc.org (Dermatorlogist)
-    - szalman@medc.org (Family Doctor)
+- lmckinney@medc.org (Family Doctor) *transfered during presentation*
+- swong@medc.org (Dermatorlogist)
+- szalman@medc.org (Family Doctor)
 
 Admin:
-    - nshepley@medc.org
+- nshepley@medc.org
 
 ### Patient Accounts
 - emarin@gmail.com
 - drodrigues@gmail.com
 - yrodriguez@gmail.com
 - btuason@gmail.com
-- john@gmail.com
+- john@gmail.com *made during presentation*
 
 # Presentation Layout 
 ## 1) Patient 
@@ -148,9 +148,6 @@ show create trigger mdb.Appointment_ChargePatientForNoShow;
 - [ ] transfer old doctor stuff to new doctor
 - [ ] generate reports
   
-### Other notes + other todos
-- At the end of the presentation we need to state name and what we did for the project (i think it is a good idea if we present what we each worked on)
-- Only one person contorlling computer while everyone talks vs we each take turns with the laptop (there is only one laptop)
-
+### Relevant links
 - [x] host website (https://clinic-website.up.railway.app/)
 - [x] host backend (https://medical-clinic-backend.up.railway.app/)
