@@ -17,14 +17,16 @@ We are also able to add new employee account data. When transferring a non-speci
 From researching our domain we found out that there would be 5 different users using our medical clinic applications: patients, receptionists, doctors, nurses, and a clinic admin. The patients have their own page to log in, but the employees have a single sign-in page so through there we determine what type of user is signed in and redirect them to their appropriate home page.
 	
 ### Patient
-Appointment History: Allows the patient to view their appointments with detailed information regarding the date set, the status of their appointment (completed/canceled/no-show), the location of the clinic, the doctor in charge of administering treatment to them, the time of the appointment, and whether or not they were marked as present in person during the time of appointment (confirmation).
-Profile: 
-The patient is able to view their personal information that they signed up with such as their name, email address, date of birth, gender, phone number, and street address. Phone number and street address is modifiable while the other details are not. Additionally, there is a primary doctor field that the receptionist can set. 
-The patient has a financial information tab that allows them to create and/or delete multiple credit cards at once each containing the fields “card number”, “name on card”, “expiration date (mm/yy)” and “cvv”.
-The emergency contact information tab is similar to the financial information tab in which you can add or delete multiple contacts. The fields contain “contact name”, “contact relationship”, and “contact number”.
-Lastly, the insurance information tab contains “group number” and “policy number”.
-Schedule Appointment: The patient is able to schedule an appointment with fields “clinic”, “doctor”, “date (yyyy-mm-dd)” and “time”. They CANNOT schedule an appointment with a specialist if they do not have a referral given by another doctor due to a trigger.
-View Charges: The patient is able to view charges. A patient can receive charges to two reasons: completion of an appointment/treatment and not showing up to an appointment 5 minutes after the time set. The charge information includes: “invoice number”, “date charged”, “charge type”, “clinic name”, “amount due”, and “paid”. If the patient wishes to pay for a charge, they must contact the receptionist.
+**Appointment History:** Allows the patient to view their appointments with detailed information regarding the date set, the status of their appointment (completed/canceled/no-show), the location of the clinic, the doctor in charge of administering treatment to them, the time of the appointment, and whether or not they were marked as present in person during the time of appointment (confirmation).
+
+**Profile:** 
+-   The patient is able to view their personal information that they signed up with such as their name, email address, date of birth, gender, phone number, and street address. Phone number and street address is modifiable while the other details are not. Additionally, there is a primary doctor field that the receptionist can set. 
+-   The patient has a financial information tab that allows them to create and/or delete multiple credit cards at once each containing the fields “card number”, “name on card”, “expiration date (mm/yy)” and “cvv”.
+-   The emergency contact information tab is similar to the financial information tab in which you can add or delete multiple contacts. The fields contain “contact name”, “contact relationship”, and “contact number”.
+-   Lastly, the insurance information tab contains “group number” and “policy number”.
+-   Schedule Appointment: The patient is able to schedule an appointment with fields “clinic”, “doctor”, “date (yyyy-mm-dd)” and “time”. They CANNOT schedule an appointment with a specialist if they do not have a referral given by another doctor due to a trigger.
+
+**View Charges:** The patient is able to view charges. A patient can receive charges to two reasons: completion of an appointment/treatment and not showing up to an appointment 5 minutes after the time set. The charge information includes: “invoice number”, “date charged”, “charge type”, “clinic name”, “amount due”, and “paid”. If the patient wishes to pay for a charge, they must contact the receptionist.
 
 ### Medical Users
 Doctors and nurses have fairly similar functionality that they could be both described as a single medical user but with some key differences. 	
@@ -37,14 +39,19 @@ For the nurse’s view they also have the same two view cards but because they a
 
 ### Receptionist
 Appointment calendar shows the appointments made to the specific clinic that the receptionist works for. She has the ability to change the status of the appointment and make an appointment. If you want to make an appointment you have to use a patient email that is already registered with the company. If you leave an appointment on scheduled status 15 minutes after the time of the appointment passes the patient will be charged $15 and the appointment will be set as a no show (semantic constraint). If you change it to complete they will be charged $100.
+
 To view charges go to the billing panel. You can see the chargers updated and when the patient pays all the receptionist has to do is log how much that patient paid. Once you do that you will be allowed to download a pdf of the receipt. 
+
 Receptionists can view the referrals made by a patient's primary doctor. After selecting the referral she wants you are then allowed to download the referral as a PDF to send to the specialist and give a copy to the patient. 
 
 ### Administrator
 After being redirected to their homepage administrators have the ability to view the 
 employees of the clinic they are assigned to, reports, and clinic information. The admin can see information regarding the entire clinic. 
+
 In our employee list, we display some identifying information about the employee, including their first name, last name, and job role. The administrator is the only one who can create new employee accounts, as we do not want unauthorized people to be able to register as employees for our clinics. Our employees are given one of four roles: doctor, nurse, receptionist, or administrator. If the administrator chooses to add a new doctor, they can choose between making them a specialist or not. For the employees that fall under the doctor category, we can access their appointments or choose to transfer them to another clinic. The ability to transfer employees is strictly given to an administrator because they have to decide what clinic to transfer the doctor to and then choose a non-specialist doctor to transfer the current doctor’s patients to. After a doctor is transferred they will be removed from the current employee list and have their upcoming appointments canceled. 
+
 The reports view is unique to the administrator.  It allows them to view the three reports made available to them. All of our reports have been made with a specific purpose that will be expanded on during the report section of our project document. The reports can be filtered through with the start date and end date selected by the user. 
+
 Lastly, the administrator has a view of the clinic they are working on which includes the name of their current clinic and set hours.
  
 ## Reports and Data Queries
