@@ -134,14 +134,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
     });
   };
  
-  const filterAppointmentTimes = (time) => {
-    const curDate = new Date();
-    const selectedDate = new Date(time);
-
-
-    return curDate.getTime() < selectedDate.getTime();
-  }
-
   const nav = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -231,9 +223,6 @@ const MakeAppointmentForm = ({ patientEmail }) => {
               onChange={handleDateChange}
               dateFormat="yyyy-MM-dd"
               minDate={subDays(new Date(), 0)}
-              timeIntervals={5}
-              showTimeSelect
-              filterTime={filterAppointmentTimes}
               showIcon
               toggleCalendarOnIconClick
               required

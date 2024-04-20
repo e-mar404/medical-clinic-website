@@ -41,9 +41,10 @@ function ReferralsForm() {
             return;
           }
 
-          console.log(data.message);
-          patientsRef.current = data.message;
-          setPatients(patientsRef.current);
+          if (data.message !== 'no patients') {
+            patientsRef.current = data.message;
+            setPatients(patientsRef.current);
+          }
         });
       });
     }
@@ -158,7 +159,7 @@ function ReferralsForm() {
           selected={formData.expiration_date}
           onChange={expiration_date => setFormData({ ...formData, expiration_date })}
           dateFormat="yyyy-MM-dd"
-          minDate={subDays(new Date(), 1)}
+          minDate={subDays(new Date(), 0)}
           showIcon
           toggleCalendarOnIconClick
           required />     

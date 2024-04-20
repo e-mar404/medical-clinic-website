@@ -153,7 +153,7 @@ async function availableAppointments(req, res, db) {
     });
 
     const curDate = new Date();
-    const appointmentDate = new Date(date.replace('-', '/'));
+    const appointmentDate = new Date(date.replaceAll('-', '/'));
     const timeOptions = { timeZone: 'CST', timeZoneName: 'short', hour12: false };
 
     console.log(`appoitmentDate: ${appointmentDate.toLocaleDateString('en-US', timeOptions)}, curDate: ${curDate.toLocaleDateString('en-US', timeOptions)}`);
