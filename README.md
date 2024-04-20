@@ -61,6 +61,7 @@ All passwords for the accounts are `password`
 
 ### Employee Accounts 
 **Clinic Houston-Downtown:**
+
 Receptionist:
 - mzaker@medc.org
 
@@ -74,7 +75,8 @@ Doctor:
 Admin:
 - uramamurthy@medc.org
 
-*Clinic Houston-Pearland:*
+**Clinic Houston-Pearland:**
+
 Receptionist:
 - jbailey@medc.org
 
