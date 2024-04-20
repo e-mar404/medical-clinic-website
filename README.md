@@ -21,7 +21,7 @@ There are two ways to set up either by command line or with the mysql workbench.
 
 ### Command line
 ```
-mysql < 'Medical Clinic Database.sql' -u -root -p
+mysql < 'Medical Clinic Database.sql' -u root -p
 ```
 
 ### MySQL Workbench
