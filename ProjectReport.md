@@ -26,7 +26,7 @@ From researching our domain we found out that there would be 5 different users u
 -   Lastly, the insurance information tab contains “group number” and “policy number”.
 -   Schedule Appointment: The patient is able to schedule an appointment with fields “clinic”, “doctor”, “date (yyyy-mm-dd)” and “time”. They CANNOT schedule an appointment with a specialist if they do not have a referral given by another doctor due to a trigger.
 
-**View Charges:** The patient is able to view charges. A patient can receive charges to two reasons: completion of an appointment/treatment and not showing up to an appointment 5 minutes after the time set. The charge information includes: “invoice number”, “date charged”, “charge type”, “clinic name”, “amount due”, and “paid”. If the patient wishes to pay for a charge, they must contact the receptionist.
+**View Charges:** The patient is able to view charges. A patient can receive charges to two reasons: completion of an appointment/treatment and not showing up to an appointment 15 minutes after the time set. The charge information includes: “invoice number”, “date charged”, “charge type”, “clinic name”, “amount due”, and “paid”. If the patient wishes to pay for a charge, they must contact the receptionist.
 
 ### Medical Users
 Doctors and nurses have fairly similar functionality that they could be both described as a single medical user but with some key differences. 	
